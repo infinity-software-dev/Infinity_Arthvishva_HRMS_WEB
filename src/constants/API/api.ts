@@ -1,4 +1,4 @@
-const DOMAIN_URL = process.env.NEXT_PUBLIC_LOCAL_URL || "";
+const DOMAIN_URL = process.env.NEXT_PUBLIC_SERVER_URL || "";
 
 export const AUTH_API = {
   LOGIN_DIRECTOR: `${DOMAIN_URL}/api/auth/director/login`,
@@ -6,38 +6,57 @@ export const AUTH_API = {
   LOGIN_HR: `${DOMAIN_URL}/api/auth/hr/login`,
 }
 
+export const MANAGEMENT_API = {
+  GET_GENERAL_STATS: `/api/web/management/get-general-stats`,
+  GET_ATTENDANCE_STATS: `/api/web/management/get-average-stats`,
+  GET_DEPARTMENT_STATS: `/api/web/management/get-department-stats`,
+  GET_RECENT_JOINED_EMPLOYEES: `/api/web/management/get-recent-joined-employees`,
+  GET_UPCOMING_BIRTHDAYS: `/api/web/management/get-upcoming-birthdays`,
+  GET_LIVE_ROSTER: `/api/web/management/attendance/live-roster`,
+  GET_PENDING_CORRECTIONS_COUNT: `/api/web/management/attendance/pending-corrections-count`,
+  GET_CORRECTIONS: `/api/web/management/attendance/corrections`,
+  GET_HISTORICAL_LEDGER: `/api/web/management/attendance/historical-ledger`,
+  GET_ALL_EMPLOYEES: `/api/web/management/employees`,
+  GET_SINGLE_EMPLOYEE: `/api/web/management/employees`,
+  GET_PAYROLL_LIST: `/api/web/management/payroll/payrollList`,
+  PROCESS_ALL_ACTIVE_PAYROLL: `/api/web/management/payroll/process-all-active`,
+  EXPORT_PAYROLL: `/api/web/management/payroll/export`,
+  DOWNLOAD_SALARY_SLIP_PDF: (id: string) => `/api/web/management/payroll/salary-slip/${id}`,
+  GET_PENDING_REIMBURSEMENTS: `/api/web/management/reimbursement/pending`,
+  GET_HISTORICAL_REIMBURSEMENTS: `/api/web/management/reimbursement/historical`,
+}
 
 export const HR_API = {
+  //Profile endpoints
   GET_PROFILE: `/api/web/hr/get-profile`,
   CHANGE_PASSWORD: `/api/web/hr/change-password`,
-  GET_GENERAL_STATS: `/api/web/hr/get-general-stats`,
-  GET_ATTENDANCE_STATS: `/api/web/hr/get-average-stats`,
-  GET_DEPARTMENT_STATS: `/api/web/hr/get-department-stats`,
-  GET_RECENT_JOINED_EMPLOYEES: `/api/web/hr/get-recent-joined-employees`,
-  GET_UPCOMING_BIRTHDAYS: `/api/web/hr/get-upcoming-birthdays`,
-  GET_LIVE_ROSTER: `/api/web/hr/attendance/live-roster`,
-  GET_PENDING_CORRECTIONS_COUNT: `/api/web/hr/attendance/pending-corrections-count`,
-  GET_CORRECTIONS: `/api/web/hr/attendance/corrections`,
+
   APPROVE_CORRECTION: (id: string) => `/api/web/hr/attendance/corrections/${id}/approve`,
   REJECT_CORRECTION: (id: string) => `/api/web/hr/attendance/corrections/${id}/reject`,
-  GET_HISTORICAL_LEDGER: `/api/web/hr/attendance/historical-ledger`,
+
+  // Leave endpoints
   GET_PENDING_LEAVES: `/api/web/hr/leaves/pending`,
   APPROVE_LEAVE: (id: string) => `/api/web/hr/leaves/${id}/approve`,
   REJECT_LEAVE: (id: string) => `/api/web/hr/leaves/${id}/reject`,
   GET_HISTORICAL_LEAVES: `/api/web/hr/leaves/historical`,
-  GET_ALL_EMPLOYEES: `/api/web/hr/employees`,
-  GET_SINGLE_EMPLOYEE: `/api/web/hr/employees`,
+
+  //Employee endpoints
   GET_MANAGER_LIST: `/api/web/hr/employees/leadership`,
   GET_NEW_EMPLOYEE_CODE: `/api/web/hr/employees/new-code`,
   CREATE_EMPLOYEE: `/api/web/hr/employees/create`,
   UPDATE_EMPLOYEE: (id: string) => `/api/web/hr/employees/${id}`,
-  GET_PAYROLL_LIST: `/api/web/hr/payroll/payrollList`,
-  PROCESS_ALL_ACTIVE_PAYROLL: `/api/web/hr/payroll/process-all-active`,
-  EXPORT_PAYROLL: `/api/web/hr/payroll/export`,
-  DOWNLOAD_SALARY_SLIP_PDF: (id: string) => `/api/web/hr/payroll/salary-slip/${id}`,
 
-  GET_PENDING_REIMBURSEMENTS: `/api/web/hr/reimbursement/pending`,
+  // Reimbursement endpoints
   APPROVE_REIMBURSEMENT: (id: string) => `/api/web/hr/reimbursement/${id}/approve`,
   REJECT_REIMBURSEMENT: (id: string) => `/api/web/hr/reimbursement/${id}/reject`,
-  GET_HISTORICAL_REIMBURSEMENTS: `/api/web/hr/reimbursement/historical`,
 }
+
+export const DIRECTOR_API = {
+  GET_PENDING_LEAVES: `/api/web/director/leaves/pending`,
+  APPROVE_LEAVE: (id: string) => `/api/web/director/leaves/${id}/approve`,
+  REJECT_LEAVE: (id: string) => `/api/web/director/leaves/${id}/reject`,
+  GET_HISTORICAL_LEAVES: `/api/web/director/leaves/historical`,
+  //Profile endpoints
+  GET_PROFILE: `/api/web/director/get-profile`,
+  CHANGE_PASSWORD: `/api/web/director/change-password`,
+};

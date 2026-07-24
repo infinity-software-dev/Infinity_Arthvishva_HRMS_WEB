@@ -5,6 +5,7 @@ import { DataField, DocumentRow } from '@/components/elements/EmployeeDisplayEle
 import { ArrowLeft } from 'lucide-react';
 import GradientButton from '@/components/buttons/GradientButton';
 import PageTitleHeader from '@/components/elements/PageTitleHeader';
+import { useEffect, useState } from 'react';
 
 export default function ViewEmployeeProfilePage() {
     const {
@@ -16,6 +17,14 @@ export default function ViewEmployeeProfilePage() {
         handleBack,
         handleEdit
     } = useEmployeeProfile();
+
+    const [isHr, setIsHr] = useState<boolean>(false);
+
+    // Safely read role on client mount and store as boolean
+    useEffect(() => {
+        const storedRole = localStorage.getItem("role");
+        setIsHr(storedRole === "HR");
+    }, []);
 
     if (loading) {
         return <div className="p-12 text-center text-gray-500">Loading profile configurations...</div>;
@@ -41,9 +50,11 @@ export default function ViewEmployeeProfilePage() {
                 >
                     <ArrowLeft className="w-4 h-4" /> Back to List
                 </button>
-                <GradientButton onClick={handleEdit}>
-                    Edit Profile
-                </GradientButton>
+                {isHr && (
+                    <GradientButton onClick={handleEdit}>
+                        Edit Profile
+                    </GradientButton>
+                )}
             </div>
 
             {/* Profile Header Card */}
@@ -107,6 +118,7 @@ export default function ViewEmployeeProfilePage() {
                 <h3 className="text-sm font-bold text-brand-blue dark:text-blue-400 border-b border-gray-100 dark:border-gray-700 px-6 py-4 bg-gray-50/50 dark:bg-gray-800/40">Job Details</h3>
                 <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4">
                     <DataField label="Joining Date" value={formatDate(employee.joiningDate)} displayValue={displayValue} />
+                    <DataField label="Role" value={employee.role} displayValue={displayValue} />
                     <DataField label="Department" value={employee.department} displayValue={displayValue} />
                     <DataField label="Position" value={employee.position} displayValue={displayValue} />
                     <DataField label="Salary" value={employee.salary ? Number(employee.salary).toFixed(2) : undefined} displayValue={displayValue} />

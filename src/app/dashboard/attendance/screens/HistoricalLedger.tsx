@@ -1,6 +1,7 @@
 "use client";
 
 import { useHistoricalLedger } from "@/hooks/attendance-hooks/useHistoricalLedger";
+import { DEPARTMENTS } from "@/hooks/employee-hooks/useAddEmployee";
 
 export default function HistoricalLedger() {
     const { data, loading, pagination, filters, modal } = useHistoricalLedger();
@@ -8,6 +9,21 @@ export default function HistoricalLedger() {
     const formatTime = (isoString?: string) => {
         if (!isoString) return "--:--";
         return new Date(isoString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    };
+
+    const getStatusClasses = (status: string) => {
+        switch (status) {
+            case 'P':
+                return 'bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400';
+            case 'A':
+                return 'bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400';
+            case 'L':
+                return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-500/10 dark:text-yellow-400';
+            case 'Half':
+                return 'bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400';
+            default:
+                return 'bg-gray-100 text-gray-700 dark:bg-white/10 dark:text-gray-300';
+        }
     };
 
     return (
@@ -32,7 +48,7 @@ export default function HistoricalLedger() {
                     type="date"
                     value={filters.startDate}
                     onChange={(e) => filters.setStartDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-brand-green" 
+                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-brand-green"
                 />
 
                 <input
@@ -50,7 +66,7 @@ export default function HistoricalLedger() {
                     <option value="" className="dark:bg-primary">All Statuses</option>
                     <option value="P" className="dark:bg-primary">Present (P)</option>
                     <option value="A" className="dark:bg-primary">Absent (A)</option>
-                    <option value="WO" className="dark:bg-primary">Week Off (WO)</option>
+                    {/* <option value="WO" className="dark:bg-primary">Week Off (WO)</option> */}
                     <option value="L" className="dark:bg-primary">Leave (L)</option>
                     <option value="Half" className="dark:bg-primary">Half Day</option>
                 </select>
@@ -61,11 +77,15 @@ export default function HistoricalLedger() {
                     onChange={(e) => filters.setDepartment(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-brand-green"
                 >
-                    <option value="" className="dark:bg-primary">All Departments</option>
-                    <option value="IT" className="dark:bg-primary">IT</option>
-                    <option value="HR" className="dark:bg-primary">HR</option>
-                    <option value="SALES" className="dark:bg-primary">Sales</option>
-                    <option value="ACCOUNTANT" className="dark:bg-primary">Accountant</option>
+                    <option value="">All Departments</option>
+                    {DEPARTMENTS.map((dept) => {
+                        const upperDept = dept.toUpperCase();
+                        return (
+                            <option key={dept} value={upperDept}>
+                                {upperDept}
+                            </option>
+                        );
+                    })}
                 </select>
             </div>
 
@@ -99,13 +119,7 @@ export default function HistoricalLedger() {
                                         <div>Out: <span className="font-medium text-primary dark:text-white">{formatTime(row.outTime)}</span></div>
                                     </td>
                                     <td className="px-6 py-4">
-                                        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${row.status === 'P'
-                                            ? 'bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400'
-                                            : row.status === 'A'
-                                                ? 'bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400'
-                                                : row.status === 'Half'
-                                                ? 'bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400'
-                                                : 'bg-gray-100 text-gray-700 dark:bg-white/10 dark:text-gray-300'}`}>
+                                        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${getStatusClasses(row.status)}`}>
                                             {row.status}
                                         </span>
                                     </td>

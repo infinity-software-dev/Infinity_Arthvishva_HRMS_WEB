@@ -50,7 +50,7 @@ export default function LoginPage() {
               <input
                 type="text"
                 autoFocus
-                placeholder="e.g. IAHR00001"
+                placeholder="e.g. IAHR001"
                 value={employeeCode}
                 onChange={(e) => setEmployeeCode(e.target.value.toUpperCase())}
                 maxLength={9}

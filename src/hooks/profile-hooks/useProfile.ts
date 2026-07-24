@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { profileService, HrProfileData } from "@/services/profile.service";
-import { logToTerminal } from "@/utils/terminalLogger";
+import { profileService, SystemProfileData } from "@/services/profile.service";
 
 export function useProfile() {
-    const [profileData, setProfileData] = useState<HrProfileData | null>(null);
+    // Change state type to the new Union Type
+    const [profileData, setProfileData] = useState<SystemProfileData | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -14,10 +14,10 @@ export function useProfile() {
         setError(null);
         try {
             const data = await profileService.getMasterProfile();
-            await logToTerminal("Master HR profile configuration matrix:", data);
             setProfileData(data);
         } catch (err: any) {
-            console.error("Failed to load Master HR profile configuration matrix:", err);
+            // Make error logging role-agnostic
+            console.error("Failed to load System profile configuration matrix:", err);
             setError(err.response?.data?.message || "Failed to load profile details.");
         } finally {
             setIsLoading(false);

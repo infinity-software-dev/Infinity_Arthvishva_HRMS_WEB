@@ -14,7 +14,7 @@ interface FailedRequestQueue {
   reject: (reason?: any) => void;
 }
 
-const DOMAIN_URL = process.env.NEXT_PUBLIC_LOCAL_URL || "";
+const DOMAIN_URL = process.env.NEXT_PUBLIC_SERVER_URL || "";
 
 const apiClient = axios.create({
   baseURL: DOMAIN_URL,

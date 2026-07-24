@@ -1,4 +1,4 @@
-import { HR_API } from "@/constants/API/api";
+import { HR_API, MANAGEMENT_API } from "@/constants/API/api";
 import apiClient from "@/constants/API/client";
 import { PendingCorrectionItem } from "@/hooks/attendance-hooks/usePendingCorrections";
 import { LiveRosterItem } from "@/hooks/attendance-hooks/useLiveRoster";
@@ -6,7 +6,7 @@ import { HistoricalLedgerFilters, LedgerItem, PaginatedResponse } from "@/hooks/
 
 export const attendanceService = {
     async getPendingCorrectionsCount(): Promise<number> {
-        const response = await apiClient.get(HR_API.GET_PENDING_CORRECTIONS_COUNT);
+        const response = await apiClient.get(MANAGEMENT_API.GET_PENDING_CORRECTIONS_COUNT);
         return response.data.data.count || 0;
     },
 
@@ -16,13 +16,13 @@ export const attendanceService = {
         if (filters?.workMode) params.append('workMode', filters.workMode);
         if (filters?.search) params.append('search', filters.search);
 
-        const response = await apiClient.get(`${HR_API.GET_LIVE_ROSTER}?${params.toString()}`);
+        const response = await apiClient.get(`${MANAGEMENT_API.GET_LIVE_ROSTER}?${params.toString()}`);
         return response.data.data;
     },
 
     // UPDATED: Now accepts a status parameter (defaults to Pending)
     async getCorrections(status: 'Pending' | 'Resolved' = 'Pending'): Promise<PendingCorrectionItem[]> {
-        const response = await apiClient.get(`${HR_API.GET_CORRECTIONS}?status=${status}`);
+        const response = await apiClient.get(`${MANAGEMENT_API.GET_CORRECTIONS}?status=${status}`);
         return response.data.data;
     },
 
@@ -48,7 +48,7 @@ export const attendanceService = {
         if (filters.status) params.append('status', filters.status);
         if (filters.department) params.append('department', filters.department);
 
-        const response = await apiClient.get(`${HR_API.GET_HISTORICAL_LEDGER}?${params.toString()}`);
+        const response = await apiClient.get(`${MANAGEMENT_API.GET_HISTORICAL_LEDGER}?${params.toString()}`);
 
         // Return both the data array and the meta object for pagination
         return {

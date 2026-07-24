@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { useLeaveInbox } from "@/hooks/leave-hooks/useLeaveInbox";
 
 export default function LeaveInbox() {
@@ -110,7 +109,7 @@ export default function LeaveInbox() {
                             </button>
                             <button
                                 onClick={() => handleApprove(req.leaveId)}
-                                className="flex-1 py-2 text-sm font-medium text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors shadow-sm shadow-primary/30"
+                                className="flex-1 py-2 text-sm font-medium text-white bg-gradient-to-r from-brand-blue to-brand-green hover:bg-primary/90 rounded-lg transition-colors shadow-sm shadow-primary/30"
                             >
                                 Approve Leave
                             </button>

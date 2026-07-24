@@ -8,11 +8,12 @@ import UpcomingBirthdays from "@/components/cards/Dashboard/UpcomingBirthdays";
 
 
 export default function Dashboard() {
+  const role = localStorage.getItem("role");
 
   return (
     <div className="items-center px-8 py-4">
       <h1 className="text-black font-extrabold text-2xl dark:text-white">
-        Hello HR,
+        Hello {role},
       </h1>
       <h6 className="text-gray-700 dark:text-gray-100 mt-1.5 font-medium">
         We hope you're having greate day.

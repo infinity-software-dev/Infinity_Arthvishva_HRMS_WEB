@@ -1,4 +1,5 @@
 "use client";
+import { DEPARTMENTS } from "@/hooks/employee-hooks/useAddEmployee";
 import { useLeaveLedger } from "@/hooks/leave-hooks/useLeaveLedger";
 
 export default function LeaveLedger() {
@@ -45,11 +46,15 @@ export default function LeaveLedger() {
                 </select>
 
                 <select value={filters.department} onChange={(e) => filters.setDepartment(e.target.value)} className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-brand-green">
-                    <option value="" className="dark:bg-primary">All Departments</option>
-                    <option value="IT" className="dark:bg-primary">IT</option>
-                    <option value="HR" className="dark:bg-primary">HR</option>
-                    <option value="Sales" className="dark:bg-primary">Sales</option>
-                    <option value="Accountant" className="dark:bg-primary">Accountant</option>
+                    <option value="">All Departments</option>
+                    {DEPARTMENTS.map((dept) => {
+                        const upperDept = dept.toUpperCase();
+                        return (
+                            <option key={dept} value={upperDept}>
+                                {upperDept}
+                            </option>
+                        );
+                    })}
                 </select>
             </div>
 
@@ -234,8 +239,8 @@ export default function LeaveLedger() {
                                         return (
                                             <div key={idx} className="flex items-start gap-4 relative">
                                                 <div className={`w-7 h-7 rounded-full flex items-center justify-center z-10 text-xs font-bold shrink-0 ${isApproved ? 'bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-400' :
-                                                        isRejected ? 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-400' :
-                                                            'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400'
+                                                    isRejected ? 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-400' :
+                                                        'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400'
                                                     }`}>
                                                     {isApproved ? '✓' : isRejected ? '✕' : idx + 1}
                                                 </div>

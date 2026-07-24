@@ -1,5 +1,6 @@
-import { HR_API } from "@/constants/API/api";
+import { HR_API, MANAGEMENT_API } from "@/constants/API/api";
 import apiClient from "@/constants/API/client";
+import { logToTerminal } from "@/utils/terminalLogger";
 
 
 export interface EmployeeCardTypes {
@@ -7,6 +8,7 @@ export interface EmployeeCardTypes {
     employeeCode: string;
     name: string;
     email: string;
+    role: 'Employee' | 'Intern';
     department?: string;
     position?: string;
     status: 'Active' | 'Inactive';
@@ -17,7 +19,7 @@ export interface EmployeeCardTypes {
 export const employeeService = {
     async getEmployees(searchQuery: string, department: string, status: string, page: number, limit: number) {
 
-        const response = await apiClient.get(HR_API.GET_ALL_EMPLOYEES, {
+        const response = await apiClient.get(MANAGEMENT_API.GET_ALL_EMPLOYEES, {
             params: {
                 search: searchQuery || undefined,
                 department: department || undefined,
@@ -55,13 +57,14 @@ export const employeeService = {
     },
 
     async getEmployeeById(id: string, fields?: string[]) {
-        let url = `${HR_API.GET_SINGLE_EMPLOYEE}/${id}`;
+        let url = `${MANAGEMENT_API.GET_SINGLE_EMPLOYEE}/${id}`;
 
         if (fields && fields.length > 0) {
             url += `?fields=${fields.join(',')}`;
         }
 
         const response = await apiClient.get(url);
+        // await logToTerminal("Response from getEmployeeById: ", response.data);
         return response.data;
     },
 

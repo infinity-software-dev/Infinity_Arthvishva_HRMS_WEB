@@ -60,8 +60,8 @@ export default function UpcomingBirthdays() {
                         <div
                             key={person.id}
                             className={`flex items-center justify-between p-2 md:p-3 rounded-xl md:rounded-2xl transition-all duration-300 ${person.isToday
-                                    ? "bg-gradient-to-r from-brand-blue/10 to-brand-green/10 dark:from-brand-blue/10 dark:to-brand-green/10 border border-brand-blue/20 dark:border-brand-blue/20 shadow-sm"
-                                    : "hover:bg-gray-50 dark:hover:bg-white/5 border border-transparent"
+                                ? "bg-gradient-to-r from-brand-blue/10 to-brand-green/10 dark:from-brand-blue/10 dark:to-brand-green/10 border border-brand-blue/20 dark:border-brand-blue/20 shadow-sm"
+                                : "hover:bg-gray-50 dark:hover:bg-white/5 border border-transparent"
                                 }`}
                         >
                             <div className="flex items-center gap-2 md:gap-3 min-w-0">
@@ -82,8 +82,8 @@ export default function UpcomingBirthdays() {
                                 <div className="flex flex-col min-w-0 pr-2">
                                     <span
                                         className={`text-xs md:text-sm font-bold truncate ${person.isToday
-                                                ? "text-brand-blue"
-                                                : "text-primary dark:text-white group-hover:text-brand-blue"
+                                            ? "text-brand-blue"
+                                            : "text-primary dark:text-white group-hover:text-brand-blue"
                                             }`}
                                     >
                                         {person.name}
@@ -96,15 +96,9 @@ export default function UpcomingBirthdays() {
 
                             {/* Date / Action Button */}
                             <div className="flex items-center shrink-0 ml-1 md:ml-2">
-                                {person.isToday ? (
-                                    <button className="text-[9px] md:text-[10px] font-bold text-white bg-brand-blue hover:bg-brand-blue/80 px-2.5 py-1 md:px-3 md:py-1.5 rounded-full transition-colors shadow-sm shadow-brand-blue/30 whitespace-nowrap">
-                                        Send Wishes
-                                    </button>
-                                ) : (
-                                    <span className="text-[10px] md:text-xs font-bold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-white/5 px-1.5 py-0.5 md:px-2 md:py-1 rounded-md whitespace-nowrap">
-                                        {person.date}
-                                    </span>
-                                )}
+                                <span className="text-[10px] md:text-xs font-bold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-white/5 px-1.5 py-0.5 md:px-2 md:py-1 rounded-md whitespace-nowrap">
+                                    {person.date}
+                                </span>
                             </div>
                         </div>
                     ))

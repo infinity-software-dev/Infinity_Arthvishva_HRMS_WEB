@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { BarChart3 } from "lucide-react"; 
+import { BarChart3 } from "lucide-react";
 import { useTotalStat } from "@/hooks/dashboard-hooks/useTotalStat";
 
 export default function TotalStat() {
@@ -10,7 +10,15 @@ export default function TotalStat() {
 
   useEffect(() => {
     if (chartData.length > 0) {
-      setActiveLabel(chartData[chartData.length - 1].label);
+      // FIX 1: Find the last month that actually has data (isn't null)
+      // We create a shallow copy so .reverse() doesn't mutate the original array
+      const lastValidItem = [...chartData].reverse().find(item => item.value !== null);
+      if (lastValidItem) {
+        setActiveLabel(lastValidItem.label);
+      } else {
+        // Fallback if all are somehow null
+        setActiveLabel(chartData[chartData.length - 1].label);
+      }
     }
   }, [chartData]);
 
@@ -52,15 +60,13 @@ export default function TotalStat() {
         </div>
       </div>
 
-      {/* Triple Check Content Area */}
+      {/* Content Area */}
       {loading ? (
-        // STATE 1: LOADING
         <div className="w-full h-72 flex flex-col items-center justify-center gap-2 text-secondary dark:text-gray-500 animate-pulse">
           <div className="w-8 h-8 border-2 border-brand-green border-t-transparent rounded-full animate-spin"></div>
           <span className="text-xs">Loading stats...</span>
         </div>
       ) : chartData.length === 0 ? (
-        // STATE 2: EMPTY (No Data)
         <div className="w-full h-72 flex flex-col items-center justify-center text-center opacity-70">
           <div className="bg-brand-green/10 dark:bg-brand-green/20 p-4 rounded-full mb-3 text-brand-green">
             <BarChart3 className="w-6 h-6" />
@@ -73,7 +79,6 @@ export default function TotalStat() {
           </p>
         </div>
       ) : (
-        // STATE 3: DATA RENDER
         <div className="flex gap-2 md:gap-4 h-72 w-full">
           {/* Y-Axis Labels */}
           <div className="flex flex-col justify-between text-xs font-medium text-secondary dark:text-gray-500 py-6 pt-12 shrink-0">
@@ -88,36 +93,42 @@ export default function TotalStat() {
           <div className="flex-1 overflow-x-auto pb-2 pt-10 no-scrollbar">
             <div className="flex items-end justify-around gap-3 h-full min-w-max md:min-w-0 pl-2 pr-2">
               {chartData.map((item) => {
-                const isActive = activeLabel === item.label;
-                const percentage = Math.min(item.value, 100);
+                // FIX 2: Identify if data exists for this month
+                const hasData = item.value !== null;
+                const isActive = hasData && activeLabel === item.label;
+                const percentage = hasData ? Math.min(item.value as number, 100) : 0;
 
                 return (
                   <div
                     key={item.label}
-                    className="flex flex-col items-center gap-1 w-full min-w-[2.5rem] group relative cursor-pointer"
-                    onMouseEnter={() => setActiveLabel(item.label)}
-                    onClick={() => setActiveLabel(item.label)}
+                    // FIX 3: Disable pointer events if there is no data
+                    className={`flex flex-col items-center gap-1 w-full min-w-[2.5rem] group relative ${hasData ? 'cursor-pointer' : 'cursor-default'}`}
+                    onMouseEnter={() => hasData && setActiveLabel(item.label)}
+                    onClick={() => hasData && setActiveLabel(item.label)}
                   >
-                    {/* Tooltip */}
-                    <div
-                      className={`absolute -top-10 left-1/2 -translate-x-1/2 transition-all duration-300 z-20 ${isActive
-                        ? "opacity-100 -translate-y-1 scale-100"
-                        : "opacity-0 translate-y-2 scale-90 pointer-events-none"
-                        }`}
-                    >
-                      <div className="bg-brand-green dark:bg-white text-white dark:text-brand-green text-[10px] font-bold py-1.5 px-3 rounded-full shadow-xl whitespace-nowrap relative">
-                        {percentage}%
-                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-brand-green dark:bg-white rotate-45"></div>
+                    {/* Tooltip - Only render if data exists */}
+                    {hasData && (
+                      <div
+                        className={`absolute -top-10 left-1/2 -translate-x-1/2 transition-all duration-300 z-20 ${isActive
+                          ? "opacity-100 -translate-y-1 scale-100"
+                          : "opacity-0 translate-y-2 scale-90 pointer-events-none"
+                          }`}
+                      >
+                        <div className="bg-brand-green dark:bg-white text-white dark:text-brand-green text-[10px] font-bold py-1.5 px-3 rounded-full shadow-xl whitespace-nowrap relative">
+                          {percentage}%
+                          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-brand-green dark:bg-white rotate-45"></div>
+                        </div>
                       </div>
-                    </div>
+                    )}
 
                     {/* Bar */}
                     <div className="relative w-full max-w-[2.5rem] h-48 flex items-end rounded-t-xl bg-transparent">
                       <div
                         className={`w-full rounded-t-md md:rounded-t-xl transition-all duration-300 ease-out ${isActive
-                          // Applied Brand Blue to Brand Green gradient here
                           ? "bg-gradient-to-t from-brand-green to-brand-blue shadow-lg shadow-brand-green/40 dark:shadow-brand-green/60 scale-[1.05]"
-                          : "bg-brand-green/20 hover:bg-brand-green/30 dark:bg-white/5 dark:hover:bg-white/10"
+                          : hasData
+                            ? "bg-brand-green/20 hover:bg-brand-green/30 dark:bg-white/5 dark:hover:bg-white/10"
+                            : "bg-transparent" // Keep future months completely invisible
                           }`}
                         style={{ height: `${percentage}%` }}
                       ></div>

@@ -52,6 +52,7 @@ export default function AddEmployeePage() {
                     </div>
                 </section>
 
+
                 {/* 2. Personal Details */}
                 <section>
                     <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Personal Details</h3>
@@ -138,6 +139,18 @@ export default function AddEmployeePage() {
                     <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Job Details</h3>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
                         <FormInput name="joiningDate" label="Joining Date" error={errors.joiningDate} type="date" value={formData.joiningDate} onChange={handleChange} textTransform="none" required />
+                        <FormSelect
+                            name="role"
+                            label="Role (Access Level)"
+                            error={errors.role}
+                            value={formData.role}
+                            onChange={handleChange}
+                            options={[
+                                { label: 'Employee', value: 'Employee' },
+                                { label: 'Intern', value: 'Intern' }
+                            ]}
+                            required
+                        />
                         <FormSelect name="department" label="Department" error={errors.department} value={formData.department} onChange={handleChange} options={DEPARTMENTS.map(d => ({ label: d, value: d }))} required />
                         <FormSelect name="position" label="Position" error={errors.position} value={formData.position} onChange={handleChange} options={POSITIONS.map(p => ({ label: p, value: p }))} required />
                         <FormSelect name="managerId" label="Reporting Manager" error={errors.managerId} value={formData.managerId} onChange={handleChange} options={managerOptions} required />

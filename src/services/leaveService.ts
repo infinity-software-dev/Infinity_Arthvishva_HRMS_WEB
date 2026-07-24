@@ -1,23 +1,47 @@
-import { HR_API } from "@/constants/API/api";
+// src/services/leaveService.ts
+import { HR_API, DIRECTOR_API } from "@/constants/API/api";
 import apiClient from "@/constants/API/client";
 import { PendingLeaveItem } from "@/hooks/leave-hooks/useLeaveInbox";
 
+// Helper to dynamically get the right endpoints
+const getEndpoints = () => {
+    // Ensure we are in the browser before checking localStorage
+    if (typeof window !== "undefined") {
+        const role = localStorage.getItem("role");
+        if (role === "DIRECTOR") {
+            return DIRECTOR_API;
+        }
+    }
+    return HR_API; // Default fallback
+};
+
 export const leaveService = {
     async getPendingLeaves(): Promise<PendingLeaveItem[]> {
-        const response = await apiClient.get(HR_API.GET_PENDING_LEAVES);
+        const ENDPOINTS = getEndpoints();
+        const response = await apiClient.get(ENDPOINTS.GET_PENDING_LEAVES);
         return response.data.data;
     },
 
     async approveLeave(leaveId: string): Promise<void> {
-        await apiClient.patch(HR_API.APPROVE_LEAVE(leaveId));
+        const ENDPOINTS = getEndpoints();
+        try {
+            await apiClient.patch(ENDPOINTS.APPROVE_LEAVE(leaveId));
+        } catch (error: any) {
+            // Format the error into a clean string for the UI
+            const errorMessage = error.response?.data?.message || "Failed to approve leave";
+
+            // You MUST throw it again so the Hook catches it
+            throw new Error(errorMessage);
+        }
     },
 
     async rejectLeave(leaveId: string, remarks: string): Promise<void> {
-        await apiClient.patch(HR_API.REJECT_LEAVE(leaveId), { remarks });
+        const ENDPOINTS = getEndpoints();
+        await apiClient.patch(ENDPOINTS.REJECT_LEAVE(leaveId), { remarks });
     },
 
-    // Add inside your leaveService object:
     async getHistoricalLeaves(filters: any) {
+        const ENDPOINTS = getEndpoints();
         const params = new URLSearchParams({
             page: filters.page.toString(),
             limit: filters.limit.toString(),
@@ -29,7 +53,7 @@ export const leaveService = {
         if (filters.status) params.append('status', filters.status);
         if (filters.department) params.append('department', filters.department);
 
-        const response = await apiClient.get(`${HR_API.GET_HISTORICAL_LEAVES}?${params.toString()}`);
+        const response = await apiClient.get(`${ENDPOINTS.GET_HISTORICAL_LEAVES}?${params.toString()}`);
         return { data: response.data.data, meta: response.data.meta };
     }
 };

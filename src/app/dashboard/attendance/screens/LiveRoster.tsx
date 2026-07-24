@@ -6,6 +6,21 @@ import { useLiveRoster } from "@/hooks/attendance-hooks/useLiveRoster";
 export default function LiveRoster() {
   const { roster, loading, filters } = useLiveRoster();
 
+  const getStatusClasses = (status: string) => {
+    switch (status) {
+      case 'P':
+        return 'bg-green-100 text-green-700';
+      case 'L':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'Half':
+        return 'bg-blue-100 text-blue-700';
+      default:
+        return 'bg-gray-100 text-gray-700';
+    }
+  };
+
+
+
   return (
     <div className="flex flex-col h-full w-full">
       {/* 1. Action Bar (Filters & Search) */}
@@ -74,7 +89,7 @@ export default function LiveRoster() {
                   </td>
                   <td className="px-6 py-4">{row.workMode}</td>
                   <td className="px-6 py-4">
-                    <span className="bg-green-100 text-green-700 px-2.5 py-1 rounded-full text-xs font-semibold">
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${getStatusClasses(row.status)}`}>
                       {row.status}
                     </span>
                   </td>

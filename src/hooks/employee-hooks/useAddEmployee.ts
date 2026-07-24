@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { employeeService } from "@/services/employee.service";
-import { logToTerminal } from "@/utils/terminalLogger";
 import imageCompression from "browser-image-compression";
 
 // ── STATIC SCHEMAS ──
@@ -550,7 +549,8 @@ export const useAddEmployee = () => {
       await employeeService.createEmployee(data);
       router.back();
     } catch (error: any) {
-      await logToTerminal("API Error Details:", error);
+      // await logToTerminal("API Error Details:", error);
+      console.error("API Error Details:", error);
 
       // 3. THE FIX: Display the actual backend error so you know exactly what failed
       const backendErrorMsg =

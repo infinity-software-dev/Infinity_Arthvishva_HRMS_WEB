@@ -1,12 +1,12 @@
 // src/services/reimbursementService.ts
 
 import apiClient from "@/constants/API/client";
-import { HR_API } from "@/constants/API/api";
+import { HR_API, MANAGEMENT_API } from "@/constants/API/api";
 
 export const reimbursementService = {
     // Fetch incoming items for the admin inbox view
     getPendingClaims: async () => {
-        const response = await apiClient.get(HR_API.GET_PENDING_REIMBURSEMENTS);
+        const response = await apiClient.get(MANAGEMENT_API.GET_PENDING_REIMBURSEMENTS);
         return response.data;
     },
 
@@ -26,7 +26,7 @@ export const reimbursementService = {
 
     // Fetch all historical non-pending claims (Approved / Rejected) for the ledger
     getHistoricalClaims: async () => {
-        const response = await apiClient.get(HR_API.GET_HISTORICAL_REIMBURSEMENTS);
+        const response = await apiClient.get(MANAGEMENT_API.GET_HISTORICAL_REIMBURSEMENTS);
         return response.data;
     },
 

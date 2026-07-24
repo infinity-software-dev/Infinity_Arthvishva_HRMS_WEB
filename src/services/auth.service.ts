@@ -7,8 +7,9 @@ export const authService = {
     const response = await axios.post(AUTH_API.LOGIN_HR, { idCode, password });
     return response.data;
   },
-  loginDirector: async (employeeCode: string, password: string) => {
-    const response = await axios.post(AUTH_API.LOGIN_DIRECTOR, { employeeCode, password });
+  loginDirector: async (idCode: string, password: string) => {
+    const response = await axios.post(AUTH_API.LOGIN_DIRECTOR, { idCode, password });
+
     return response.data;
   },
   loginEmployee: async (employeeCode: string, password: string) => {
