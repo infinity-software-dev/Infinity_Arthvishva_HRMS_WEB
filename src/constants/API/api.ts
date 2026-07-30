@@ -49,6 +49,11 @@ export const HR_API = {
   // Reimbursement endpoints
   APPROVE_REIMBURSEMENT: (id: string) => `/api/web/hr/reimbursement/${id}/approve`,
   REJECT_REIMBURSEMENT: (id: string) => `/api/web/hr/reimbursement/${id}/reject`,
+
+  // ─── COMPLAINT ENDPOINTS (ADDED) ───
+  GET_LIVE_COMPLAINTS: `/api/web/hr/complaints/live`,
+  GET_HISTORICAL_COMPLAINTS: `/api/web/hr/complaints/historical`,
+  UPDATE_COMPLAINT_STATUS: (id: string) => `/api/web/hr/complaints/${id}/status`,
 }
 
 export const DIRECTOR_API = {
@@ -59,4 +64,9 @@ export const DIRECTOR_API = {
   //Profile endpoints
   GET_PROFILE: `/api/web/director/get-profile`,
   CHANGE_PASSWORD: `/api/web/director/change-password`,
+
+  // ─── COMPLAINT ENDPOINTS (ADDED) ───
+  GET_LIVE_COMPLAINTS: `/api/web/director/complaints/live`,
+  GET_HISTORICAL_COMPLAINTS: `/api/web/director/complaints/historical`,
+  UPDATE_COMPLAINT_STATUS: (id: string) => `/api/web/director/complaints/${id}/status`,
 };

@@ -79,10 +79,10 @@ export default function LiveRoster() {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={row.isLate ? "text-red-500 font-medium" : "text-gray-600 dark:text-gray-300"}>
+                    {/* <span className={row.isLate ? "text-red-500 font-medium" : "text-gray-600 dark:text-gray-300"}> */}
                       {row.inTime ? new Date(row.inTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--:--'}
-                    </span>
-                    {row.isLate && <span className="ml-2 text-xs bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md">Late {row.lateMinutes}m</span>}
+                    {/* </span> */}
+                    {/* {row.isLate && <span className="ml-2 text-xs bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md">Late {row.lateMinutes}m</span>} */}
                   </td>
                   <td className="px-6 py-4">
                     {row.outTime ? new Date(row.outTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Working...'}
