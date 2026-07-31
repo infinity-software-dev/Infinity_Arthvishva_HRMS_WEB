@@ -3,6 +3,7 @@ import apiClient from "@/constants/API/client";
 import { PendingCorrectionItem } from "@/hooks/attendance-hooks/usePendingCorrections";
 import { LiveRosterItem } from "@/hooks/attendance-hooks/useLiveRoster";
 import { HistoricalLedgerFilters, LedgerItem, PaginatedResponse } from "@/hooks/attendance-hooks/useHistoricalLedger";
+import { logToTerminal } from "@/utils/terminalLogger";
 
 export const attendanceService = {
     async getPendingCorrectionsCount(): Promise<number> {
@@ -49,6 +50,8 @@ export const attendanceService = {
         if (filters.department) params.append('department', filters.department);
 
         const response = await apiClient.get(`${MANAGEMENT_API.GET_HISTORICAL_LEDGER}?${params.toString()}`);
+
+        // await logToTerminal(response.data);
 
         // Return both the data array and the meta object for pagination
         return {

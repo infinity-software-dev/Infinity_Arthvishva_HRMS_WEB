@@ -17,6 +17,8 @@ export interface LiveRosterItem {
     workMode: string;       // 'Office', 'WFH', 'Field'
     isLate: boolean;
     lateMinutes: number;
+    latitude: number | null;
+    longitude: number | null;
 }
 
 export function useLiveRoster() {

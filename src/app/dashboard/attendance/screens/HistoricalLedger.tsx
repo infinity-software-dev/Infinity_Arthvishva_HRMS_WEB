@@ -1,10 +1,12 @@
 "use client";
 
+import MapModal from "@/components/modals/MapModal";
 import { useHistoricalLedger } from "@/hooks/attendance-hooks/useHistoricalLedger";
 import { DEPARTMENTS } from "@/hooks/employee-hooks/useAddEmployee";
+import { MapPin } from "lucide-react";
 
 export default function HistoricalLedger() {
-    const { data, loading, pagination, filters, modal } = useHistoricalLedger();
+    const { data, loading, pagination, filters, modal, mapModal } = useHistoricalLedger();
 
     const formatTime = (isoString?: string) => {
         if (!isoString) return "--:--";
@@ -99,6 +101,7 @@ export default function HistoricalLedger() {
                             <th className="px-6 py-4 font-medium">Punches</th>
                             <th className="px-6 py-4 font-medium">Status</th>
                             <th className="px-6 py-4 font-medium text-right">Actions</th>
+                            <th className="px-6 py-4 font-medium text-right">Location</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100 dark:divide-gray-800 bg-transparent transition-colors">
@@ -130,6 +133,19 @@ export default function HistoricalLedger() {
                                         >
                                             View Details
                                         </button>
+                                    </td>
+                                    <td className="px-6 py-4 text-center">
+                                        {row.latitude && row.longitude ? (
+                                            <button
+                                                onClick={() => mapModal.handleOpenMap(row)}
+                                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-brand-green bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/40 rounded-lg transition-colors cursor-pointer"
+                                            >
+                                                <MapPin size={14} />
+                                                View Map
+                                            </button>
+                                        ) : (
+                                            <span className="text-xs text-gray-400">N/A</span>
+                                        )}
                                     </td>
                                 </tr>
                             ))
@@ -242,6 +258,21 @@ export default function HistoricalLedger() {
                     </div>
                 </div>
             )}
+
+            <MapModal
+                isOpen={mapModal.isMapOpen}
+                onClose={() => {
+                    mapModal.setIsMapOpen(false);
+                    mapModal.setSelectedMapData(null);
+                }}
+                latitude={mapModal.selectedMapData?.latitude}
+                longitude={mapModal.selectedMapData?.longitude}
+                checkOutLatitude={mapModal.selectedMapData?.checkOutLatitude}
+                checkOutLongitude={mapModal.selectedMapData?.checkOutLongitude}
+                locationHistory={mapModal.selectedMapData?.locationHistory || []}
+                workMode={mapModal.selectedMapData?.workMode}
+                employeeName={mapModal.selectedMapData?.employeeName}
+            />
         </div>
     );
 }

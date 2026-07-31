@@ -19,6 +19,13 @@ export interface LedgerItem {
     todayWork?: string;
     pendingWork?: string;
     issuesFaced?: string;
+
+    // ─── ADDED LOCATION FIELDS ───
+    latitude?: number | null;
+    longitude?: number | null;
+    checkOutLatitude?: number | null;
+    checkOutLongitude?: number | null;
+    locationHistory?: any[]; // Array of { latitude, longitude, timestamp }
 }
 
 export interface HistoricalLedgerFilters {
@@ -73,8 +80,17 @@ export function useHistoricalLedger() {
     const [status, setStatus] = useState("");
     const [department, setDepartment] = useState("");
 
-    // Modal State
+    // Details Modal State
     const [selectedRecord, setSelectedRecord] = useState<LedgerItem | null>(null);
+
+    // Map Modal State
+    const [isMapOpen, setIsMapOpen] = useState(false);
+    const [selectedMapData, setSelectedMapData] = useState<LedgerItem | null>(null);
+
+    const handleOpenMap = (row: LedgerItem) => {
+        setSelectedMapData(row);
+        setIsMapOpen(true);
+    };
 
     // Debounce search
     useEffect(() => {
@@ -118,7 +134,8 @@ export function useHistoricalLedger() {
     }, [fetchLedger]);
 
     return {
-        data, loading,
+        data,
+        loading,
         pagination: { page, setPage, limit, setLimit, totalPages, totalRecords },
         filters: {
             searchQuery, setSearchQuery,
@@ -127,6 +144,8 @@ export function useHistoricalLedger() {
             status, setStatus,
             department, setDepartment
         },
-        modal: { selectedRecord, setSelectedRecord }
+        modal: { selectedRecord, setSelectedRecord },
+        // ─── EXPORTED MAP MODAL HELPERS ───
+        mapModal: { isMapOpen, setIsMapOpen, selectedMapData, setSelectedMapData, handleOpenMap }
     };
 }

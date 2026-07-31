@@ -1,10 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import { useLiveRoster } from "@/hooks/attendance-hooks/useLiveRoster";
-
+import { MapPin } from "lucide-react";
+import MapModal from "@/components/modals/MapModal";
 
 export default function LiveRoster() {
   const { roster, loading, filters } = useLiveRoster();
+
+  // Modal State
+  const [isMapOpen, setIsMapOpen] = useState(false);
+  const [selectedMapData, setSelectedMapData] = useState<any>(null);
 
   const getStatusClasses = (status: string) => {
     switch (status) {
@@ -19,10 +25,13 @@ export default function LiveRoster() {
     }
   };
 
-
+  const handleOpenMap = (row: any) => {
+    setSelectedMapData(row);
+    setIsMapOpen(true);
+  };
 
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col h-full w-full relative">
       {/* 1. Action Bar (Filters & Search) */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
         <input
@@ -58,16 +67,17 @@ export default function LiveRoster() {
               <th className="px-6 py-4 font-medium">Out Time</th>
               <th className="px-6 py-4 font-medium">Mode</th>
               <th className="px-6 py-4 font-medium">Status</th>
+              <th className="px-6 py-4 font-medium text-center">Location</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 dark:divide-gray-700 bg-white dark:bg-gray-900">
             {loading ? (
               <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-gray-400">Loading roster...</td>
+                <td colSpan={6} className="px-6 py-8 text-center text-gray-400">Loading roster...</td>
               </tr>
             ) : roster.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-6 py-8 text-center text-gray-400">No active punches found for these filters.</td>
+                <td colSpan={6} className="px-6 py-8 text-center text-gray-400">No active punches found for these filters.</td>
               </tr>
             ) : (
               roster.map((row) => (
@@ -79,10 +89,7 @@ export default function LiveRoster() {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    {/* <span className={row.isLate ? "text-red-500 font-medium" : "text-gray-600 dark:text-gray-300"}> */}
-                      {row.inTime ? new Date(row.inTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--:--'}
-                    {/* </span> */}
-                    {/* {row.isLate && <span className="ml-2 text-xs bg-red-100 text-red-600 px-1.5 py-0.5 rounded-md">Late {row.lateMinutes}m</span>} */}
+                    {row.inTime ? new Date(row.inTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--:--'}
                   </td>
                   <td className="px-6 py-4">
                     {row.outTime ? new Date(row.outTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Working...'}
@@ -93,12 +100,42 @@ export default function LiveRoster() {
                       {row.status}
                     </span>
                   </td>
+                  <td className="px-6 py-4 text-center">
+                    {/* Only show map button if latitude/longitude exist for this punch */}
+                    {row.latitude && row.longitude ? (
+                      <button
+                        onClick={() => handleOpenMap(row)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-brand-green bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/40 rounded-lg transition-colors"
+                      >
+                        <MapPin size={14} />
+                        View Map
+                      </button>
+                    ) : (
+                      <span className="text-xs text-gray-400">N/A</span>
+                    )}
+                  </td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
       </div>
+
+      {/* 3. Render Map Modal */}
+      <MapModal
+        isOpen={isMapOpen}
+        onClose={() => {
+          setIsMapOpen(false);
+          setSelectedMapData(null);
+        }}
+        latitude={selectedMapData?.latitude}
+        longitude={selectedMapData?.longitude}
+        checkOutLatitude={selectedMapData?.checkOutLatitude}
+        checkOutLongitude={selectedMapData?.checkOutLongitude}
+        locationHistory={selectedMapData?.locationHistory || []}
+        workMode={selectedMapData?.workMode}
+        employeeName={selectedMapData?.employeeName}
+      />
     </div>
   );
 }
