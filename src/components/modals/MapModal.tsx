@@ -38,8 +38,6 @@ export default function MapModal({
     const [libReady, setLibReady] = useState(false);
     const [mapError, setMapError] = useState(false);
 
-    console.log(locationHistory);
-
     useEffect(() => {
         if (!isOpen) {
             setLibReady(false);

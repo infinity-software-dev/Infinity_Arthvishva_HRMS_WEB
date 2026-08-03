@@ -104,7 +104,7 @@ export function useHistoricalLedger() {
     }, [debouncedSearch, startDate, endDate, status, department, limit]);
 
     const fetchLedger = useCallback(async () => {
-        setLoading(true);
+        // setLoading(true);
         try {
             // Call our clean service method
             const result = await attendanceService.getHistoricalLedger({

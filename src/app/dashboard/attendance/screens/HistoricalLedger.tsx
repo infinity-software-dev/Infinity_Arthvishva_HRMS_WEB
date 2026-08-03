@@ -8,6 +8,8 @@ import { MapPin } from "lucide-react";
 export default function HistoricalLedger() {
     const { data, loading, pagination, filters, modal, mapModal } = useHistoricalLedger();
 
+    console.log(data)
+
     const formatTime = (isoString?: string) => {
         if (!isoString) return "--:--";
         return new Date(isoString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -92,59 +94,92 @@ export default function HistoricalLedger() {
             </div>
 
             {/* 2. Data Table */}
-            <div className="bg-white dark:bg-primary overflow-x-auto rounded-xl border border-gray-100 dark:border-gray-800 mb-6 flex-1 shadow-sm transition-colors duration-300  ">
-                <table className="w-full text-left text-sm text-secondary dark:text-gray-400">
-                    <thead className="bg-gray-50 dark:bg-white/5 text-secondary dark:text-gray-400 border-b border-gray-100 dark:border-gray-800 transition-colors">
+            <div className="bg-white dark:bg-primary overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-700 mb-6 flex-1 shadow-sm transition-colors duration-300">
+                <table className="w-full text-left text-sm text-gray-800 dark:text-gray-200">
+                    <thead className="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-b border-gray-300 dark:border-gray-700 transition-colors">
                         <tr>
-                            <th className="px-6 py-4 font-medium">Date</th>
-                            <th className="px-6 py-4 font-medium">Employee</th>
-                            <th className="px-6 py-4 font-medium">Punches</th>
-                            <th className="px-6 py-4 font-medium">Status</th>
-                            <th className="px-6 py-4 font-medium text-right">Actions</th>
-                            <th className="px-6 py-4 font-medium text-right">Location</th>
+                            <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60 ">Date</th>
+                            <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60">Employee</th>
+                            <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60 text-center">Punches</th>
+                            <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60 text-center">Mode</th>
+                            <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60 text-center">Status</th>
+                            <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60 text-center">Actions</th>
+                            <th className="px-6 py-3.5 font-bold whitespace-nowrap text-center">Location</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-100 dark:divide-gray-800 bg-transparent transition-colors">
+                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-transparent transition-colors">
                         {loading ? (
-                            <tr><td colSpan={5} className="px-6 py-8 text-center text-secondary dark:text-gray-500">Loading ledger...</td></tr>
+                            <tr>
+                                <td colSpan={6} className="px-6 py-8 text-center text-gray-600 dark:text-gray-400 font-medium">
+                                    Loading ledger...
+                                </td>
+                            </tr>
                         ) : data.length === 0 ? (
-                            <tr><td colSpan={5} className="px-6 py-8 text-center text-secondary dark:text-gray-500">No records found for this period.</td></tr>
+                            <tr>
+                                <td colSpan={6} className="px-6 py-8 text-center text-gray-600 dark:text-gray-400 font-medium">
+                                    No records found for this period.
+                                </td>
+                            </tr>
                         ) : (
                             data.map((row) => (
-                                <tr key={row.attendanceId} className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                                    <td className="px-6 py-4 font-medium text-primary dark:text-white">{row.date}</td>
-                                    <td className="px-6 py-4">
-                                        <div className="font-medium text-primary dark:text-white">{row.employeeName}</div>
-                                        <div className="text-xs text-secondary dark:text-gray-400">{row.employeeCode} • {row.department}</div>
+                                <tr key={row.attendanceId} className="hover:bg-gray-100/70 dark:hover:bg-gray-800/50 transition-colors">
+                                    {/* Date */}
+                                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white border-r border-gray-200/60 dark:border-gray-800">
+                                        {row.date}
                                     </td>
-                                    <td className="px-6 py-4 text-xs">
-                                        <div>In: <span className="font-medium text-primary dark:text-white">{formatTime(row.inTime)}</span></div>
-                                        <div>Out: <span className="font-medium text-primary dark:text-white">{formatTime(row.outTime)}</span></div>
+
+                                    {/* Employee */}
+                                    <td className="px-6 py-4 whitespace-nowrap border-r border-gray-200/60 dark:border-gray-800">
+                                        <div className="font-semibold text-gray-900 dark:text-white">{row.employeeName}</div>
+                                        <div className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+                                            {row.employeeCode} • {row.department}
+                                        </div>
                                     </td>
-                                    <td className="px-6 py-4">
-                                        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${getStatusClasses(row.status)}`}>
+
+                                    {/* Punches */}
+                                    <td className="px-6 py-4 whitespace-nowrap text-xs border-r text-center border-gray-200/60 dark:border-gray-800">
+                                        <div className="text-gray-700 dark:text-gray-300">
+                                            In: <span className="font-semibold text-gray-900 dark:text-white">{formatTime(row.inTime)}</span>
+                                        </div>
+                                        <div className="text-gray-700 dark:text-gray-300">
+                                            Out: <span className="font-semibold text-gray-900 dark:text-white">{formatTime(row.outTime)}</span>
+                                        </div>
+                                    </td>
+
+                                    {/* Mode */}
+                                    <td className="px-6 py-4 whitespace-nowrap border-r text-center border-gray-200/60 dark:border-gray-800">
+                                        {row.workMode}
+                                    </td>
+
+                                    {/* Status */}
+                                    <td className="px-6 py-4 whitespace-nowrap border-r text-center border-gray-200/60 dark:border-gray-800">
+                                        <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${getStatusClasses(row.status)}`}>
                                             {row.status}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 text-right">
+
+                                    {/* Actions */}
+                                    <td className="px-6 py-4 whitespace-nowrap text-center border-r border-gray-200/60 dark:border-gray-800">
                                         <button
                                             onClick={() => modal.setSelectedRecord(row)}
-                                            className="text-primary hover:text-brand-blue cursor-pointer dark:hover:text-brand-blue dark:text-white font-medium text-sm transition-colors"
+                                            className="text-primary hover:text-brand-blue cursor-pointer dark:hover:text-brand-blue dark:text-white font-semibold text-sm transition-colors"
                                         >
                                             View Details
                                         </button>
                                     </td>
-                                    <td className="px-6 py-4 text-center">
+
+                                    {/* Location */}
+                                    <td className="px-6 py-4 whitespace-nowrap text-center">
                                         {row.latitude && row.longitude ? (
                                             <button
                                                 onClick={() => mapModal.handleOpenMap(row)}
-                                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-brand-green bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/40 rounded-lg transition-colors cursor-pointer"
+                                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-green-800 bg-green-50 border border-green-300 hover:bg-green-100 dark:text-green-300 dark:bg-green-950/50 dark:border-green-800 dark:hover:bg-green-900/60 rounded-lg transition-colors cursor-pointer shadow-sm"
                                             >
                                                 <MapPin size={14} />
                                                 View Map
                                             </button>
                                         ) : (
-                                            <span className="text-xs text-gray-400">N/A</span>
+                                            <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">N/A</span>
                                         )}
                                     </td>
                                 </tr>
