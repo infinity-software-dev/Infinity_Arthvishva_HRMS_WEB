@@ -66,6 +66,12 @@ export const DASHBOARD_NAV = [
                 requiredRoles: ["HR", "DIRECTOR"],
             },
             {
+                title: "Holidays",
+                url: "/dashboard/holidays",
+                icon: CalendarCheck,
+                requiredRoles: ["HR", "DIRECTOR"],
+            },
+            {
                 title: "Complaints",
                 url: "/dashboard/complaints",
                 icon: FileTerminal,
@@ -102,20 +108,40 @@ export const PORTAL_NAV = [
                 icon: LayoutDashboard,
             },
             {
-                title: "My Attendance",
+                title: "Attendance Center",
                 url: "/portal/attendance",
                 icon: Clock,
             },
             {
-                title: "My Payslips",
-                url: "/portal/payslips",
-                icon: FileText,
+                title: "Leaves Center",
+                url: "/portal/leaves",
+                icon: PlaneTakeoff,
             },
+            {
+                title: "Payroll Center",
+                url: "/portal/payroll",
+                icon: CreditCard,
+            },
+            {
+                title: "Reimbursement Center",
+                url: "/portal/reimbursement",
+                icon: HandCoins,
+            },
+            {
+                title: "Complaints Center",
+                url: "/portal/complaints",
+                icon: FileTerminal,
+            },
+        ],
+    },
+    {
+        label: "ACCOUNT",
+        items: [
             {
                 title: "My Profile",
                 url: "/portal/profile",
                 icon: UserCircle,
             },
-        ],
+        ]
     }
 ];

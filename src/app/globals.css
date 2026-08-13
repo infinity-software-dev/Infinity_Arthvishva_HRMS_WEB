@@ -6,9 +6,8 @@
 @theme {
   --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
 
-  --color-brand-blue: #2076C7; 
+  --color-brand-blue: #2076C7;
   --color-brand-green: #1CADA3;
-
 
   --color-magenta: #FE02C5;
   --color-primary: #1A0F1E;
@@ -20,6 +19,7 @@
 }
 
 @layer utilities {
+
   /* Hide spin buttons for Chrome, Safari, Edge, and Opera */
   .no-spinner::-webkit-outer-spin-button,
   .no-spinner::-webkit-inner-spin-button {
@@ -39,9 +39,7 @@
   --color-text-base: #1A0F1E;
 }
 
-/* #FDEEE9 */
-
-/* 3. Define your Dark Mode variables (Notice we replaced @media with .dark) */
+/* 3. Define your Dark Mode variables */
 .dark {
   --color-background: #0F0B13;
   --color-text-base: #FFFFFF;
@@ -54,25 +52,35 @@ body {
   font-family: var(--font-sans);
 }
 
-@layer base {
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 5px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, #2076C7, #1CADA3); 
-    border-radius: 10px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(to bottom, #185E9F, #158C84);
-  }
-  ::-webkit-scrollbar-thumb:horizontal {
-    background: linear-gradient(to right, #2076C7, #1CADA3);
-  }
-  ::-webkit-scrollbar-thumb:horizontal:hover {
-    background: linear-gradient(to right, #185E9F, #158C84);
-  }
+/* 5. Universal Custom Scrollbar Settings */
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #2076C7, #1CADA3);
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #185E9F, #158C84);
+}
+
+*::-webkit-scrollbar-thumb:horizontal {
+  background: linear-gradient(to right, #2076C7, #1CADA3);
+}
+
+*::-webkit-scrollbar-thumb:horizontal:hover {
+  background: linear-gradient(to right, #185E9F, #158C84);
+}
+
+/* Firefox & Standard CSS Fallback */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1CADA3 transparent;
 }

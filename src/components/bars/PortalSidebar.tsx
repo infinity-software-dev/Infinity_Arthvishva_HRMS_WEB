@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Menu, X, LogOut } from "lucide-react";
 import GradientText from "../elements/GradientText";
 import { PORTAL_NAV } from "@/constants/Sidebar/navigation";
+import ThemeToggleSwitch from "../buttons/ThemeToggle";
 
 export default function PortalSidebar() {
     const pathname = usePathname();
@@ -34,8 +35,8 @@ export default function PortalSidebar() {
             <header className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white dark:bg-primary border-b border-gray-100 dark:border-white/5 flex items-center justify-between px-4 z-40">
                 <Link href="/portal" className="flex items-center gap-2 font-bold">
                     <Image src="/images/icon.png" alt="IA Portal" width={28} height={28} className="rounded-md" />
-                    <GradientText from="var(--color-brand-blue)" to="var(--color-brand-green)" className="tracking-widest font-extrabold uppercase">
-                        PORTAL
+                    <GradientText from="var(--color-brand-blue)" to="var(--color-brand-green)" className="tracking-widest text-xl font-extrabold uppercase">
+                        HRMS
                     </GradientText>
                 </Link>
                 <button
@@ -54,19 +55,20 @@ export default function PortalSidebar() {
             )}
 
             <aside
-                className={`fixed top-0 left-0 h-screen w-64 bg-white dark:bg-[#0A0A0A] border-r border-gray-100 dark:border-white/5 shadow-xl md:shadow-none z-50 flex flex-col transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+                className={`fixed inset-y-0 left-0 w-64 bg-white dark:bg-[#0A0A0A] border-r border-gray-100 dark:border-white/5 shadow-xl md:shadow-none z-50 flex flex-col transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
                     }`}
             >
                 <div className="h-16 md:h-24 flex items-center justify-between px-6 border-b border-gray-100 dark:border-white/5 shrink-0">
                     <Link href="/portal" className="flex items-center gap-2 text-xl font-bold tracking-tight">
                         <Image src="/images/icon.png" alt="IA Portal" width={32} height={32} className="rounded-md" />
                         <GradientText from="var(--color-brand-blue)" to="var(--color-brand-green)" className="uppercase tracking-widest font-extrabold">
-                            MY PORTAL
+                            HRMS
                         </GradientText>
                     </Link>
                     <button onClick={closeMobileMenu} className="md:hidden text-gray-500 hover:text-primary dark:hover:text-white">
                         <X className="w-6 h-6" />
                     </button>
+                    <ThemeToggleSwitch />
                 </div>
 
                 <div className="flex-1 overflow-y-auto py-6 space-y-8">
@@ -77,7 +79,11 @@ export default function PortalSidebar() {
                             </p>
                             <div className="space-y-1">
                                 {section.items.map((item) => {
-                                    const isActive = pathname === item.url || pathname.startsWith(`${item.url}/`);
+                                    const isBaseRoute = item.url === "/portal" || item.url === "/";
+                                    const isActive = isBaseRoute
+                                        ? pathname === item.url
+                                        : pathname === item.url || pathname.startsWith(`${item.url}/`);
+
                                     const Icon = item.icon;
 
                                     return (
@@ -86,8 +92,8 @@ export default function PortalSidebar() {
                                             href={item.url}
                                             onClick={closeMobileMenu}
                                             className={`flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${isActive
-                                                    ? "bg-primary text-white dark:bg-white dark:text-primary shadow-md"
-                                                    : "text-secondary dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-primary dark:hover:text-white"
+                                                ? "bg-gradient-to-r from-brand-blue to-brand-green text-white dark:bg-white dark:text-primary shadow-md"
+                                                : "text-secondary dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-primary dark:hover:text-white"
                                                 }`}
                                         >
                                             <Icon className={`w-5 h-5 ${isActive ? "" : "opacity-70"}`} />

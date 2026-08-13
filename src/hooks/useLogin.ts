@@ -23,13 +23,12 @@ export const useLogin = () => {
         }
 
         // Updated Regex: The '?' makes (HR|DT) optional. 
-        // const codeRegex = /^IA(HR|DT)?\d{5}$/;
+        const codeRegex = /^IA(HR|DT)?\d{3,5}$/;
 
-        const codeRegex = /^IA(HR|DT)\d{3}$/;
+        // const codeRegex = /^IA(HR|DT)\d{3}$/;
 
         if (!codeRegex.test(employeeCode)) {
-            // setError("Invalid code format. Expected: IAHR00001, IADT00001, or IA00141.");
-            setError("Invalid code format. Expected: IAHR001, IADT001.");
+            setError("Invalid code format. Expected: IA00141, IAHR001, or IADT001.");
             setLoading(false);
             return;
         }
@@ -42,16 +41,14 @@ export const useLogin = () => {
             let data;
             let roleToStore = "EMPLOYEE"; // Default fallback
 
-            // Route to the correct service based on the prefix
+            // Route to the correct service based on the prefix and role
             if (isHR) {
                 roleToStore = "HR";
                 data = await authService.loginHR(employeeCode, password);
             } else if (isDirector) {
-                console.log("Authenticating Director Profile...");
                 roleToStore = "DIRECTOR";
                 data = await authService.loginDirector(employeeCode, password);
             } else {
-                console.log("Authenticating Standard Employee...");
                 data = await authService.loginEmployee(employeeCode, password);
             }
 

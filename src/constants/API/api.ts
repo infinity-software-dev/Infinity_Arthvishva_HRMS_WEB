@@ -2,7 +2,7 @@ const DOMAIN_URL = process.env.NEXT_PUBLIC_SERVER_URL || "";
 
 export const AUTH_API = {
   LOGIN_DIRECTOR: `${DOMAIN_URL}/api/auth/director/login`,
-  LOGIN_EMPLOYEE: `/api/auth/employee/login`,
+  LOGIN_EMPLOYEE: `${DOMAIN_URL}/api/auth/employee/login`,
   LOGIN_HR: `${DOMAIN_URL}/api/auth/hr/login`,
 }
 
@@ -69,4 +69,15 @@ export const DIRECTOR_API = {
   GET_LIVE_COMPLAINTS: `/api/web/director/complaints/live`,
   GET_HISTORICAL_COMPLAINTS: `/api/web/director/complaints/historical`,
   UPDATE_COMPLAINT_STATUS: (id: string) => `/api/web/director/complaints/${id}/status`,
+};
+
+export const EMPLOYEE_API = {
+  GET_PROFILE: `/api/web/employee/profile`,
+  SYSTEM_CONFIGS: `/api/v1/settings/system-configs`,
+  GET_ATTENDANCE_STATUS: `/api/web/attendance/today-status`,
+  GET_PERFORMANCE: `/api/web/attendance/insights/performance`,
+  CHECK_IN: `/api/web/attendance/check-in`,
+  GET_MONTHLY_ATTENDANCE: `/api/web/attendance/monthly`,
+  REQUEST_CORRECTION: (attendanceId: string) => `/api/web/attendance/correction/${attendanceId}`,
+
 };

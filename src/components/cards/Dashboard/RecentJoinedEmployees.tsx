@@ -70,9 +70,9 @@ export default function RecentJoinedEmployees() {
           employees.map((employee) => (
             <div
               key={employee.id}
-              className="flex items-center justify-between group cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5 p-2 rounded-xl transition-colors -mx-2"
+              className="flex items-center justify-between group cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5 p-2 rounded-xl transition-colors gap-2"
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
                 <div className="relative w-10 h-10 rounded-full overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm bg-gray-100 shrink-0">
                   <Image
                     src={
@@ -84,7 +84,7 @@ export default function RecentJoinedEmployees() {
                     className="object-cover"
                   />
                 </div>
-                <div className="flex flex-col min-w-0">
+                <div className="flex flex-col min-w-0 flex-1">
                   <span className="text-sm font-bold text-primary dark:text-white group-hover:text-brand-blue transition-colors truncate">
                     {employee.name}
                   </span>
@@ -95,8 +95,8 @@ export default function RecentJoinedEmployees() {
                 </div>
               </div>
 
-              <div className="flex items-end text-right shrink-0">
-                <span className="text-xs font-bold text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-white/5 px-2 py-1 rounded-md">
+              <div className="flex items-center shrink-0">
+                <span className="text-xs font-bold text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-white/5 px-2 py-1 rounded-md whitespace-nowrap">
                   {employee.joinDate}
                 </span>
               </div>

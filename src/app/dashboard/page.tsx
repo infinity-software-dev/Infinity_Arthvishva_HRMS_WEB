@@ -16,7 +16,7 @@ export default function Dashboard() {
         Hello {role},
       </h1>
       <h6 className="text-gray-700 dark:text-gray-100 mt-1.5 font-medium">
-        We hope you're having greate day.
+        We hope you're having a great day.
       </h6>
 
       <div className="lg:flex flex-row lg:py-5 justify-between gap-5 ">
