@@ -79,5 +79,12 @@ export const EMPLOYEE_API = {
   CHECK_IN: `/api/web/attendance/check-in`,
   GET_MONTHLY_ATTENDANCE: `/api/web/attendance/monthly`,
   REQUEST_CORRECTION: (attendanceId: string) => `/api/web/attendance/correction/${attendanceId}`,
+  GET_MY_LEAVES: `/api/web/leaves/my`,
+  CANCEL_LEAVE: (leaveId: string) => `/api/web/leaves/cancel/${leaveId}`,
+  GET_ACTIVE_TOKENS: `/api/web/leaves/ledger`,
+  APPLY_LEAVE: `/api/web/leaves/apply`,
+  PREVIEW_PAYROLL: `/api/web/payroll/preview`,
+  GET_PAYROLL_LIST: `/api/web/payroll/list`,
+  GET_PAYROLL_DETAILS: (id: string) => `/api/web/payroll/${id}/details`,
 
 };

@@ -122,16 +122,16 @@ export const PORTAL_NAV = [
                 url: "/portal/payroll",
                 icon: CreditCard,
             },
-            {
-                title: "Reimbursement Center",
-                url: "/portal/reimbursement",
-                icon: HandCoins,
-            },
-            {
-                title: "Complaints Center",
-                url: "/portal/complaints",
-                icon: FileTerminal,
-            },
+            // {
+            //     title: "Reimbursement Center",
+            //     url: "/portal/reimbursement",
+            //     icon: HandCoins,
+            // },
+            // {
+            //     title: "Complaints Center",
+            //     url: "/portal/complaints",
+            //     icon: FileTerminal,
+            // },
         ],
     },
     {
