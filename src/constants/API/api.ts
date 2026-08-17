@@ -24,6 +24,8 @@ export const MANAGEMENT_API = {
   DOWNLOAD_SALARY_SLIP_PDF: (id: string) => `/api/web/management/payroll/salary-slip/${id}`,
   GET_PENDING_REIMBURSEMENTS: `/api/web/management/reimbursement/pending`,
   GET_HISTORICAL_REIMBURSEMENTS: `/api/web/management/reimbursement/historical`,
+  GET_HOLIDAYS: `/api/web/management/holidays`,
+  GET_ALERTS: `/api/web/management/announcements/check`,
 }
 
 export const HR_API = {
@@ -54,6 +56,13 @@ export const HR_API = {
   GET_LIVE_COMPLAINTS: `/api/web/hr/complaints/live`,
   GET_HISTORICAL_COMPLAINTS: `/api/web/hr/complaints/historical`,
   UPDATE_COMPLAINT_STATUS: (id: string) => `/api/web/hr/complaints/${id}/status`,
+
+  // ─── HOLIDAY ENDPOINTS (ADDED) ───
+  CREATE_HOLIDAY: `/api/web/hr/holidays`,
+  DELETE_HOLIDAY: (id: string) => `/api/web/hr/holidays/${id}`,
+
+  // ─── ANNOUNCEMENT ENDPOINTS (ADDED) ───
+  UPSERT_ALERT: `/api/web/hr/announcements/upsert`,
 }
 
 export const DIRECTOR_API = {
