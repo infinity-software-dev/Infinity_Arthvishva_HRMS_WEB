@@ -68,9 +68,9 @@ export default function LoginPage() {
               <label className="text-sm font-bold text-secondary dark:text-gray-400 uppercase tracking-wide">
                 Password
               </label>
-              <Link href="#" className="text-xs font-bold text-brand-blue hover:underline">
+              {/* <Link href="#" className="text-xs font-bold text-brand-blue hover:underline">
                 Forgot Password?
-              </Link>
+              </Link> */}
             </div>
             <div className="relative">
               <input

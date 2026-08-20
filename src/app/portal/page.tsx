@@ -83,7 +83,7 @@ export default function PortalOverviewPage() {
             icon={<ClipboardList className="w-5 h-5" />}
             title="Attendance Summary"
             desc="View your monthly logs"
-            href="/portal/summary"
+            href="/portal/attendance/summary"
           />
           <QuickActionCard
             icon={<Calendar className="w-5 h-5" />}

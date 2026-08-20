@@ -26,6 +26,8 @@ export const MANAGEMENT_API = {
   GET_HISTORICAL_REIMBURSEMENTS: `/api/web/management/reimbursement/historical`,
   GET_HOLIDAYS: `/api/web/management/holidays`,
   GET_ALERTS: `/api/web/management/announcements/check`,
+  // GURUKUL (VIDEOS)
+  GET_VIDEOS: `/api/web/management/gurukul/videos`,
 }
 
 export const HR_API = {
@@ -63,6 +65,11 @@ export const HR_API = {
 
   // ─── ANNOUNCEMENT ENDPOINTS (ADDED) ───
   UPSERT_ALERT: `/api/web/hr/announcements/upsert`,
+
+  // -- GURUKUL (VIDEOS)
+  CREATE_VIDEO: `/api/web/hr/gurukul/videos`,
+  UPDATE_VIDEO: (id: string) => `/api/web/hr/gurukul/videos/${id}`,
+  DELETE_VIDEO: (id: string) => `/api/web/hr/gurukul/videos/${id}`,
 }
 
 export const DIRECTOR_API = {
@@ -95,5 +102,8 @@ export const EMPLOYEE_API = {
   PREVIEW_PAYROLL: `/api/web/payroll/preview`,
   GET_PAYROLL_LIST: `/api/web/payroll/list`,
   GET_PAYROLL_DETAILS: (id: string) => `/api/web/payroll/${id}/details`,
+  GET_REIMBURSEMENT_HISTORY: '/api/web/reimbursement/history',
+  APPLY_REIMBURSEMENT: '/api/web/reimbursement/apply',
+  CANCEL_REIMBURSEMENT: (id: string) => `/api/web/reimbursement/${id}`,
 
 };

@@ -53,12 +53,12 @@ export const DASHBOARD_NAV = [
                 icon: HandCoins,
                 requiredRoles: ["HR", "DIRECTOR"],
             },
-            // {
-            //     title: "Gurukul Admin",
-            //     url: "/dashboard/gurukul",
-            //     icon: GraduationCap,
-            //     requiredRoles: ["HR", "DIRECTOR"],
-            // },
+            {
+                title: "Gurukul Admin",
+                url: "/dashboard/gurukul",
+                icon: GraduationCap,
+                requiredRoles: ["HR", "DIRECTOR"],
+            },
             {
                 title: "Announcements",
                 url: "/dashboard/announcements",
@@ -122,11 +122,11 @@ export const PORTAL_NAV = [
                 url: "/portal/payroll",
                 icon: CreditCard,
             },
-            // {
-            //     title: "Reimbursement Center",
-            //     url: "/portal/reimbursement",
-            //     icon: HandCoins,
-            // },
+            {
+                title: "Reimbursement Center",
+                url: "/portal/reimbursement",
+                icon: HandCoins,
+            },
             // {
             //     title: "Complaints Center",
             //     url: "/portal/complaints",
