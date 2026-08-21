@@ -64,10 +64,10 @@ export default function LiveRoster() {
             <tr>
               <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60">Emp ID</th>
               <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60">Employee</th>
-              <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60">In Time</th>
-              <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60">Out Time</th>
-              <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60">Mode</th>
-              <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60">Status</th>
+              <th className="px-6 py-3.5 text-center font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60">In Time</th>
+              <th className="px-6 py-3.5 text-center font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60">Out Time</th>
+              <th className="px-6 py-3.5 text-center font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60">Mode</th>
+              <th className="px-6 py-3.5 text-center font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60">Status</th>
               <th className="px-6 py-3.5 font-bold whitespace-nowrap text-center">Location</th>
             </tr>
           </thead>
@@ -98,17 +98,17 @@ export default function LiveRoster() {
                   </td>
 
                   {/* In Time */}
-                  <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-800 dark:text-gray-200 border-r border-gray-200/60 dark:border-gray-800">
+                  <td className="px-6 py-4 text-center whitespace-nowrap font-medium text-gray-800 dark:text-gray-200 border-r border-gray-200/60 dark:border-gray-800">
                     {row.inTime ? new Date(row.inTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--:--'}
                   </td>
 
                   {/* Out Time */}
-                  <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-800 dark:text-gray-200 border-r border-gray-200/60 dark:border-gray-800">
+                  <td className="px-6 py-4 text-center whitespace-nowrap font-medium text-gray-800 dark:text-gray-200 border-r border-gray-200/60 dark:border-gray-800">
                     {row.outTime ? new Date(row.outTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Working...'}
                   </td>
 
                   {/* Mode */}
-                  <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-800 text-center dark:text-gray-200 border-r border-gray-200/60 dark:border-gray-800">
+                  <td className="px-6 py-4 text-center whitespace-nowrap font-medium text-gray-800 text-center dark:text-gray-200 border-r border-gray-200/60 dark:border-gray-800">
                     {row.workMode}
                   </td>
 
