@@ -118,6 +118,7 @@ export default function ViewEmployeeProfilePage() {
                 <h3 className="text-sm font-bold text-brand-blue dark:text-blue-400 border-b border-gray-100 dark:border-gray-700 px-6 py-4 bg-gray-50/50 dark:bg-gray-800/40">Job Details</h3>
                 <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-6 gap-x-4">
                     <DataField label="Joining Date" value={formatDate(employee.joiningDate)} displayValue={displayValue} />
+                    <DataField label="Employment Date" value={formatDate(employee.employmentDate)} displayValue={displayValue} />
                     <DataField label="Role" value={employee.role} displayValue={displayValue} />
                     <DataField label="Department" value={employee.department} displayValue={displayValue} />
                     <DataField label="Position" value={employee.position} displayValue={displayValue} />

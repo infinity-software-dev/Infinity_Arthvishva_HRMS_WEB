@@ -24,7 +24,7 @@ export const useEditEmployee = (employeeId: string) => {
             current: { address: '', pinCode: '', state: '', district: '', city: '' },
             permanent: { address: '', pinCode: '', state: '', district: '', city: '' }
         },
-        joiningDate: '', department: '', position: '', isLeadershipRole: false,
+        joiningDate: '', employmentDate: '', department: '', position: '', isLeadershipRole: false,
         salary: '', fixedAllowance: '', managerId: '', experienceType: 'Fresher',
         totalExperienceYears: '', lastCompanyName: '', hscPercent: '',
         graduationCourse: '', graduationPercent: '', postGraduationCourse: '',
@@ -80,6 +80,7 @@ export const useEditEmployee = (employeeId: string) => {
                                 permanent: emp.address?.permanent || { address: '', pinCode: '', state: '', district: '', city: '' }
                             },
                             joiningDate: emp.joiningDate ? new Date(emp.joiningDate).toISOString().split('T')[0] : '',
+                            employmentDate: emp.employmentDate ? new Date(emp.employmentDate).toISOString().split('T')[0] : '',
                             department: emp.department || '',
                             position: emp.position || '',
                             isLeadershipRole: !!emp.isLeadershipRole,
@@ -261,6 +262,9 @@ export const useEditEmployee = (employeeId: string) => {
         // ── 4. JOB DETAILS VALIDATION ──
         if (!formData.joiningDate)
             localErrors.joiningDate = "Joining date is required.";
+        if (formData.role === "Employee" && !formData.employmentDate) {
+            localErrors.employmentDate = "Employment date is required for regular employees.";
+        }
         if (!formData.department)
             localErrors.department = "Department routing config is required.";
 
@@ -357,7 +361,7 @@ export const useEditEmployee = (employeeId: string) => {
                     data.append("address", JSON.stringify(value));
                 } else if (key === "password" || key === "confirmPassword") {
                     if (value) data.append(key, String(value)); // Only send password if modified
-                } else if (value !== undefined && value !== null && value !== "") {
+                } else if (value !== undefined && value !== null) {
                     data.append(key, String(value));
                 }
             });

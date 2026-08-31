@@ -135,6 +135,18 @@ export default function EditEmployeePage({ params }: { params: Promise<{ id: str
                             ]}
                             required
                         />
+                        {formData.role === 'Employee' && (
+                            <FormInput
+                                name="employmentDate"
+                                label="Employment Date"
+                                type="date"
+                                value={formData.employmentDate}
+                                onChange={handleChange}
+                                error={errors.employmentDate}
+                                textTransform="none"
+                                required
+                            />
+                        )}
                         <FormSelect name="department" label="Department" value={formData.department} onChange={handleChange} options={DEPARTMENTS.map(d => ({ label: d, value: d }))} required />
                         <FormSelect name="position" label="Position" value={formData.position} onChange={handleChange} options={POSITIONS.map(p => ({ label: p, value: p }))} required />
                         <FormSelect name="managerId" label="Reporting Manager" value={formData.managerId} onChange={handleChange} options={managerOptions} required />
