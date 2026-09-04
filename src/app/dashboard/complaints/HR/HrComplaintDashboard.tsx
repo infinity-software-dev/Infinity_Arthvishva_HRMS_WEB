@@ -1,16 +1,30 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search, AlertCircle, CheckCircle2 } from 'lucide-react';
 import HrLiveComplaintsList from './HrLiveComplaintsList';
 import HrHistoryComplaintsList from './HrHistoryComplaintsList';
+import { useRouter } from 'next/navigation';
 
 export default function HrComplaintDashboard() {
+    const router = useRouter();
+    const [isAuthorized, setIsAuthorized] = useState(false);
     const [activeTab, setActiveTab] = useState<'Live' | 'History'>('Live');
     const [searchQuery, setSearchQuery] = useState('');
 
     // Only forward the search query to child lists if its length is > 1 character
     const activeSearchQuery = searchQuery.trim().length > 1 ? searchQuery : '';
+
+    useEffect(() => {
+        const role = localStorage.getItem("role");
+        if (role === "HR") {
+            router.replace("/dashboard"); // Kick HR out
+        } else {
+            setIsAuthorized(true); // Let others in
+        }
+    }, [router]);
+
+    if (!isAuthorized) return null;
 
     return (
         <div className="flex-1 w-full bg-white dark:bg-primary rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] dark:shadow-none border border-gray-100 dark:border-gray-800 p-6 transition-colors duration-300">

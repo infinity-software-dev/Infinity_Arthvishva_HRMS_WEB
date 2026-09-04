@@ -76,6 +76,7 @@ export const DASHBOARD_NAV = [
                 url: "/dashboard/complaints",
                 icon: FileTerminal,
                 requiredRoles: ["HR", "DIRECTOR"],
+                excludedRoles: ["HR"], // <-- Add this
             },
             // {
             //     title: "Resignation",

@@ -82,10 +82,17 @@ export default function DashboardSidebar() {
                 <div className="flex-1 overflow-y-auto py-6 space-y-8">
                     {isMounted && DASHBOARD_NAV.map((section) => {
                         // 1. Filter the items in this section based on the user's role
-                        const visibleItems = section.items.filter((item) => {
+                        const visibleItems = section.items.filter((item: any) => {
+                            // Hide if the user's role is explicitly excluded
+                            if (item.excludedRoles && userRole && item.excludedRoles.includes(userRole)) {
+                                return false;
+                            }
+
+                            // Hide if requiredRoles is defined and user's role is not included
                             if (item.requiredRoles) {
                                 return userRole && item.requiredRoles.includes(userRole);
                             }
+
                             return true;
                         });
 
@@ -98,7 +105,7 @@ export default function DashboardSidebar() {
                                     {section.label}
                                 </p>
                                 <div className="space-y-1">
-                                    {visibleItems.map((item) => {
+                                    {visibleItems.map((item: any) => {
                                         // Check if the current item is the root of the stack
                                         const isRootPath = item.url === '/dashboard' || item.url === '/portal';
 

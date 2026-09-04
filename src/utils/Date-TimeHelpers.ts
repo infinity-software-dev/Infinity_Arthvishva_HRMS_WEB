@@ -56,3 +56,16 @@ export function formatDecimalHours(val?: string | number): string {
 
   return `${hours}h ${minutes}m`;
 }
+
+export const formatDate = (dateString?: string, includeTime = false) => {
+  if (!dateString) return "—";
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return dateString;
+
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    ...(includeTime && { hour: "2-digit", minute: "2-digit" }),
+  });
+};

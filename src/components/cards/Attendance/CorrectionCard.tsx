@@ -1,6 +1,7 @@
 "use client";
 
 import { PendingCorrectionItem } from "@/hooks/attendance-hooks/usePendingCorrections";
+import { formatDate } from "@/utils/Date-TimeHelpers";
 import { useEffect, useState } from "react";
 
 interface CorrectionCardProps {
@@ -36,9 +37,10 @@ export default function CorrectionCard({
     return (
         <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
             {/* Header: Employee Info */}
-            <div className="flex justify-between items-start mb-4">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold overflow-hidden shrink-0">
+            <div className="flex justify-between items-start mb-4 gap-3">
+                {/* Left: Employee Info */}
+                <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-600 dark:text-gray-300 font-bold overflow-hidden shrink-0 border border-gray-200 dark:border-gray-700">
                         {req.avatar ? (
                             <img
                                 src={req.avatar}
@@ -46,21 +48,34 @@ export default function CorrectionCard({
                                 className="w-full h-full object-cover"
                             />
                         ) : (
-                            req.employeeName.charAt(0)
+                            <span className="uppercase">{req.employeeName.charAt(0)}</span>
                         )}
                     </div>
-                    <div>
-                        <h3 className="font-semibold text-gray-900 dark:text-white leading-tight">
+
+                    <div className="min-w-0">
+                        <h3 className="font-semibold text-gray-900 dark:text-white leading-tight truncate">
                             {req.employeeName}
                         </h3>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">
                             {req.employeeCode} • {req.department}
                         </p>
                     </div>
                 </div>
-                <span className="text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2.5 py-1 rounded-md">
-                    {req.date}
-                </span>
+
+                {/* Right: Date Grouping */}
+                <div className="flex flex-col items-end shrink-0 text-right gap-1">
+                    {/* Target / Request Date Badge */}
+                    <span className="inline-flex items-center text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-800/40 whitespace-nowrap">
+                        {formatDate(req.date)}
+                    </span>
+
+                    {/* Metadata: Requested timestamp */}
+                    {req.requestedOn && (
+                        <span className="text-[11px] text-gray-400 dark:text-gray-500 whitespace-nowrap">
+                            Applied: {formatDate(req.requestedOn)}
+                        </span>
+                    )}
+                </div>
             </div>
 
             {/* Body: Time Comparison */}
