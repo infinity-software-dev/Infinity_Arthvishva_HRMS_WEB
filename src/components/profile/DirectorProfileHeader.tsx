@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { ShieldCheck, Calendar, Activity } from "lucide-react";
 
 interface DirectorHeaderProps {
@@ -24,7 +23,7 @@ export default function DirectorProfileHeader({ idCode, isActive, createdAt }: D
             </div>
 
             <div className="flex-1 text-center md:text-left space-y-2">
-                <h2 className="text-2xl font-bold tracking-wide text-gray-900 dark:text-white">
+                <h2 className="text-2xl font-bold tracking-wide text-gray-900 dark:text-white uppercase ">
                     Director
                 </h2>
                 <p className="text-gray-500 dark:text-lavender/80 text-sm font-mono uppercase tracking-widest">
@@ -51,10 +50,10 @@ export default function DirectorProfileHeader({ idCode, isActive, createdAt }: D
                     </div>
 
                     {/* Created At */}
-                    <div className="flex items-center justify-center md:justify-start gap-2 bg-gray-50 dark:bg-secondary/20 p-2.5 rounded-lg border border-gray-100 dark:border-secondary/40">
+                    {/* <div className="flex items-center justify-center md:justify-start gap-2 bg-gray-50 dark:bg-secondary/20 p-2.5 rounded-lg border border-gray-100 dark:border-secondary/40">
                         <Calendar size={16} className="text-gray-400 dark:text-lavender/70" />
                         <span className="text-gray-700 dark:text-white text-sm font-medium">{formattedDate}</span>
-                    </div>
+                    </div> */}
 
                 </div>
             </div>

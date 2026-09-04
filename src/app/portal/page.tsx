@@ -8,6 +8,7 @@ import {
   Sun, Clock, ClipboardList, Calendar, FileText,
   Activity, CalendarDays, Zap, CheckCircle2, XCircle, Timer, TrendingUp, ArrowRight, MapPin
 } from "lucide-react";
+import { formatDecimalHours } from "@/utils/Date-TimeHelpers";
 
 export default function PortalOverviewPage() {
   const { loading, data, error, profileData } = usePortalOverview();
@@ -132,8 +133,8 @@ export default function PortalOverviewPage() {
                     {/* Status Badges */}
                     <div className="flex flex-wrap items-center gap-2">
                       <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border shadow-sm ${data.punchStatus.isPunchedIn
-                          ? "bg-brand-green/10 text-brand-green border-brand-green/20"
-                          : "bg-gray-50 text-secondary dark:bg-white/5 dark:text-gray-400 border-gray-200 dark:border-gray-700"
+                        ? "bg-brand-green/10 text-brand-green border-brand-green/20"
+                        : "bg-gray-50 text-secondary dark:bg-white/5 dark:text-gray-400 border-gray-200 dark:border-gray-700"
                         }`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${data.punchStatus.isPunchedIn ? "bg-brand-green animate-pulse" : "bg-gray-400"}`}></span>
                         {data.punchStatus.isPunchedIn ? "ON DUTY" : "OFF DUTY"}
@@ -255,7 +256,7 @@ export default function PortalOverviewPage() {
           />
           <PerformanceCard
             title="Avg Hours"
-            value={data?.stats?.avgHours || "0h"}
+            value={formatDecimalHours(data?.stats?.avgHours)}
             subtitle="Per working day"
             icon={<TrendingUp className="w-5 h-5 text-brand-blue" />}
           />

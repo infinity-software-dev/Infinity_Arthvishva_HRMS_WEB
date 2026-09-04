@@ -3,6 +3,7 @@
 import MapModal from "@/components/modals/MapModal";
 import { useHistoricalLedger } from "@/hooks/attendance-hooks/useHistoricalLedger";
 import { DEPARTMENTS } from "@/hooks/employee-hooks/useAddEmployee";
+import { formatHours } from "@/utils/Date-TimeHelpers";
 import { MapPin } from "lucide-react";
 
 export default function HistoricalLedger() {
@@ -255,7 +256,9 @@ export default function HistoricalLedger() {
                             <div className="space-y-4">
                                 <div>
                                     <p className="text-xs font-semibold text-secondary dark:text-gray-500 uppercase tracking-wider mb-1">Total Hours</p>
-                                    <p className="text-primary dark:text-white font-medium">{modal.selectedRecord.totalHours || 0} Hours</p>
+                                    <p className="text-primary dark:text-white font-medium">
+                                        {formatHours(modal.selectedRecord.totalHours ?? 0)}
+                                    </p>
                                 </div>
 
                                 <div>
