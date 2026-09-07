@@ -18,6 +18,7 @@ export const MANAGEMENT_API = {
   GET_HISTORICAL_LEDGER: `/api/web/management/attendance/historical-ledger`,
   GET_ALL_EMPLOYEES: `/api/web/management/employees`,
   GET_SINGLE_EMPLOYEE: `/api/web/management/employees`,
+  GET_ALL_EMPLOYEE_EXCEL: `/api/web/management/employees/export/master-data`,
   GET_PAYROLL_LIST: `/api/web/management/payroll/payrollList`,
   PROCESS_ALL_ACTIVE_PAYROLL: `/api/web/management/payroll/process-all-active`,
   EXPORT_PAYROLL: `/api/web/management/payroll/export`,

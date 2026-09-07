@@ -100,7 +100,7 @@ export const HolidayCard: React.FC<HolidayCardProps> = ({ holiday, onDelete }) =
 
                 {holiday.createdBy && (
                     <p className="text-xs text-secondary/70 dark:text-gray-400">
-                        Added by {holiday.createdBy.name}
+                        Added by HR Department.
                     </p>
                 )}
             </div>

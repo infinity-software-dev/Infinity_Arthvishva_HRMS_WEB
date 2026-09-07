@@ -29,5 +29,5 @@ export function useEmployees(searchQuery: string, department: string, status: st
 
     }, [searchQuery, department, status, page, limit]);
 
-    return { employees, isLoading, error, meta };
+    return { employees, isLoading, error,setError, meta };
 }

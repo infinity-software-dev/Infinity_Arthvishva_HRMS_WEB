@@ -76,5 +76,16 @@ export const employeeService = {
             timeout: 30000,
         });
         return response.data;
+    },
+
+    async exportEmployeesToExcel(department: string, status: string) {
+        const response = await apiClient.get(MANAGEMENT_API.GET_ALL_EMPLOYEE_EXCEL, {
+            params: {
+                department: department || undefined,
+                status: status || undefined
+            },
+            responseType: 'blob', // Important for file downloads
+        });
+        return response.data;
     }
 };

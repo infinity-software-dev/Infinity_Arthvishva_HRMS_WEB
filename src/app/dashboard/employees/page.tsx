@@ -1,6 +1,6 @@
 "use client";
 
-import { Grid, List, Loader2, Search } from 'lucide-react';
+import { Download, Grid, List, Loader2, Search } from 'lucide-react';
 import EmployeeCard from '@/components/cards/Employee/EmployeeCard';
 import EmployeeTable from '@/components/cards/Employee/EmployeeTable';
 import GradientButton from '@/components/buttons/GradientButton';
@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 
 export default function EmployeePage() {
   const router = useRouter();
-  const { data, isLoading, viewMode, setViewMode, filters, pagination } = useEmployeeDirectory();
+  const { data, isLoading, viewMode, setViewMode, handleExportToExcel, filters, pagination } = useEmployeeDirectory();
   const [isHr, setIsHr] = useState<boolean>(false);
 
   // Safely read role on client mount and store as boolean
@@ -79,6 +79,15 @@ export default function EmployeePage() {
               <option value="Active">Active</option>
               <option value="Inactive">Inactive</option>
             </select>
+
+            {/* Export Button */}
+            <button
+              onClick={handleExportToExcel}
+              className="flex items-center gap-2 px-4 mx-1 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-green transition-colors shadow-sm cursor-pointer"
+            >
+              <Download className="w-4 h-4" />
+              Export Excel
+            </button>
 
             {/* Visual Divider */}
             <div className="w-px h-8 bg-gray-200 dark:bg-gray-700 mx-2 hidden sm:block"></div>

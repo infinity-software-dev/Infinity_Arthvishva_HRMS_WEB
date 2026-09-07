@@ -102,6 +102,7 @@ export default function HistoricalLedger() {
                             <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60 ">Date</th>
                             <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60">Employee</th>
                             <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60 text-center">Punches</th>
+                            <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60 text-center">Working Hours</th>
                             <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60 text-center">Mode</th>
                             <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60 text-center">Status</th>
                             <th className="px-6 py-3.5 font-bold whitespace-nowrap border-r border-gray-200 dark:border-gray-700/60 text-center">Actions</th>
@@ -145,6 +146,14 @@ export default function HistoricalLedger() {
                                         <div className="text-gray-700 dark:text-gray-300">
                                             Out: <span className="font-semibold text-gray-900 dark:text-white">{formatTime(row.outTime)}</span>
                                         </div>
+                                    </td>
+
+                                    <td className="px-6 py-4 whitespace-nowrap border-r text-center border-gray-200/60 dark:border-gray-800">
+                                        {row.totalHours ? (
+                                            <span className="font-semibold text-gray-900 dark:text-white">{formatHours(row.totalHours)}</span>
+                                        ) : (
+                                            <span className="font-semibold text-gray-900 dark:text-white">N/A</span>
+                                        )}
                                     </td>
 
                                     {/* Mode */}
