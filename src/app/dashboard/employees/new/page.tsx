@@ -43,7 +43,7 @@ export default function AddEmployeePage() {
                     <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Basic Details</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                         <FormInput name="employeeCode" label="Employee Code" value={formData.employeeCode} onChange={handleChange} disabled textTransform="uppercase" required />
-                        <FormInput name="name" label="Full Name" value={formData.name} onChange={handleChange} error={errors.name} textTransform="capitalize" placeholder="John Doe" required />
+                        <FormInput name="name" label="Full Name" value={formData.name} onChange={handleChange} error={errors.name} textTransform="uppercase" placeholder="John Doe" required />
                         <FormInput name="email" label="Email Address" type="email" value={formData.email} onChange={handleChange} error={errors.email} textTransform="lowercase" placeholder="user@example.com" required />
                         <FormInput name="mobileNumber" label="Mobile Number" value={formData.mobileNumber} onChange={handleChange} error={errors.mobileNumber} placeholder='9876543210' required />
                         <FormInput name="alternateMobileNumber" label="Alternate Mobile Number" value={formData.alternateMobileNumber} onChange={handleChange} error={errors.alternateMobileNumber} placeholder='9876543210' />
@@ -59,10 +59,10 @@ export default function AddEmployeePage() {
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-6">
                         <FileInputField label="Profile Photo" onChange={(e) => handleFileChange(e, 'profileImage')} />
                         <FormSelect name="gender" label="Gender" error={errors.gender} value={formData.gender} onChange={handleChange} options={[{ label: 'Male', value: 'Male' }, { label: 'Female', value: 'Female' }, { label: 'Other', value: 'Other' }]} required />
-                        <FormInput name="fatherName" label="Father's Name" value={formData.fatherName} onChange={handleChange} placeholder="John Doe" />
-                        <FormInput name="motherName" label="Mother's Name" value={formData.motherName} onChange={handleChange} placeholder="Jane Doe" />
+                        <FormInput name="fatherName" label="Father's Name" value={formData.fatherName} onChange={handleChange} placeholder="John Doe" required />
+                        <FormInput name="motherName" label="Mother's Name" value={formData.motherName} onChange={handleChange} placeholder="Jane Doe" required/>
                         <FormInput name="dateOfBirth" label="Date of Birth" error={errors.dateOfBirth} type="date" value={formData.dateOfBirth} onChange={handleChange} textTransform="none" required />
-                        <FormSelect name="bloodGroup" label="Blood Group" value={formData.bloodGroup} onChange={handleChange} options={['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(bg => ({ label: bg, value: bg }))} />
+                        <FormSelect name="bloodGroup" label="Blood Group" value={formData.bloodGroup} onChange={handleChange} options={['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(bg => ({ label: bg, value: bg }))} required />
                         <FormSelect name="maritalStatus" label="Marital Status" value={formData.maritalStatus} onChange={handleChange} options={['Single', 'Married', 'Divorced', 'Widowed'].map(s => ({ label: s, value: s }))} />
                     </div>
 

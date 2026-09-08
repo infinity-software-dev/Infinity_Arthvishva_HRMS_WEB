@@ -63,7 +63,7 @@ export default function EditEmployeePage({ params }: { params: Promise<{ id: str
                     <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">Basic Details</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                         <FormInput name="employeeCode" label="Employee Code" value={formData.employeeCode} disabled textTransform="uppercase" />
-                        <FormInput name="name" label="Full Name" value={formData.name} onChange={handleChange} error={errors.name} required />
+                        <FormInput name="name" label="Full Name" value={formData.name} onChange={handleChange} error={errors.name} required textTransform="uppercase" />
                         <FormInput name="email" label="Email Address" type="email" value={formData.email} onChange={handleChange} error={errors.email} textTransform="lowercase" required />
                         <FormInput name="mobileNumber" label="Mobile Number" value={formData.mobileNumber} onChange={handleChange} error={errors.mobileNumber} required />
                         <FormInput name="alternateMobileNumber" label="Alternate Mobile" value={formData.alternateMobileNumber} onChange={handleChange} />

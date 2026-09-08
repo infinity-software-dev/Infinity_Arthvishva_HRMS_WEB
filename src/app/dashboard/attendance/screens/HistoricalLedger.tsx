@@ -131,7 +131,7 @@ export default function HistoricalLedger() {
                                     </td>
 
                                     {/* Employee */}
-                                    <td className="px-6 py-4 whitespace-nowrap border-r border-gray-200/60 dark:border-gray-800">
+                                    <td className="px-6 py-4 whitespace-nowrap border-r border-gray-200/60 dark:border-gray-800 uppercase">
                                         <div className="font-semibold text-gray-900 dark:text-white">{row.employeeName}</div>
                                         <div className="text-xs font-semibold text-gray-600 dark:text-gray-400">
                                             {row.employeeCode} • {row.department}
