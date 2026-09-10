@@ -78,6 +78,11 @@ export const employeeService = {
         return response.data;
     },
 
+    async updateKycStatus(id: string, kycData: Record<string, any>) {
+        const response = await apiClient.patch(HR_API.UPDATE_EMPLOYEE_KYC_STATUS(id), kycData);
+        return response.data;
+    },
+
     async exportEmployeesToExcel(department: string, status: string) {
         const response = await apiClient.get(MANAGEMENT_API.GET_ALL_EMPLOYEE_EXCEL, {
             params: {

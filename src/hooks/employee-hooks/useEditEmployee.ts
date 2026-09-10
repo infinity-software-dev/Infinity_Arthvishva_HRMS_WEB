@@ -29,6 +29,8 @@ export const useEditEmployee = (employeeId: string) => {
         totalExperienceYears: '', lastCompanyName: '', hscPercent: '',
         graduationCourse: '', graduationPercent: '', postGraduationCourse: '',
         postGraduationPercent: '', aadhaarNumber: '', panNumber: '',
+        aadhaarName: '', panName: '', panDob: '',
+        aadhaarVerified: false, panVerified: false, bankVerified: false,
         accountHolderName: '', bankName: '', accountNumber: '', ifsc: '', branch: '',
         emergencyContactName: '', emergencyContactRelationship: '',
         emergencyContactMobile: '', emergencyContactAddress: '', hasDisease: 'No',
@@ -96,7 +98,13 @@ export const useEditEmployee = (employeeId: string) => {
                             postGraduationCourse: emp.postGraduationCourse || '',
                             postGraduationPercent: emp.postGraduationPercent ? String(emp.postGraduationPercent) : '',
                             aadhaarNumber: emp.aadhaarNumber || '',
+                            aadhaarName: emp.aadhaarName || '',
                             panNumber: emp.panNumber || '',
+                            panName: emp.panName || emp.name || '',
+                            panDob: emp.panDob || (emp.dateOfBirth ? new Date(emp.dateOfBirth).toISOString().split('T')[0] : ''),
+                            aadhaarVerified: !!emp.aadhaarVerified,
+                            panVerified: !!emp.panVerified,
+                            bankVerified: !!emp.bankVerified,
                             accountHolderName: emp.accountHolderName || '',
                             bankName: emp.bankName || '',
                             accountNumber: emp.accountNumber || '',
@@ -389,7 +397,7 @@ export const useEditEmployee = (employeeId: string) => {
     const handleBack = () => router.back();
 
     return {
-        formData, existingUrls, errors, isLoading, isSubmitting, managerOptions,
+        formData, setFormData, existingUrls, errors, isLoading, isSubmitting, managerOptions,
         handleChange, handleAddressChange, handleFileChange, handleSyncAddresses, handleSubmit, handleBack
     };
 };

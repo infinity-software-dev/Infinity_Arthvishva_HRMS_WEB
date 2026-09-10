@@ -50,6 +50,7 @@ export const HR_API = {
   GET_NEW_EMPLOYEE_CODE: `/api/web/hr/employees/new-code`,
   CREATE_EMPLOYEE: `/api/web/hr/employees/create`,
   UPDATE_EMPLOYEE: (id: string) => `/api/web/hr/employees/${id}`,
+  UPDATE_EMPLOYEE_KYC_STATUS: (id: string) => `/api/web/hr/employees/${id}/kyc-status`,
 
   // Reimbursement endpoints
   APPROVE_REIMBURSEMENT: (id: string) => `/api/web/hr/reimbursement/${id}/approve`,
@@ -107,4 +108,11 @@ export const EMPLOYEE_API = {
   APPLY_REIMBURSEMENT: '/api/web/reimbursement/apply',
   CANCEL_REIMBURSEMENT: (id: string) => `/api/web/reimbursement/${id}`,
 
+};
+
+export const KYC_API = {
+  AADHAAR_SEND_OTP: `/api/web/kyc/aadhaar/send-otp`,
+  AADHAAR_VERIFY_OTP: `/api/web/kyc/aadhaar/verify-otp`,
+  PAN_VERIFY: `/api/web/kyc/pan/verify`,
+  BANK_VERIFY: `/api/web/kyc/bank/verify`,
 };

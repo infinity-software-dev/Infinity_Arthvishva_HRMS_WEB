@@ -119,12 +119,18 @@ export const useAddEmployee = () => {
     postGraduationCourse: "",
     postGraduationPercent: "",
     aadhaarNumber: "",
+    aadhaarName: "",
+    aadhaarVerified: false,
     panNumber: "",
+    panName: "",
+    panDob: "",
+    panVerified: false,
     accountHolderName: "",
     bankName: "",
     accountNumber: "",
     ifsc: "",
     branch: "",
+    bankVerified: false,
     emergencyContactName: "",
     emergencyContactRelationship: "",
     emergencyContactMobile: "",
@@ -498,12 +504,20 @@ export const useAddEmployee = () => {
 
       // Handle specific ID Proofs and Banking Info safely
       data.append("aadhaarNumber", formData.aadhaarNumber);
+      data.append("aadhaarVerified", String(formData.aadhaarVerified));
+      if (formData.aadhaarName) data.append("aadhaarName", formData.aadhaarName);
+
       data.append("panNumber", formData.panNumber.toUpperCase().trim());
+      data.append("panVerified", String(formData.panVerified));
+      if (formData.panName) data.append("panName", formData.panName);
+      if (formData.panDob) data.append("panDob", formData.panDob);
+
       data.append("accountHolderName", formData.accountHolderName);
       data.append("bankName", formData.bankName);
       data.append("accountNumber", formData.accountNumber);
       data.append("ifsc", formData.ifsc.toUpperCase().trim());
       data.append("branch", formData.branch);
+      data.append("bankVerified", String(formData.bankVerified));
 
       // Handle Emergency Details
       data.append("emergencyContactName", formData.emergencyContactName);
@@ -573,6 +587,7 @@ export const useAddEmployee = () => {
 
   return {
     formData,
+    setFormData,
     errors,
     isSubmitting,
     managerOptions,

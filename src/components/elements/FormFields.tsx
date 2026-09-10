@@ -114,13 +114,13 @@ interface FileInputFieldProps {
 
 export function FileInputField({ label, onChange, disabled = false }: FileInputFieldProps) {
     return (
-        <div className="w-full flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{label}</label>
+        <div className="w-full min-w-0 max-w-full flex flex-col gap-1.5">
+            {label ? <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{label}</label> : null}
             <input
                 type="file"
                 onChange={onChange}
                 disabled={disabled}
-                className="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-gray-100 dark:file:bg-gray-800 file:text-gray-700 dark:file:text-gray-200 hover:file:bg-gray-200 dark:hover:file:bg-gray-700 disabled:opacity-50 transition-all border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-900"
+                className="w-full min-w-0 max-w-full text-sm text-gray-500 file:mr-3 file:py-2.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-gray-100 dark:file:bg-gray-800 file:text-gray-700 dark:file:text-gray-200 hover:file:bg-gray-200 dark:hover:file:bg-gray-700 disabled:opacity-50 transition-all border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-900 cursor-pointer overflow-hidden"
             />
         </div>
     );
