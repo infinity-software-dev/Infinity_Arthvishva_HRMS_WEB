@@ -4,163 +4,89 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { employeeService } from "@/services/employee.service";
 import imageCompression from "browser-image-compression";
+import apiClient from '@/constants/API/client';
+import { KYC_API } from '@/constants/API/api';
 
 // ── STATIC SCHEMAS ──
 export const DEPARTMENTS = [
-  "Director",
-  "Engineering",
-  "Sales",
-  "Marketing",
-  "Finance",
-  "Operations",
-  "HR",
-  "IT",
-  "Accountant",
-  "Area Manager",
-  "Driver",
-  "Helper",
-  "Office Boy",
-  "Wealth Advisor",
-  "BDM",
+  "Director", "Engineering", "Sales", "Marketing", "Finance",
+  "Operations", "HR", "IT", "Accountant", "Area Manager",
+  "Driver", "Helper", "Office Boy", "Wealth Advisor", "BDM",
 ];
 
 export const POSITIONS = [
-  "Intern",
-  "Junior Developer",
-  "Software Developer",
-  "Tester",
-  "Android Developer",
-  "iOS Developer",
-  "App Developer",
-  "Senior Developer",
-  "Manager",
-  "Director",
-  "VP",
-  "General Manager",
-  "Specialist",
-  "HR Executive",
-  "System Administrator",
+  "Intern", "Junior Developer", "Software Developer", "Tester",
+  "Android Developer", "iOS Developer", "App Developer",
+  "Senior Developer", "Manager", "Director", "VP",
+  "General Manager", "Specialist", "HR Executive", "System Administrator",
 ];
 
 export const GRADUATION_COURSES = [
-  "B.Tech",
-  "BE",
-  "BCA",
-  "B.Sc",
-  "BCS",
-  "B.Com",
-  "B.A",
-  "BBA",
-  "B.Ed",
-  "Other",
+  "B.Tech", "BE", "BCA", "B.Sc", "BCS", "B.Com", "B.A", "BBA", "B.Ed", "Other",
 ];
 
 export const POST_GRADUATION_COURSES = [
-  "M.Tech",
-  "ME",
-  "MCA",
-  "M.Sc",
-  "MCS",
-  "M.Com",
-  "M.A",
-  "MBA",
-  "M.Ed",
-  "Other",
+  "M.Tech", "ME", "MCA", "M.Sc", "MCS", "M.Com", "M.A", "MBA", "M.Ed", "Other",
 ];
 
 export const useAddEmployee = () => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [managerOptions, setManagerOptions] = useState<
-    { label: string; value: string }[]
-  >([]);
+  const [managerOptions, setManagerOptions] = useState<{ label: string; value: string }[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [formData, setFormData] = useState({
-    employeeCode: "",
-    password: "",
-    confirmPassword: "",
-    role: "Employee",
-    isAppAdmin: false,
-    status: "Active",
-    name: "",
-    email: "",
-    mobileNumber: "",
-    alternateMobileNumber: "",
-    gender: "",
-    bloodGroup: "",
-    dateOfBirth: "",
-    maritalStatus: "",
-    fatherName: "",
-    motherName: "",
+    employeeCode: "", password: "", confirmPassword: "", role: "Employee",
+    isAppAdmin: false, status: "Active", name: "", email: "", mobileNumber: "",
+    alternateMobileNumber: "", gender: "", bloodGroup: "", dateOfBirth: "",
+    maritalStatus: "", fatherName: "", motherName: "",
     address: {
       current: { address: "", pinCode: "", state: "", district: "", city: "" },
-      permanent: {
-        address: "",
-        pinCode: "",
-        state: "",
-        district: "",
-        city: "",
-      },
+      permanent: { address: "", pinCode: "", state: "", district: "", city: "" },
     },
-    joiningDate: "",
-    department: "",
-    position: "",
-    isLeadershipRole: false,
-    salary: "",
-    fixedAllowance: "",
-    managerId: "",
-    experienceType: "Fresher",
-    totalExperienceYears: "",
-    lastCompanyName: "",
-    hscPercent: "",
-    graduationCourse: "",
-    graduationPercent: "",
-    postGraduationCourse: "",
-    postGraduationPercent: "",
-    aadhaarNumber: "",
-    aadhaarName: "",
-    aadhaarVerified: false,
-    panNumber: "",
-    panName: "",
-    panDob: "",
-    panVerified: false,
-    accountHolderName: "",
-    bankName: "",
-    accountNumber: "",
-    ifsc: "",
-    branch: "",
-    bankVerified: false,
-    emergencyContactName: "",
-    emergencyContactRelationship: "",
-    emergencyContactMobile: "",
-    emergencyContactAddress: "",
-    hasDisease: "No",
-    diseaseName: "",
-    diseaseType: "",
-    diseaseSince: "",
-    medicinesRequired: "",
-    doctorName: "",
-    doctorContact: "",
+    joiningDate: "", department: "", position: "", isLeadershipRole: false,
+    salary: "", fixedAllowance: "", managerId: "", experienceType: "Fresher",
+    totalExperienceYears: "", lastCompanyName: "", hscPercent: "",
+    graduationCourse: "", graduationPercent: "", postGraduationCourse: "",
+    postGraduationPercent: "", aadhaarNumber: "", aadhaarName: "",
+    aadhaarVerified: false, panNumber: "", panName: "", panDob: "",
+    panVerified: false, accountHolderName: "", bankName: "", accountNumber: "",
+    ifsc: "", branch: "", bankVerified: false, emergencyContactName: "",
+    emergencyContactRelationship: "", emergencyContactMobile: "",
+    emergencyContactAddress: "", hasDisease: "No", diseaseName: "",
+    diseaseType: "", diseaseSince: "", medicinesRequired: "",
+    doctorName: "", doctorContact: "",
   });
 
   const [files, setFiles] = useState<{ [key: string]: File | null }>({
-    profileImage: null,
-    experienceCertificate: null,
-    tenthMarksheet: null,
-    twelfthMarksheet: null,
-    graduationMarksheet: null,
-    postGraduationMarksheet: null,
-    aadhaarFile: null,
-    panFile: null,
-    passbookFile: null,
-    medicalDocument: null,
+    profileImage: null, experienceCertificate: null, tenthMarksheet: null,
+    twelfthMarksheet: null, graduationMarksheet: null, postGraduationMarksheet: null,
+    aadhaarFile: null, panFile: null, passbookFile: null, medicalDocument: null,
   });
+
+  // ── KYC States ──
+  const [aadhaarOtpSent, setAadhaarOtpSent] = useState(false);
+  const [aadhaarReferenceId, setAadhaarReferenceId] = useState('');
+  const [aadhaarOtp, setAadhaarOtp] = useState('');
+  const [aadhaarVerified, setAadhaarVerified] = useState(false);
+  const [aadhaarLoading, setAadhaarLoading] = useState(false);
+  const [aadhaarError, setAadhaarError] = useState('');
+  const [aadhaarRegisteredName, setAadhaarRegisteredName] = useState('');
+
+  const [panName, setPanName] = useState('');
+  const [panDob, setPanDob] = useState('');
+  const [panVerified, setPanVerified] = useState(false);
+  const [panLoading, setPanLoading] = useState(false);
+  const [panError, setPanError] = useState('');
+
+  const [bankVerified, setBankVerified] = useState(false);
+  const [bankLoading, setBankLoading] = useState(false);
+  const [bankError, setBankError] = useState('');
+  const [bankRegisteredName, setBankRegisteredName] = useState('');
 
   // ── INITIAL DATA FETCHING ──
   useEffect(() => {
     let isMounted = true;
-
     const fetchInitialData = async () => {
       try {
         const [codeRes, managersRes] = await Promise.all([
@@ -188,30 +114,33 @@ export const useAddEmployee = () => {
     };
 
     fetchInitialData();
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, []);
 
-  // ── HANDLERS ──
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value, type } = e.target;
-    const val =
-      type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
+  // Pre-populate PAN Name and DOB from basic details if user hasn't modified them
+  useEffect(() => {
+    if (!panName && formData.name) {
+      setPanName(formData.name.toUpperCase());
+    }
+    if (!formData.accountHolderName && formData.name) {
+      setFormData(prev => ({ ...prev, accountHolderName: formData.name }));
+    }
+  }, [formData.name, panName, formData.accountHolderName]);
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: val,
-    }));
+  useEffect(() => {
+    if (!panDob && formData.dateOfBirth) {
+      setPanDob(formData.dateOfBirth);
+    }
+  }, [formData.dateOfBirth, panDob]);
+
+  // ── HANDLERS ──
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    const val = type === "checkbox" ? (e.target as HTMLInputElement).checked : value;
+    setFormData((prev) => ({ ...prev, [name]: val }));
   };
 
-  const handleAddressChange = (
-    type: "current" | "permanent",
-    field: string,
-    value: string,
-  ) => {
+  const handleAddressChange = (type: "current" | "permanent", field: string, value: string) => {
     setFormData((prev) => ({
       ...prev,
       address: {
@@ -224,27 +153,14 @@ export const useAddEmployee = () => {
     }));
   };
 
-  const handleFileChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-    key: string,
-  ) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, key: string) => {
     if (e.target.files && e.target.files[0]) {
       const originalFile = e.target.files[0];
-
-      // Only compress image files (skip PDFs etc.)
       if (originalFile.type.startsWith("image/")) {
-        const options = {
-          maxSizeMB: 0.1, // Max file size 100KB
-          maxWidthOrHeight: 1200,
-          useWebWorker: true,
-        };
-
+        const options = { maxSizeMB: 0.1, maxWidthOrHeight: 1200, useWebWorker: true };
         try {
           const compressedBlob = await imageCompression(originalFile, options);
-          // Convert Blob back to File to keep Multer happy on backend
-          const compressedFile = new File([compressedBlob], originalFile.name, {
-            type: originalFile.type,
-          });
+          const compressedFile = new File([compressedBlob], originalFile.name, { type: originalFile.type });
           setFiles((prev) => ({ ...prev, [key]: compressedFile }));
         } catch (error) {
           console.error("Compression failed, using original", error);
@@ -268,171 +184,224 @@ export const useAddEmployee = () => {
     }
   };
 
+  // ── KYC API HANDLERS ──
+  const handleSendAadhaarOtp = async () => {
+    setAadhaarError('');
+    if (!/^\d{12}$/.test(String(formData.aadhaarNumber))) {
+      setAadhaarError('Aadhaar must be 12 digits.');
+      return;
+    }
+    try {
+      setAadhaarLoading(true);
+      const res = await apiClient.post(KYC_API.AADHAAR_SEND_OTP, {
+        aadhaar_number: String(formData.aadhaarNumber),
+      });
+      setAadhaarReferenceId(res.data?.reference_id || '');
+      setAadhaarOtpSent(true);
+    } catch (err: any) {
+      setAadhaarError(err?.response?.data?.message || 'Failed to send OTP.');
+    } finally {
+      setAadhaarLoading(false);
+    }
+  };
+
+  const handleVerifyAadhaarOtp = async () => {
+    setAadhaarError('');
+    if (!aadhaarOtp.trim()) {
+      setAadhaarError('Please enter the OTP.');
+      return;
+    }
+    try {
+      setAadhaarLoading(true);
+      const res = await apiClient.post(KYC_API.AADHAAR_VERIFY_OTP, {
+        reference_id: aadhaarReferenceId,
+        otp: aadhaarOtp,
+        employee_name: formData.name?.trim(),
+      });
+      const verifiedName = res.data?.verified_name || res.data?.data?.name || res.data?.data?.full_name || res.data?.data?.user_name || formData.name?.trim() || '';
+      if (verifiedName) {
+        setAadhaarRegisteredName(verifiedName);
+      }
+      setAadhaarVerified(true);
+      setFormData(prev => ({
+        ...prev,
+        aadhaarVerified: true,
+        aadhaarName: verifiedName,
+      }));
+    } catch (err: any) {
+      setAadhaarError(err?.response?.data?.message || 'OTP verification failed.');
+    } finally {
+      setAadhaarLoading(false);
+    }
+  };
+
+  const handleVerifyPan = async () => {
+    setPanError('');
+    if (!panName.trim()) {
+      setPanError('Please enter name as per PAN.');
+      return;
+    }
+    if (!panDob) {
+      setPanError('Please enter date of birth.');
+      return;
+    }
+    try {
+      setPanLoading(true);
+      const [y, m, d] = panDob.split('-');
+      await apiClient.post(KYC_API.PAN_VERIFY, {
+        pan: String(formData.panNumber).trim().toUpperCase(),
+        name_as_per_pan: panName.trim().toUpperCase(),
+        date_of_birth: `${d}/${m}/${y}`,
+      });
+      setPanVerified(true);
+      setFormData(prev => ({
+        ...prev,
+        panVerified: true,
+        panName,
+        panDob,
+      }));
+    } catch (err: any) {
+      setPanError(err?.response?.data?.message || 'PAN verification failed.');
+    } finally {
+      setPanLoading(false);
+    }
+  };
+
+  const handleVerifyBank = async () => {
+    setBankError('');
+    if (!formData.accountNumber || !String(formData.accountNumber).trim()) {
+      setBankError('Please enter Account Number.');
+      return;
+    }
+    if (!formData.ifsc || !String(formData.ifsc).trim()) {
+      setBankError('Please enter IFSC Code.');
+      return;
+    }
+    try {
+      setBankLoading(true);
+      const res = await apiClient.post(KYC_API.BANK_VERIFY, {
+        account_number: String(formData.accountNumber).trim(),
+        ifsc: String(formData.ifsc).trim().toUpperCase(),
+        account_holder_name: formData.accountHolderName?.trim() || '',
+      });
+      const result = res.data?.data ?? res.data;
+      const regName = result?.registered_name || result?.name_at_bank || result?.account_holder_name || '';
+      if (regName) {
+        setBankRegisteredName(regName);
+      }
+      setBankVerified(true);
+      setFormData(prev => ({
+        ...prev,
+        bankVerified: true,
+        ...(result?.bank_name ? { bankName: result.bank_name } : {}),
+        ...(result?.branch ? { branch: result.branch } : {}),
+        ...(regName && !prev.accountHolderName ? { accountHolderName: regName } : {}),
+      }));
+    } catch (err: any) {
+      setBankError(err?.response?.data?.message || 'Bank account verification failed.');
+    } finally {
+      setBankLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const localErrors: Record<string, string> = {};
 
-    //     // ── 1. BASIC DETAILS VALIDATION ──
+    // ── 1. BASIC DETAILS VALIDATION ──
     if (!formData.name.trim()) localErrors.name = "Full Name is required.";
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email.trim())
-      localErrors.email = "Email address is required.";
-    else if (!emailRegex.test(formData.email))
-      localErrors.email = "Please enter a valid email format.";
+    if (!formData.email.trim()) localErrors.email = "Email address is required.";
+    else if (!emailRegex.test(formData.email)) localErrors.email = "Please enter a valid email format.";
 
     const mobileRegex = /^\d{10}$/;
-    if (!formData.mobileNumber.trim())
-      localErrors.mobileNumber = "Mobile number is required.";
-    else if (!mobileRegex.test(formData.mobileNumber.trim()))
-      localErrors.mobileNumber = "Mobile number must be exactly 10 digits.";
+    if (!formData.mobileNumber.trim()) localErrors.mobileNumber = "Mobile number is required.";
+    else if (!mobileRegex.test(formData.mobileNumber.trim())) localErrors.mobileNumber = "Mobile number must be exactly 10 digits.";
 
-    if (
-      formData.alternateMobileNumber?.trim() &&
-      !mobileRegex.test(formData.alternateMobileNumber.trim())
-    ) {
-      localErrors.alternateMobileNumber =
-        "Alternate mobile number must be exactly 10 digits.";
+    if (formData.alternateMobileNumber?.trim() && !mobileRegex.test(formData.alternateMobileNumber.trim())) {
+      localErrors.alternateMobileNumber = "Alternate mobile number must be exactly 10 digits.";
     }
 
     if (!formData.password) localErrors.password = "Password is required.";
-    else if (formData.password.length < 6)
-      localErrors.password = "Password must be at least 6 characters long.";
+    else if (formData.password.length < 6) localErrors.password = "Password must be at least 6 characters long.";
+    if (formData.password !== formData.confirmPassword) localErrors.confirmPassword = "Passwords do not match.";
 
-    if (formData.password !== formData.confirmPassword)
-      localErrors.confirmPassword = "Passwords do not match.";
-
-    //     // ── 2. PERSONAL DETAILS VALIDATION ──
+    // ── 2. PERSONAL DETAILS VALIDATION ──
     if (!formData.gender) localErrors.gender = "Gender selection is required.";
     if (!formData.dateOfBirth) {
       localErrors.dateOfBirth = "Date of Birth is required.";
     } else {
       const dob = new Date(formData.dateOfBirth);
       const today = new Date();
-      if (dob >= today)
-        localErrors.dateOfBirth = "Date of Birth must be in the past.";
+      if (dob >= today) localErrors.dateOfBirth = "Date of Birth must be in the past.";
     }
 
-    // Address Validations
-    if (!formData.address.current.address.trim())
-      localErrors.currentAddress = "Street address is required.";
-    if (!formData.address.current.pinCode.trim())
-      localErrors.currentPin = "Pin Code is required.";
-    else if (!/^\d{6}$/.test(formData.address.current.pinCode.trim()))
-      localErrors.currentPin = "Pin Code must be exactly 6 digits.";
-    if (!formData.address.current.city.trim())
-      localErrors.currentCity = "City is required.";
-    if (!formData.address.current.state.trim())
-      localErrors.currentState = "State is required.";
-    if (!formData.address.current.district.trim())
-      localErrors.currentDistrict = "District is required.";
+    if (!formData.address.current.address.trim()) localErrors.currentAddress = "Street address is required.";
+    if (!formData.address.current.pinCode.trim()) localErrors.currentPin = "Pin Code is required.";
+    else if (!/^\d{6}$/.test(formData.address.current.pinCode.trim())) localErrors.currentPin = "Pin Code must be exactly 6 digits.";
+    if (!formData.address.current.city.trim()) localErrors.currentCity = "City is required.";
+    if (!formData.address.current.state.trim()) localErrors.currentState = "State is required.";
+    if (!formData.address.current.district.trim()) localErrors.currentDistrict = "District is required.";
 
-    if (!formData.address.permanent.address.trim())
-      localErrors.permanentAddress = "Permanent street address is required.";
-    if (!formData.address.permanent.pinCode.trim())
-      localErrors.permanentPin = "Permanent Pin Code is required.";
-    else if (!/^\d{6}$/.test(formData.address.permanent.pinCode.trim()))
-      localErrors.permanentPin = "Permanent Pin Code must be exactly 6 digits.";
-    if (!formData.address.permanent.city.trim())
-      localErrors.permanentCity = "Permanent City is required.";
-    if (!formData.address.permanent.state.trim())
-      localErrors.permanentState = "Permanent State is required.";
-    if (!formData.address.permanent.district.trim())
-      localErrors.permanentDistrict = "Permanent District is required.";
+    if (!formData.address.permanent.address.trim()) localErrors.permanentAddress = "Permanent street address is required.";
+    if (!formData.address.permanent.pinCode.trim()) localErrors.permanentPin = "Permanent Pin Code is required.";
+    else if (!/^\d{6}$/.test(formData.address.permanent.pinCode.trim())) localErrors.permanentPin = "Permanent Pin Code must be exactly 6 digits.";
+    if (!formData.address.permanent.city.trim()) localErrors.permanentCity = "Permanent City is required.";
+    if (!formData.address.permanent.state.trim()) localErrors.permanentState = "Permanent State is required.";
+    if (!formData.address.permanent.district.trim()) localErrors.permanentDistrict = "Permanent District is required.";
 
-    //     // ── 3. EXPERIENCE CONDITIONAL VALIDATION ──
+    // ── 3. EXPERIENCE CONDITIONAL VALIDATION ──
     if (formData.experienceType === "Experienced") {
-      if (!formData.totalExperienceYears)
-        localErrors.totalExperienceYears =
-          "Total experience track history is required.";
-      if (!formData.lastCompanyName.trim())
-        localErrors.lastCompanyName = "Last corporate entity name is required.";
+      if (!formData.totalExperienceYears) localErrors.totalExperienceYears = "Total experience track history is required.";
+      if (!formData.lastCompanyName.trim()) localErrors.lastCompanyName = "Last corporate entity name is required.";
     }
 
-    //     // ── 4. JOB DETAILS VALIDATION ──
-    if (!formData.joiningDate)
-      localErrors.joiningDate = "Joining date is required.";
-    if (!formData.department)
-      localErrors.department = "Department routing config is required.";
+    // ── 4. JOB DETAILS VALIDATION ──
+    if (!formData.joiningDate) localErrors.joiningDate = "Joining date is required.";
+    if (!formData.department) localErrors.department = "Department routing config is required.";
 
-    //     // ── 5. HEALTH CONDITIONAL VALIDATION ──
+    // ── 5. HEALTH CONDITIONAL VALIDATION ──
     if (formData.hasDisease === "Yes" && !formData.diseaseName?.trim()) {
-      localErrors.diseaseName =
-        "Disease condition profile summary name is required.";
+      localErrors.diseaseName = "Disease condition profile summary name is required.";
     }
 
-    //     // ── 6. EDUCATION VALIDATION ──
+    // ── 6. EDUCATION VALIDATION ──
     if (!formData.hscPercent) {
       localErrors.hscPercent = "12th standard score percentage is required.";
     } else {
       const hscNum = Number(formData.hscPercent);
-      if (hscNum < 0 || hscNum > 100)
-        localErrors.hscPercent =
-          "Percentage score must map cleanly between 0 and 100.";
+      if (hscNum < 0 || hscNum > 100) localErrors.hscPercent = "Percentage score must map cleanly between 0 and 100.";
     }
 
-    //     // ── 7. IDENTITY PROOFS VALIDATION ──
-    if (!formData.aadhaarNumber?.trim())
-      localErrors.aadhaarNumber =
-        "Aadhaar evaluation identification number is required.";
-    else if (!/^\d{12}$/.test(formData.aadhaarNumber.trim()))
-      localErrors.aadhaarNumber =
-        "Aadhaar registration sequences must be exactly 12 digits.";
+    // ── 7. IDENTITY PROOFS VALIDATION ──
+    if (!formData.aadhaarNumber?.trim()) localErrors.aadhaarNumber = "Aadhaar evaluation identification number is required.";
+    else if (!/^\d{12}$/.test(formData.aadhaarNumber.trim())) localErrors.aadhaarNumber = "Aadhaar registration sequences must be exactly 12 digits.";
 
     const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
-    if (!formData.panNumber?.trim())
-      localErrors.panNumber =
-        "PAN layout identification alphanumeric string is required.";
-    else if (!panRegex.test(formData.panNumber.toUpperCase().trim()))
-      localErrors.panNumber =
-        "Invalid format structure layout guidelines (Expected: ABCDE1234F).";
+    if (!formData.panNumber?.trim()) localErrors.panNumber = "PAN layout identification alphanumeric string is required.";
+    else if (!panRegex.test(formData.panNumber.toUpperCase().trim())) localErrors.panNumber = "Invalid format structure layout guidelines (Expected: ABCDE1234F).";
 
-    //     // ── 8. BANK DETAILS VALIDATION ──
-    if (!formData.accountHolderName.trim())
-      localErrors.accountHolderName =
-        "Account holder verification title string is required.";
-    if (!formData.bankName.trim())
-      localErrors.bankName =
-        "Banking clear clearing string node identity title is required.";
-    if (!formData.accountNumber.trim())
-      localErrors.accountNumber =
-        "Settlement account banking system distribution numeric line string is required.";
-
+    // ── 8. BANK DETAILS VALIDATION ──
+    if (!formData.accountHolderName.trim()) localErrors.accountHolderName = "Account holder verification title string is required.";
+    if (!formData.bankName.trim()) localErrors.bankName = "Banking clear clearing string node identity title is required.";
+    if (!formData.accountNumber.trim()) localErrors.accountNumber = "Settlement account banking system distribution numeric line string is required.";
     const ifscRegex = /^[A-Z]{4}0[A-Z0-9]{6}$/;
-    if (!formData.ifsc.trim())
-      localErrors.ifsc =
-        "IFSC banking branch system clear verification routing string sequence is required.";
-    else if (!ifscRegex.test(formData.ifsc.toUpperCase().trim()))
-      localErrors.ifsc =
-        "Invalid system standard core code pattern formatting (Expected: HDFC0001234).";
-
-    if (!formData.branch.trim())
-      localErrors.branch =
-        "Branch structural settlement context locator label string required.";
+    if (!formData.ifsc.trim()) localErrors.ifsc = "IFSC banking branch system clear verification routing string sequence is required.";
+    else if (!ifscRegex.test(formData.ifsc.toUpperCase().trim())) localErrors.ifsc = "Invalid system standard core code pattern formatting (Expected: HDFC0001234).";
+    if (!formData.branch.trim()) localErrors.branch = "Branch structural settlement context locator label string required.";
 
     // ── 9. EMERGENCY CONTACT VALIDATION ──
-    if (!formData.emergencyContactName.trim())
-      localErrors.emergencyContactName =
-        "Emergency contact name node identity is required.";
-    if (!formData.emergencyContactMobile.trim())
-      localErrors.emergencyContactMobile =
-        "Emergency backup callback sequence mobile target line is required.";
-    else if (!mobileRegex.test(formData.emergencyContactMobile.trim()))
-      localErrors.emergencyContactMobile =
-        "Emergency connectivity mobile contact number target lines require exactly 10 digits.";
+    if (!formData.emergencyContactName.trim()) localErrors.emergencyContactName = "Emergency contact name node identity is required.";
+    if (!formData.emergencyContactMobile.trim()) localErrors.emergencyContactMobile = "Emergency backup callback sequence mobile target line is required.";
+    else if (!mobileRegex.test(formData.emergencyContactMobile.trim())) localErrors.emergencyContactMobile = "Emergency connectivity mobile contact number target lines require exactly 10 digits.";
 
-    //     // ── EVALUATE CRITICAL RUNTIME ERRORS INTERCEPTION ──
+    // ── EVALUATE CRITICAL RUNTIME ERRORS INTERCEPTION ──
     if (Object.keys(localErrors).length > 0) {
       setErrors(localErrors);
       const firstErrorKey = Object.keys(localErrors)[0];
       const errorInputNode = document.getElementsByName(firstErrorKey)[0];
       if (errorInputNode) {
-        errorInputNode.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
+        errorInputNode.scrollIntoView({ behavior: "smooth", block: "center" });
         errorInputNode.focus();
       }
       return;
@@ -444,139 +413,128 @@ export const useAddEmployee = () => {
       setIsSubmitting(true);
       const data = new FormData();
 
-      // Append flat text fields and flags
-      data.append("employeeCode", formData.employeeCode);
+      // Uppercase ID & Name
+      data.append("employeeCode", formData.employeeCode.toUpperCase().trim());
+      data.append("name", formData.name.toUpperCase().trim());
+
+      // Exact / Lowercase / Enums
       data.append("password", formData.password);
+      data.append("email", formData.email.toLowerCase().trim());
       data.append("role", formData.role);
       data.append("status", formData.status);
       data.append("isAppAdmin", String(formData.isAppAdmin));
-      data.append("name", formData.name);
-      data.append("email", formData.email.toLowerCase().trim());
-      data.append("mobileNumber", formData.mobileNumber);
-      data.append(
-        "alternateMobileNumber",
-        formData.alternateMobileNumber || "",
-      );
+      data.append("mobileNumber", formData.mobileNumber.trim());
+      data.append("alternateMobileNumber", formData.alternateMobileNumber ? formData.alternateMobileNumber.trim() : "");
       data.append("gender", formData.gender);
       data.append("bloodGroup", formData.bloodGroup);
       data.append("dateOfBirth", formData.dateOfBirth);
       data.append("maritalStatus", formData.maritalStatus);
-      data.append("fatherName", formData.fatherName);
-      data.append("motherName", formData.motherName);
       data.append("joiningDate", formData.joiningDate);
       data.append("department", formData.department);
       data.append("position", formData.position);
       data.append("isLeadershipRole", String(formData.isLeadershipRole));
 
-      // Only append managerId if it actually has a value to prevent sending empty strings
+      // Uppercase Parents
+      data.append("fatherName", formData.fatherName.toUpperCase().trim());
+      data.append("motherName", formData.motherName.toUpperCase().trim());
+
+      // Experience & Education
       if (formData.managerId) data.append("managerId", formData.managerId);
-
       data.append("experienceType", formData.experienceType);
-      if (formData.lastCompanyName)
-        data.append("lastCompanyName", formData.lastCompanyName);
-      if (formData.graduationCourse)
-        data.append("graduationCourse", formData.graduationCourse);
-      if (formData.postGraduationCourse)
-        data.append("postGraduationCourse", formData.postGraduationCourse);
 
-      // Format and typecast safe numeric data strings
-      if (formData.salary)
-        data.append("salary", String(Number(formData.salary)));
-      if (formData.fixedAllowance)
-        data.append("fixedAllowance", String(Number(formData.fixedAllowance)));
-      if (formData.totalExperienceYears)
-        data.append(
-          "totalExperienceYears",
-          String(Number(formData.totalExperienceYears)),
-        );
-      if (formData.hscPercent)
-        data.append("hscPercent", String(Number(formData.hscPercent)));
-      if (formData.graduationPercent)
-        data.append(
-          "graduationPercent",
-          String(Number(formData.graduationPercent)),
-        );
-      if (formData.postGraduationPercent)
-        data.append(
-          "postGraduationPercent",
-          String(Number(formData.postGraduationPercent)),
-        );
+      if (formData.lastCompanyName) {
+        data.append("lastCompanyName", formData.lastCompanyName.toUpperCase().trim());
+      }
 
-      // Handle specific ID Proofs and Banking Info safely
-      data.append("aadhaarNumber", formData.aadhaarNumber);
+      if (formData.graduationCourse) data.append("graduationCourse", formData.graduationCourse);
+      if (formData.postGraduationCourse) data.append("postGraduationCourse", formData.postGraduationCourse);
+
+      // Numbers
+      if (formData.salary) data.append("salary", String(Number(formData.salary)));
+      if (formData.fixedAllowance) data.append("fixedAllowance", String(Number(formData.fixedAllowance)));
+      if (formData.totalExperienceYears) data.append("totalExperienceYears", String(Number(formData.totalExperienceYears)));
+      if (formData.hscPercent) data.append("hscPercent", String(Number(formData.hscPercent)));
+      if (formData.graduationPercent) data.append("graduationPercent", String(Number(formData.graduationPercent)));
+      if (formData.postGraduationPercent) data.append("postGraduationPercent", String(Number(formData.postGraduationPercent)));
+
+      // KYC & Identity
+      data.append("aadhaarNumber", formData.aadhaarNumber.trim());
       data.append("aadhaarVerified", String(formData.aadhaarVerified));
-      if (formData.aadhaarName) data.append("aadhaarName", formData.aadhaarName);
+      if (formData.aadhaarName) {
+        data.append("aadhaarName", formData.aadhaarName.toUpperCase().trim());
+      }
 
       data.append("panNumber", formData.panNumber.toUpperCase().trim());
       data.append("panVerified", String(formData.panVerified));
-      if (formData.panName) data.append("panName", formData.panName);
+      if (formData.panName) {
+        data.append("panName", formData.panName.toUpperCase().trim());
+      }
       if (formData.panDob) data.append("panDob", formData.panDob);
 
-      data.append("accountHolderName", formData.accountHolderName);
-      data.append("bankName", formData.bankName);
-      data.append("accountNumber", formData.accountNumber);
+      // Banking
+      data.append("accountHolderName", formData.accountHolderName.toUpperCase().trim());
+      data.append("bankName", formData.bankName.toUpperCase().trim());
+      data.append("accountNumber", formData.accountNumber.trim());
       data.append("ifsc", formData.ifsc.toUpperCase().trim());
-      data.append("branch", formData.branch);
+      data.append("branch", formData.branch.toUpperCase().trim());
       data.append("bankVerified", String(formData.bankVerified));
 
-      // Handle Emergency Details
-      data.append("emergencyContactName", formData.emergencyContactName);
-      data.append(
-        "emergencyContactRelationship",
-        formData.emergencyContactRelationship,
-      );
-      data.append("emergencyContactMobile", formData.emergencyContactMobile);
-      data.append("emergencyContactAddress", formData.emergencyContactAddress);
-
-      // Handle Health fields
-      data.append("hasDisease", formData.hasDisease);
-      if (formData.hasDisease === "Yes") {
-        data.append("diseaseName", formData.diseaseName);
-        data.append("diseaseType", formData.diseaseType);
-        data.append("diseaseSince", formData.diseaseSince);
-        data.append("medicinesRequired", formData.medicinesRequired);
-        data.append("doctorName", formData.doctorName);
-        data.append("doctorContact", formData.doctorContact);
+      // Emergency Contact
+      data.append("emergencyContactName", formData.emergencyContactName.toUpperCase().trim());
+      data.append("emergencyContactRelationship", formData.emergencyContactRelationship.toUpperCase().trim());
+      data.append("emergencyContactMobile", formData.emergencyContactMobile.trim());
+      if (formData.emergencyContactAddress) {
+        data.append("emergencyContactAddress", formData.emergencyContactAddress.toUpperCase().trim());
       }
 
-      // 2. THE FIX: Send address as a single stringified JSON object
-      data.append("address", JSON.stringify(formData.address));
+      // Health
+      data.append("hasDisease", formData.hasDisease);
+      if (formData.hasDisease === "Yes") {
+        data.append("diseaseName", formData.diseaseName.toUpperCase().trim());
+        data.append("diseaseType", formData.diseaseType.toUpperCase().trim());
+        data.append("diseaseSince", formData.diseaseSince.trim());
+        if (formData.medicinesRequired) data.append("medicinesRequired", formData.medicinesRequired.toUpperCase().trim());
+        if (formData.doctorName) data.append("doctorName", formData.doctorName.toUpperCase().trim());
+        if (formData.doctorContact) data.append("doctorContact", formData.doctorContact.trim());
+      }
 
-      // Append raw dynamic files
+      // Address Parsing & Uppercase Transformation
+      const uppercaseAddress = {
+        current: {
+          address: formData.address.current.address.toUpperCase().trim(),
+          pinCode: formData.address.current.pinCode.trim(),
+          state: formData.address.current.state.toUpperCase().trim(),
+          district: formData.address.current.district.toUpperCase().trim(),
+          city: formData.address.current.city.toUpperCase().trim()
+        },
+        permanent: {
+          address: formData.address.permanent.address.toUpperCase().trim(),
+          pinCode: formData.address.permanent.pinCode.trim(),
+          state: formData.address.permanent.state.toUpperCase().trim(),
+          district: formData.address.permanent.district.toUpperCase().trim(),
+          city: formData.address.permanent.city.toUpperCase().trim()
+        }
+      };
+      data.append("address", JSON.stringify(uppercaseAddress));
+
+      // Files
       if (files.profileImage) data.append("profileImage", files.profileImage);
-      if (files.experienceCertificate)
-        data.append("experienceCertificate", files.experienceCertificate);
-      if (files.tenthMarksheet)
-        data.append("tenthMarksheet", files.tenthMarksheet);
-      if (files.twelfthMarksheet)
-        data.append("twelfthMarksheet", files.twelfthMarksheet);
-      if (files.graduationMarksheet)
-        data.append("graduationMarksheet", files.graduationMarksheet);
-      if (files.postGraduationMarksheet)
-        data.append("postGraduationMarksheet", files.postGraduationMarksheet);
+      if (files.experienceCertificate) data.append("experienceCertificate", files.experienceCertificate);
+      if (files.tenthMarksheet) data.append("tenthMarksheet", files.tenthMarksheet);
+      if (files.twelfthMarksheet) data.append("twelfthMarksheet", files.twelfthMarksheet);
+      if (files.graduationMarksheet) data.append("graduationMarksheet", files.graduationMarksheet);
+      if (files.postGraduationMarksheet) data.append("postGraduationMarksheet", files.postGraduationMarksheet);
       if (files.aadhaarFile) data.append("aadhaarFile", files.aadhaarFile);
       if (files.panFile) data.append("panFile", files.panFile);
       if (files.passbookFile) data.append("passbookFile", files.passbookFile);
-      if (files.medicalDocument)
-        data.append("medicalDocument", files.medicalDocument);
+      if (files.medicalDocument) data.append("medicalDocument", files.medicalDocument);
 
       await employeeService.createEmployee(data);
       router.back();
     } catch (error: any) {
-      // await logToTerminal("API Error Details:", error);
       console.error("API Error Details:", error);
-
-      // 3. THE FIX: Display the actual backend error so you know exactly what failed
-      const backendErrorMsg =
-        error.response?.data?.message ||
-        error.message ||
-        "An unknown error occurred.";
-
-      // Format array messages nicely if NestJS class-validator sends an array
-      const displayMsg = Array.isArray(backendErrorMsg)
-        ? backendErrorMsg.join("\n")
-        : backendErrorMsg;
-
+      const backendErrorMsg = error.response?.data?.message || error.message || "An unknown error occurred.";
+      const displayMsg = Array.isArray(backendErrorMsg) ? backendErrorMsg.join("\n") : backendErrorMsg;
       alert(`Save Failed:\n\n${displayMsg}`);
     } finally {
       setIsSubmitting(false);
@@ -586,16 +544,15 @@ export const useAddEmployee = () => {
   const handleBack = () => router.back();
 
   return {
-    formData,
-    setFormData,
-    errors,
-    isSubmitting,
-    managerOptions,
-    handleChange,
-    handleAddressChange,
-    handleFileChange,
-    handleSyncAddresses,
-    handleSubmit,
-    handleBack,
+    formData, setFormData, errors, isSubmitting, managerOptions,
+    handleChange, handleAddressChange, handleFileChange, handleSyncAddresses,
+    handleSubmit, handleBack,
+
+    // KYC Exports
+    aadhaarOtpSent, setAadhaarOtpSent, aadhaarOtp, setAadhaarOtp,
+    aadhaarVerified, aadhaarLoading, aadhaarError, aadhaarRegisteredName, setAadhaarReferenceId, setAadhaarError,
+    handleSendAadhaarOtp, handleVerifyAadhaarOtp,
+    panName, setPanName, panDob, setPanDob, panVerified, panLoading, panError, handleVerifyPan,
+    bankVerified, bankLoading, bankError, bankRegisteredName, handleVerifyBank
   };
 };
