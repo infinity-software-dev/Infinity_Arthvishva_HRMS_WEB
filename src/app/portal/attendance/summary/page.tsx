@@ -16,7 +16,18 @@ export default function AttendanceSummaryPage() {
     const [user, setUser] = useState<any>(null);
     const [selectedReport, setSelectedReport] = useState<{ data: any, date: string } | null>(null);
     const [selectedCorrectionRecord, setSelectedCorrectionRecord] = useState<any | null>(null);
-    const { currentDate, nextMonth, prevMonth, data, uiStats, loading } = useAttendanceSummary();
+    const {
+        startDate,
+        setStartDate,
+        endDate,
+        setEndDate,
+        currentDate,
+        nextMonth,
+        prevMonth,
+        data,
+        uiStats,
+        loading
+    } = useAttendanceSummary();
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -86,22 +97,48 @@ export default function AttendanceSummaryPage() {
                     </div>
                 </div>
 
-                {/* Right: Month Selector */}
-                <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-800/50 p-1.5 rounded-xl border border-gray-100 dark:border-gray-700">
-                    <button onClick={prevMonth} className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white dark:hover:bg-gray-700 text-secondary dark:text-gray-400 transition-colors shadow-sm">
-                        <ChevronLeft size={16} />
-                    </button>
-                    <div className="flex items-center gap-2 px-4 text-sm font-bold text-primary dark:text-white min-w-[140px] justify-center">
-                        <Calendar size={14} className="text-brand-blue dark:text-blue-400" />
-                        {monthYearString}
+                {/* Right: Date Range Filter & Month Quick Navigator */}
+                <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="date"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            className="px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-xl text-sm bg-gray-50 dark:bg-gray-800/50 text-primary dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-brand-blue shadow-sm cursor-pointer"
+                            title="Start Date"
+                        />
+                        <span className="text-secondary dark:text-gray-400 text-xs font-bold uppercase tracking-wider">to</span>
+                        <input
+                            type="date"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                            className="px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-xl text-sm bg-gray-50 dark:bg-gray-800/50 text-primary dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-brand-blue shadow-sm cursor-pointer"
+                            title="End Date"
+                        />
                     </div>
-                    <button
-                        onClick={nextMonth}
-                        disabled={new Date().getMonth() === currentDate.getMonth() && new Date().getFullYear() === currentDate.getFullYear()}
-                        className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white dark:hover:bg-gray-700 text-secondary dark:text-gray-400 transition-colors shadow-sm disabled:opacity-30"
-                    >
-                        <ChevronRight size={16} />
-                    </button>
+
+                    {/* Month Navigator */}
+                    <div className="flex items-center gap-1.5 bg-gray-50 dark:bg-gray-800/50 p-1.5 rounded-xl border border-gray-100 dark:border-gray-700">
+                        <button
+                            onClick={prevMonth}
+                            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white dark:hover:bg-gray-700 text-secondary dark:text-gray-400 transition-colors shadow-sm"
+                            title="Previous Month"
+                        >
+                            <ChevronLeft size={16} />
+                        </button>
+                        <div className="flex items-center gap-1.5 px-2 text-xs font-bold text-primary dark:text-white whitespace-nowrap">
+                            <Calendar size={14} className="text-brand-blue dark:text-blue-400" />
+                            {monthYearString}
+                        </div>
+                        <button
+                            onClick={nextMonth}
+                            disabled={new Date().getMonth() === currentDate.getMonth() && new Date().getFullYear() === currentDate.getFullYear()}
+                            className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white dark:hover:bg-gray-700 text-secondary dark:text-gray-400 transition-colors shadow-sm disabled:opacity-30"
+                            title="Next Month"
+                        >
+                            <ChevronRight size={16} />
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -149,7 +186,7 @@ export default function AttendanceSummaryPage() {
                                 ) : data?.records?.length === 0 ? (
                                     <tr>
                                         <td colSpan={7} className="px-6 py-12 text-center font-medium text-secondary dark:text-gray-400">
-                                            No attendance records found for {monthYearString}.
+                                            No attendance records found for the selected date range ({startDate} to {endDate}).
                                         </td>
                                     </tr>
                                 ) : (
