@@ -72,6 +72,22 @@ export const HR_API = {
   CREATE_VIDEO: `/api/web/hr/gurukul/videos`,
   UPDATE_VIDEO: (id: string) => `/api/web/hr/gurukul/videos/${id}`,
   DELETE_VIDEO: (id: string) => `/api/web/hr/gurukul/videos/${id}`,
+
+  // ─── DEPARTMENT ENDPOINTS (ADDED) ───
+  GET_ALL_DEPARTMENTS: `/api/web/hr/get-all-departments`,
+  GET_ACTIVE_DEPARTMENTS: `/api/web/hr/get-active-departments`,
+  CREATE_DEPARTMENT: `/api/web/hr/create-department`,
+  UPDATE_DEPARTMENT: (id: string) => `/api/web/hr/update-department/${id}`,
+  DELETE_DEPARTMENT: (id: string) => `/api/web/hr/delete-department/${id}`,
+  RESTORE_DEPARTMENT: (id: string) => `/api/web/hr/restore-department/${id}`,
+
+  // ─── POSITION ENDPOINTS (ADDED) ───
+  GET_ALL_POSITIONS: `/api/web/hr/get-all-positions`,
+  GET_ACTIVE_POSITIONS: `/api/web/hr/get-active-positions`,
+  CREATE_POSITION: `/api/web/hr/create-position`,
+  UPDATE_POSITION: (id: string) => `/api/web/hr/update-position/${id}`,
+  DELETE_POSITION: (id: string) => `/api/web/hr/delete-position/${id}`,
+  RESTORE_POSITION: (id: string) => `/api/web/hr/restore-position/${id}`,
 }
 
 export const DIRECTOR_API = {

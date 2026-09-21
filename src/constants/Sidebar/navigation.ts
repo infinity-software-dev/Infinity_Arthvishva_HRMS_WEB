@@ -12,6 +12,7 @@ import {
     FileTerminal,
     PlaneTakeoff,
     HandCoins,
+    Building2,
 } from "lucide-react";
 
 // --- MANAGEMENT STACK (HR & DIRECTOR) ---
@@ -33,6 +34,12 @@ export const DASHBOARD_NAV = [
                 title: "Employee Management",
                 url: "/dashboard/employees",
                 icon: Users,
+                requiredRoles: ["HR", "DIRECTOR"],
+            },
+            {
+                title: "Departments",
+                url: "/dashboard/departments",
+                icon: Building2,
                 requiredRoles: ["HR", "DIRECTOR"],
             },
             {

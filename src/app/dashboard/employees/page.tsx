@@ -9,11 +9,12 @@ import PageTitleHeader from '@/components/elements/PageTitleHeader';
 import { useRouter } from 'next/navigation';
 import { DEPARTMENTS } from '@/hooks/employee-hooks/useAddEmployee';
 import { useEffect, useState } from 'react';
-
+import { useDepartments } from '@/hooks/department-hooks/useDepartments';
 
 export default function EmployeePage() {
   const router = useRouter();
   const { data, isLoading, viewMode, setViewMode, handleExportToExcel, filters, pagination } = useEmployeeDirectory();
+  const { departments: dynamicDepartments } = useDepartments();
   const [isHr, setIsHr] = useState<boolean>(false);
 
   // Safely read role on client mount and store as boolean
@@ -63,13 +64,15 @@ export default function EmployeePage() {
             {/* Department Dropdown */}
             <select className="px-4 mx-1 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-green min-w-[140px] cursor-pointer" onChange={(e) => filters.setDepartment(e.target.value)}>
               <option value="">All Departments</option>
-              {DEPARTMENTS.map((dept) => {
-                const upperDept = dept.toUpperCase();
-                return (
-                  <option key={dept} value={upperDept}>
-                    {upperDept}
-                  </option>
-                );
+              {dynamicDepartments
+                .filter((dept) => dept.isActive !== false)
+                .map((dept) => {
+                  const upperDept = dept.name.toUpperCase();
+                  return (
+                    <option key={dept._id} value={upperDept}>
+                      {upperDept}
+                    </option>
+                  );
               })}
             </select>
 

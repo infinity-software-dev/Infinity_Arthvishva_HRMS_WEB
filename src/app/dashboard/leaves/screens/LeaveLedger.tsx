@@ -1,9 +1,10 @@
 "use client";
-import { DEPARTMENTS } from "@/hooks/employee-hooks/useAddEmployee";
+import { useDepartments } from "@/hooks/department-hooks/useDepartments";
 import { useLeaveLedger } from "@/hooks/leave-hooks/useLeaveLedger";
 
 export default function LeaveLedger() {
     const { data, loading, pagination, filters, modal } = useLeaveLedger();
+    const { departments } = useDepartments();
 
     const formatDate = (dateStr?: string) => {
         if (!dateStr) return "--/--/----";
@@ -47,10 +48,10 @@ export default function LeaveLedger() {
 
                 <select value={filters.department} onChange={(e) => filters.setDepartment(e.target.value)} className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-brand-green">
                     <option value="">All Departments</option>
-                    {DEPARTMENTS.map((dept) => {
-                        const upperDept = dept.toUpperCase();
+                    {departments.filter(d => d.isActive !== false).map((dept) => {
+                        const upperDept = dept.name.toUpperCase();
                         return (
-                            <option key={dept} value={upperDept}>
+                            <option key={dept._id} value={upperDept}>
                                 {upperDept}
                             </option>
                         );

@@ -3,7 +3,9 @@
 import PageTitleHeader from '@/components/elements/PageTitleHeader';
 import { FileInputField, FormInput, FormSelect } from '@/components/elements/FormFields';
 import GradientButton from '@/components/buttons/GradientButton';
-import { useAddEmployee, DEPARTMENTS, GRADUATION_COURSES, POSITIONS, POST_GRADUATION_COURSES } from '@/hooks/employee-hooks/useAddEmployee';
+import { useAddEmployee, GRADUATION_COURSES, POST_GRADUATION_COURSES } from '@/hooks/employee-hooks/useAddEmployee';
+import { useDepartments } from '@/hooks/department-hooks/useDepartments';
+import { usePositions } from '@/hooks/department-hooks/usePositions';
 import { ArrowLeft } from 'lucide-react';
 
 // Helper component for file inputs in Identity & Banking
@@ -27,6 +29,9 @@ export default function AddEmployeePage() {
         panName, setPanName, panDob, setPanDob, panVerified, panLoading, panError, handleVerifyPan,
         bankVerified, bankLoading, bankError, bankRegisteredName, handleVerifyBank
     } = useAddEmployee();
+
+    const { departments } = useDepartments();
+    const { positions } = usePositions();
 
     return (
         <div className="p-8">
@@ -120,8 +125,8 @@ export default function AddEmployeePage() {
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
                         <FormInput name="joiningDate" label="Joining Date" error={errors.joiningDate} type="date" value={formData.joiningDate} onChange={handleChange} textTransform="none" required />
                         <FormSelect name="role" label="Role (Access Level)" error={errors.role} value={formData.role} onChange={handleChange} options={[{ label: 'Employee', value: 'Employee' }, { label: 'Intern', value: 'Intern' }]} required />
-                        <FormSelect name="department" label="Department" error={errors.department} value={formData.department} onChange={handleChange} options={DEPARTMENTS.map(d => ({ label: d, value: d }))} required />
-                        <FormSelect name="position" label="Position" error={errors.position} value={formData.position} onChange={handleChange} options={POSITIONS.map(p => ({ label: p, value: p }))} required />
+                        <FormSelect name="department" label="Department" error={errors.department} value={formData.department} onChange={handleChange} options={departments.filter(d => d.isActive !== false).map(d => ({ label: d.name.toUpperCase(), value: d.name.toUpperCase() }))} required />
+                        <FormSelect name="position" label="Position" error={errors.position} value={formData.position} onChange={handleChange} options={positions.filter(p => p.isActive !== false).map(p => ({ label: p.name.toUpperCase(), value: p.name.toUpperCase() }))} required />
                         <FormSelect name="managerId" label="Reporting Manager" error={errors.managerId} value={formData.managerId} onChange={handleChange} options={managerOptions} required />
                         <FormInput name="salary" label="Base Salary (₹)" error={errors.salary} type="number" value={formData.salary} onChange={handleChange} textTransform="none" placeholder='30000' required />
                         <FormInput name="fixedAllowance" label="Fixed Allowance (₹)" error={errors.fixedAllowance} type="number" value={formData.fixedAllowance} onChange={handleChange} textTransform="none" placeholder='5000' />

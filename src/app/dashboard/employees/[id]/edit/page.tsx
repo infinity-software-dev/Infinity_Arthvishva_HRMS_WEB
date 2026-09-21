@@ -6,7 +6,9 @@ import PageTitleHeader from '@/components/elements/PageTitleHeader';
 import { FileInputField, FormInput, FormSelect } from '@/components/elements/FormFields';
 import GradientButton from '@/components/buttons/GradientButton';
 import { useEditEmployee } from '@/hooks/employee-hooks/useEditEmployee';
-import { DEPARTMENTS, GRADUATION_COURSES, POSITIONS, POST_GRADUATION_COURSES } from '@/hooks/employee-hooks/useAddEmployee';
+import { GRADUATION_COURSES, POST_GRADUATION_COURSES } from '@/hooks/employee-hooks/useAddEmployee';
+import { useDepartments } from '@/hooks/department-hooks/useDepartments';
+import { usePositions } from '@/hooks/department-hooks/usePositions';
 
 // Helper component to show existing files above your FileInputField
 const FileSlot = ({ label, fileKey, existingUrl, onChange }: { label: string, fileKey: string, existingUrl?: string, onChange: any }) => (
@@ -39,6 +41,9 @@ export default function EditEmployeePage({ params }: { params: Promise<{ id: str
         panName, setPanName, panDob, setPanDob, panVerified, panLoading, panError, handleVerifyPan,
         bankVerified, bankLoading, bankError, bankRegisteredName, handleVerifyBank
     } = useEditEmployee(id);
+
+    const { departments } = useDepartments();
+    const { positions } = usePositions();
 
     if (isLoading) {
         return (
@@ -134,8 +139,8 @@ export default function EditEmployeePage({ params }: { params: Promise<{ id: str
                         {formData.role === 'Employee' && (
                             <FormInput name="employmentDate" label="Employment Date" type="date" value={formData.employmentDate} onChange={handleChange} error={errors.employmentDate} textTransform="none" required />
                         )}
-                        <FormSelect name="department" label="Department" value={formData.department} onChange={handleChange} options={DEPARTMENTS.map(d => ({ label: d, value: d }))} required />
-                        <FormSelect name="position" label="Position" value={formData.position} onChange={handleChange} options={POSITIONS.map(p => ({ label: p, value: p }))} required />
+                        <FormSelect name="department" label="Department" value={formData.department} onChange={handleChange} options={departments.filter(d => d.isActive !== false).map(d => ({ label: d.name.toUpperCase(), value: d.name.toUpperCase() }))} required />
+                        <FormSelect name="position" label="Position" value={formData.position} onChange={handleChange} options={positions.filter(p => p.isActive !== false).map(p => ({ label: p.name.toUpperCase(), value: p.name.toUpperCase() }))} required />
                         <FormSelect name="managerId" label="Reporting Manager" value={formData.managerId} onChange={handleChange} options={managerOptions} required />
                         <FormInput name="salary" label="Base Salary (₹)" type="number" value={formData.salary} onChange={handleChange} textTransform="none" required />
                         <FormInput name="fixedAllowance" label="Fixed Allowance (₹)" type="number" value={formData.fixedAllowance} onChange={handleChange} textTransform="none" />

@@ -2,12 +2,13 @@
 
 import MapModal from "@/components/modals/MapModal";
 import { useHistoricalLedger } from "@/hooks/attendance-hooks/useHistoricalLedger";
-import { DEPARTMENTS } from "@/hooks/employee-hooks/useAddEmployee";
 import { formatHours } from "@/utils/Date-TimeHelpers";
+import { useDepartments } from "@/hooks/department-hooks/useDepartments";
 import { MapPin } from "lucide-react";
 
 export default function HistoricalLedger() {
     const { data, loading, pagination, filters, modal, mapModal } = useHistoricalLedger();
+    const { departments } = useDepartments();
 
     console.log(data)
 
@@ -83,10 +84,10 @@ export default function HistoricalLedger() {
                     className="w-full px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-lg text-sm bg-gray-50 dark:bg-white/5 text-primary dark:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-brand-green"
                 >
                     <option value="">All Departments</option>
-                    {DEPARTMENTS.map((dept) => {
-                        const upperDept = dept.toUpperCase();
+                    {departments.filter(d => d.isActive !== false).map((dept) => {
+                        const upperDept = dept.name.toUpperCase();
                         return (
-                            <option key={dept} value={upperDept}>
+                            <option key={dept._id} value={upperDept}>
                                 {upperDept}
                             </option>
                         );
