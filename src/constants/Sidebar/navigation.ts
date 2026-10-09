@@ -78,6 +78,14 @@ export const DASHBOARD_NAV = [
                 icon: CalendarCheck,
                 requiredRoles: ["HR", "DIRECTOR"],
             },
+
+              {
+                title: "Letters",
+                url: "/dashboard/letters",
+                icon: FileText,
+                requiredRoles: ["HR"],
+              
+            },
             {
                 title: "Complaints",
                 url: "/dashboard/complaints",

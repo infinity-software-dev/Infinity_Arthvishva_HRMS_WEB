@@ -10,6 +10,16 @@ export function usePositions() {
     useState<Position | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // --- Responsibilities State ---
+  const [selectedPosId, setSelectedPosId] = useState<string>('');
+  const [responsibilities, setResponsibilities] = useState<string[]>([]);
+  const [newResp, setNewResp] = useState('');
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editValue, setEditValue] = useState<string>('');
+  const [isSavingResp, setIsSavingResp] = useState(false);
+  const [respError, setRespError] = useState<string | null>(null);
+  const [respSuccessMsg, setRespSuccessMsg] = useState<string | null>(null);
+
   const role = typeof window !== 'undefined' ? localStorage.getItem("role") : null;
 
   const fetchPositions = useCallback(async () => {
@@ -121,6 +131,46 @@ export function usePositions() {
     }
   };
 
+
+  const addPositionResponsibility = async (id: string, responsibility: string): Promise<void> => {
+    setError(null);
+    try {
+      await positionService.addPositionResponsibility(id, responsibility);
+      await fetchPositions();
+    } catch (err: any) {
+      const message = err.response?.data?.message || err.message || "Failed to add responsibility";
+      const formattedError = Array.isArray(message) ? message.join(", ") : message;
+      setError(formattedError);
+      throw new Error(formattedError);
+    }
+  };
+
+  const editPositionResponsibility = async (id: string, index: number, responsibility: string): Promise<void> => {
+    setError(null);
+    try {
+      await positionService.editPositionResponsibility(id, index, responsibility);
+      await fetchPositions();
+    } catch (err: any) {
+      const message = err.response?.data?.message || err.message || "Failed to edit responsibility";
+      const formattedError = Array.isArray(message) ? message.join(", ") : message;
+      setError(formattedError);
+      throw new Error(formattedError);
+    }
+  };
+
+  const deletePositionResponsibility = async (id: string, index: number): Promise<void> => {
+    setError(null);
+    try {
+      await positionService.deletePositionResponsibility(id, index);
+      await fetchPositions();
+    } catch (err: any) {
+      const message = err.response?.data?.message || err.message || "Failed to delete responsibility";
+      const formattedError = Array.isArray(message) ? message.join(", ") : message;
+      setError(formattedError);
+      throw new Error(formattedError);
+    }
+  };
+
   const handleAddClick = () => {
     setSelectedPosition(null);
     setIsModalOpen(true);
@@ -151,6 +201,97 @@ export function usePositions() {
     }
   };
 
+  const handlePositionSelect = (posId: string) => {
+    setSelectedPosId(posId);
+    setRespError(null);
+    setRespSuccessMsg(null);
+    if (posId) {
+      const pos = positions.find(p => p._id === posId);
+      setResponsibilities(pos?.responsibilities ? [...pos.responsibilities] : []);
+    } else {
+      setResponsibilities([]);
+    }
+    setNewResp('');
+    setEditingIndex(null);
+    setEditValue('');
+  };
+
+  const handleAddResp = async () => {
+    const trimmed = newResp.trim();
+    if (!trimmed || responsibilities.includes(trimmed)) return;
+    
+    if (selectedPosId) {
+      setIsSavingResp(true);
+      try {
+        await addPositionResponsibility(selectedPosId, trimmed);
+        setResponsibilities(prev => [...prev, trimmed]);
+        setNewResp('');
+        setRespSuccessMsg('Saved successfully!');
+        setTimeout(() => setRespSuccessMsg(null), 2000);
+      } catch (err: any) {
+        setRespError(err.message || 'Failed to add responsibility');
+      } finally {
+        setIsSavingResp(false);
+      }
+    }
+  };
+
+  const handleRemoveResp = async (index: number) => {
+    if (selectedPosId) {
+      setIsSavingResp(true);
+      try {
+        await deletePositionResponsibility(selectedPosId, index);
+        setResponsibilities(prev => prev.filter((_, i) => i !== index));
+        setRespSuccessMsg('Deleted successfully!');
+        setTimeout(() => setRespSuccessMsg(null), 2000);
+      } catch (err: any) {
+        setRespError(err.message || 'Failed to delete responsibility');
+      } finally {
+        setIsSavingResp(false);
+      }
+    }
+  };
+
+  const handleEditRespClick = (index: number, currentText: string) => {
+    setEditingIndex(index);
+    setEditValue(currentText);
+  };
+
+  const handleSaveEditResp = async (index: number) => {
+    const trimmed = editValue.trim();
+    if (!trimmed) {
+      await handleRemoveResp(index);
+      setEditingIndex(null);
+      setEditValue('');
+      return;
+    }
+
+    if (selectedPosId) {
+      setIsSavingResp(true);
+      try {
+        await editPositionResponsibility(selectedPosId, index, trimmed);
+        setResponsibilities(prev => {
+          const newArr = [...prev];
+          newArr[index] = trimmed;
+          return newArr;
+        });
+        setEditingIndex(null);
+        setEditValue('');
+        setRespSuccessMsg('Updated successfully!');
+        setTimeout(() => setRespSuccessMsg(null), 2000);
+      } catch (err: any) {
+        setRespError(err.message || 'Failed to update responsibility');
+      } finally {
+        setIsSavingResp(false);
+      }
+    }
+  };
+
+  const handleCancelEditResp = () => {
+    setEditingIndex(null);
+    setEditValue('');
+  };
+
   const refresh = () => fetchPositions();
 
   return {
@@ -173,5 +314,26 @@ export function usePositions() {
     selectedPosition,
     setSelectedPosition,
     handleModalSubmit,
+
+    addPositionResponsibility,
+    editPositionResponsibility,
+    deletePositionResponsibility,
+
+    selectedPosId,
+    responsibilities,
+    newResp,
+    setNewResp,
+    editingIndex,
+    editValue,
+    setEditValue,
+    isSavingResp,
+    respError,
+    respSuccessMsg,
+    handlePositionSelect,
+    handleAddResp,
+    handleRemoveResp,
+    handleEditRespClick,
+    handleSaveEditResp,
+    handleCancelEditResp,
   };
 }

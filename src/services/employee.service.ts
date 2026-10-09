@@ -14,6 +14,8 @@ export interface EmployeeCardTypes {
     status: 'Active' | 'Inactive';
     profileImageUrl?: string;
     managerName?: string;
+    joiningDate?: string;
+    salary?: number;
 }
 
 export const employeeService = {

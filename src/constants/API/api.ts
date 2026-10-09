@@ -88,6 +88,9 @@ export const HR_API = {
   UPDATE_POSITION: (id: string) => `/api/web/hr/update-position/${id}`,
   DELETE_POSITION: (id: string) => `/api/web/hr/delete-position/${id}`,
   RESTORE_POSITION: (id: string) => `/api/web/hr/restore-position/${id}`,
+  ADD_POSITION_RESPONSIBILITY: (id: string) => `/api/web/hr/position/${id}/responsibility`,
+  EDIT_POSITION_RESPONSIBILITY: (id: string, index: number) => `/api/web/hr/position/${id}/responsibility/${index}`,
+  DELETE_POSITION_RESPONSIBILITY: (id: string, index: number) => `/api/web/hr/position/${id}/responsibility/${index}`,
 }
 
 export const DIRECTOR_API = {
@@ -131,4 +134,8 @@ export const KYC_API = {
   AADHAAR_VERIFY_OTP: `/api/web/kyc/aadhaar/verify-otp`,
   PAN_VERIFY: `/api/web/kyc/pan/verify`,
   BANK_VERIFY: `/api/web/kyc/bank/verify`,
+};
+
+export const MAIL_API = {
+  SEND_LETTER_EMAIL: `/mail/send-letter`,
 };

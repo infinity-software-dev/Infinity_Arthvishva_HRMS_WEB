@@ -66,13 +66,13 @@ export default function CorrectionCard({
                 <div className="flex flex-col items-end shrink-0 text-right gap-1">
                     {/* Target / Request Date Badge */}
                     <span className="inline-flex items-center text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-800/40 whitespace-nowrap">
-                        {formatDate(req.date)}
+                        Applied for: {formatDate(req.date)}
                     </span>
 
                     {/* Metadata: Requested timestamp */}
                     {req.requestedOn && (
                         <span className="text-[11px] text-gray-400 dark:text-gray-500 whitespace-nowrap">
-                            Applied: {formatDate(req.requestedOn)}
+                            Applied on: {formatDate(req.requestedOn)}
                         </span>
                     )}
                 </div>

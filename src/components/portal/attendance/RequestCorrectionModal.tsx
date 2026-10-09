@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Edit3, AlertCircle, Link as LinkIcon, Send, Loader2, XCircle } from 'lucide-react';
+import { X, Edit3, AlertCircle, Link as LinkIcon, Send, Loader2, XCircle, Clock } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { portalAttendanceService } from '@/services/employeeProtalServices/employee.attendance.service';
 
@@ -19,6 +19,7 @@ export default function RequestCorrectionModal({ isOpen, onClose, record, onSucc
     const [reason, setReason] = useState('');
     const [proofUrl, setProofUrl] = useState('');
     const [submitting, setSubmitting] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
 
     // 1. Extract Rejection Info & Previous Active Request (if any)
     const attendanceData = record?.myAttendance;
@@ -59,7 +60,19 @@ export default function RequestCorrectionModal({ isOpen, onClose, record, onSucc
         day: 'numeric', month: 'long', year: 'numeric'
     });
 
-    const handleSubmit = async () => {
+    const calculateHours = () => {
+        if (!inTime || !outTime) return { hours: 0, minutes: 0 };
+        const [inH, inM] = inTime.split(':').map(Number);
+        const [outH, outM] = outTime.split(':').map(Number);
+        let diff = (outH * 60 + outM) - (inH * 60 + inM);
+        if (diff < 0) diff += 24 * 60; // Handle cross-midnight if applicable
+        return {
+            hours: Math.floor(diff / 60),
+            minutes: diff % 60
+        };
+    };
+
+    const handleInitialSubmit = () => {
         if (!reason.trim()) {
             toast.error("Please provide a valid reason for correction.");
             return;
@@ -70,6 +83,10 @@ export default function RequestCorrectionModal({ isOpen, onClose, record, onSucc
             return;
         }
 
+        setShowConfirm(true);
+    };
+
+    const handleFinalSubmit = async () => {
         setSubmitting(true);
 
         try {
@@ -126,115 +143,169 @@ export default function RequestCorrectionModal({ isOpen, onClose, record, onSucc
                     {/* Body */}
                     <div className="p-5 sm:p-6 overflow-y-auto flex flex-col gap-5">
 
-                        {/* 🔴 REJECTION REASON BANNER (Rendered if previous request was rejected) */}
-                        {isRejectedState && rejectionEntry && (
-                            <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-2xl p-4 flex flex-col gap-2">
-                                <div className="flex items-center gap-2 text-red-700 dark:text-red-400 font-bold text-xs uppercase tracking-wider">
-                                    <XCircle size={16} className="shrink-0" />
-                                    <span>Previous Request Rejected</span>
+                        {showConfirm ? (
+                            <div className="flex flex-col items-center justify-center text-center space-y-4">
+                                <div className="w-16 h-16 bg-blue-50 dark:bg-blue-500/10 rounded-full flex items-center justify-center mb-2">
+                                    <Clock size={32} className="text-brand-blue dark:text-blue-400" />
                                 </div>
-                                {rejectionEntry.remark && (
-                                    <p className="text-xs text-red-900 dark:text-red-200 font-semibold pl-6 leading-relaxed">
-                                        <span className="text-red-600 dark:text-red-400 font-bold">Manager Remark:</span> "{rejectionEntry.remark}"
-                                    </p>
-                                )}
-                                {rejectionEntry.timestamp && (
-                                    <p className="text-[10px] text-red-500/80 dark:text-red-400/60 pl-6 font-medium">
-                                        Rejected on: {new Date(rejectionEntry.timestamp).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
-                                    </p>
-                                )}
+                                <div>
+                                    <h3 className="text-xl font-black text-primary dark:text-white">Confirm Timings</h3>
+                                    <p className="text-xs font-bold text-secondary dark:text-gray-400 mt-1 uppercase tracking-widest">Verify your calculated hours</p>
+                                </div>
+                                <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 rounded-2xl p-5 w-full space-y-4 text-left">
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-secondary dark:text-gray-400 text-sm font-bold uppercase tracking-wider">Requested In</span>
+                                        <span className="font-bold text-primary dark:text-white bg-white dark:bg-gray-800 px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">{inTime}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-secondary dark:text-gray-400 text-sm font-bold uppercase tracking-wider">Requested Out</span>
+                                        <span className="font-bold text-primary dark:text-white bg-white dark:bg-gray-800 px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">{outTime}</span>
+                                    </div>
+                                    <div className="border-t border-gray-200 dark:border-gray-700 pt-4 flex justify-between items-center">
+                                        <span className="text-primary dark:text-white text-sm font-black uppercase tracking-wider">Total Hours</span>
+                                        <span className="font-black text-brand-blue dark:text-blue-400 text-2xl">
+                                            {calculateHours().hours}h {calculateHours().minutes}m
+                                        </span>
+                                    </div>
+                                </div>
+                                <p className="text-[11px] font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 px-3 py-2 rounded-lg border border-amber-200 dark:border-amber-500/20">
+                                    Please ensure these timings are correct before submitting to your manager.
+                                </p>
                             </div>
+                        ) : (
+                            <>
+                                {/* 🔴 REJECTION REASON BANNER (Rendered if previous request was rejected) */}
+                                {isRejectedState && rejectionEntry && (
+                                    <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-2xl p-4 flex flex-col gap-2">
+                                        <div className="flex items-center gap-2 text-red-700 dark:text-red-400 font-bold text-xs uppercase tracking-wider">
+                                            <XCircle size={16} className="shrink-0" />
+                                            <span>Previous Request Rejected</span>
+                                        </div>
+                                        {rejectionEntry.remark && (
+                                            <p className="text-xs text-red-900 dark:text-red-200 font-semibold pl-6 leading-relaxed">
+                                                <span className="text-red-600 dark:text-red-400 font-bold">Manager Remark:</span> "{rejectionEntry.remark}"
+                                            </p>
+                                        )}
+                                        {rejectionEntry.timestamp && (
+                                            <p className="text-[10px] text-red-500/80 dark:text-red-400/60 pl-6 font-medium">
+                                                Rejected on: {new Date(rejectionEntry.timestamp).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Time Pickers Grid */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="flex flex-col gap-1.5">
+                                        <label className="text-[11px] font-bold text-secondary dark:text-gray-400 uppercase tracking-wider">
+                                            Correct In-Time
+                                        </label>
+                                        <div className="relative flex items-center">
+                                            <input
+                                                type="time"
+                                                value={inTime}
+                                                onChange={(e) => setInTime(e.target.value)}
+                                                className="w-full bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2.5 text-sm font-bold text-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col gap-1.5">
+                                        <label className="text-[11px] font-bold text-secondary dark:text-gray-400 uppercase tracking-wider">
+                                            Correct Out-Time
+                                        </label>
+                                        <div className="relative flex items-center">
+                                            <input
+                                                type="time"
+                                                value={outTime}
+                                                onChange={(e) => setOutTime(e.target.value)}
+                                                className="w-full bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2.5 text-sm font-bold text-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Reason */}
+                                <div className="flex flex-col gap-1.5">
+                                    <label className="text-[11px] font-bold text-secondary dark:text-gray-400 uppercase tracking-wider">
+                                        Reason for Correction <span className="text-red-500">*</span>
+                                    </label>
+                                    <textarea
+                                        rows={3}
+                                        value={reason}
+                                        onChange={(e) => setReason(e.target.value)}
+                                        placeholder="Please provide a valid reason..."
+                                        className="w-full bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-3 text-sm text-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue resize-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-600"
+                                    />
+                                </div>
+
+                                {/* Supporting Proof */}
+                                <div className="flex flex-col gap-1.5">
+                                    <label className="text-[11px] font-bold text-secondary dark:text-gray-400 uppercase tracking-wider">
+                                        Supporting Proof (URL)
+                                    </label>
+                                    <div className="relative flex items-center">
+                                        <input
+                                            type="url"
+                                            value={proofUrl}
+                                            onChange={(e) => setProofUrl(e.target.value)}
+                                            placeholder="Link to document or image"
+                                            className="w-full bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl pl-3 pr-9 py-2.5 text-sm text-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all placeholder:text-gray-400 dark:placeholder:text-gray-600"
+                                        />
+                                        <LinkIcon size={16} className="absolute right-3 text-gray-400 pointer-events-none" />
+                                    </div>
+                                </div>
+
+                                {/* Warning Banner */}
+                                <div className="bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl p-3 flex items-start gap-2.5">
+                                    <AlertCircle size={16} className="text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                                    <p className="text-xs text-amber-800 dark:text-amber-300 font-medium leading-relaxed">
+                                        Correction requests are subject to manager approval and may take 1–2 business days.
+                                    </p>
+                                </div>
+
+                            </>
                         )}
-
-                        {/* Time Pickers Grid */}
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="flex flex-col gap-1.5">
-                                <label className="text-[11px] font-bold text-secondary dark:text-gray-400 uppercase tracking-wider">
-                                    Correct In-Time
-                                </label>
-                                <div className="relative flex items-center">
-                                    <input
-                                        type="time"
-                                        value={inTime}
-                                        onChange={(e) => setInTime(e.target.value)}
-                                        className="w-full bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2.5 text-sm font-bold text-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="flex flex-col gap-1.5">
-                                <label className="text-[11px] font-bold text-secondary dark:text-gray-400 uppercase tracking-wider">
-                                    Correct Out-Time
-                                </label>
-                                <div className="relative flex items-center">
-                                    <input
-                                        type="time"
-                                        value={outTime}
-                                        onChange={(e) => setOutTime(e.target.value)}
-                                        className="w-full bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2.5 text-sm font-bold text-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Reason */}
-                        <div className="flex flex-col gap-1.5">
-                            <label className="text-[11px] font-bold text-secondary dark:text-gray-400 uppercase tracking-wider">
-                                Reason for Correction <span className="text-red-500">*</span>
-                            </label>
-                            <textarea
-                                rows={3}
-                                value={reason}
-                                onChange={(e) => setReason(e.target.value)}
-                                placeholder="Please provide a valid reason..."
-                                className="w-full bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-3 text-sm text-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue resize-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-600"
-                            />
-                        </div>
-
-                        {/* Supporting Proof */}
-                        <div className="flex flex-col gap-1.5">
-                            <label className="text-[11px] font-bold text-secondary dark:text-gray-400 uppercase tracking-wider">
-                                Supporting Proof (URL)
-                            </label>
-                            <div className="relative flex items-center">
-                                <input
-                                    type="url"
-                                    value={proofUrl}
-                                    onChange={(e) => setProofUrl(e.target.value)}
-                                    placeholder="Link to document or image"
-                                    className="w-full bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl pl-3 pr-9 py-2.5 text-sm text-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue transition-all placeholder:text-gray-400 dark:placeholder:text-gray-600"
-                                />
-                                <LinkIcon size={16} className="absolute right-3 text-gray-400 pointer-events-none" />
-                            </div>
-                        </div>
-
-                        {/* Warning Banner */}
-                        <div className="bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl p-3 flex items-start gap-2.5">
-                            <AlertCircle size={16} className="text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-                            <p className="text-xs text-amber-800 dark:text-amber-300 font-medium leading-relaxed">
-                                Correction requests are subject to manager approval and may take 1–2 business days.
-                            </p>
-                        </div>
-
                     </div>
 
                     {/* Footer Actions */}
                     <div className="p-5 sm:p-6 border-t border-gray-100 dark:border-gray-800 flex items-center gap-3 shrink-0 bg-gray-50 dark:bg-gray-900/50">
-                        <button
-                            onClick={onClose}
-                            disabled={submitting}
-                            className="flex-1 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-secondary dark:text-gray-300 rounded-xl text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            onClick={handleSubmit}
-                            disabled={submitting}
-                            className="flex-1 py-3 bg-brand-blue hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-md shadow-brand-blue/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-                        >
-                            {submitting ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
-                            {isRejectedState ? 'Re-submit Request' : 'Submit Request'}
-                        </button>
+                        {showConfirm ? (
+                            <>
+                                <button
+                                    onClick={() => setShowConfirm(false)}
+                                    disabled={submitting}
+                                    className="flex-1 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-secondary dark:text-gray-300 rounded-xl text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                >
+                                    Back to Edit
+                                </button>
+                                <button
+                                    onClick={handleFinalSubmit}
+                                    disabled={submitting}
+                                    className="flex-1 py-3 bg-brand-blue hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-md shadow-brand-blue/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                                >
+                                    {submitting ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
+                                    Confirm & Submit
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <button
+                                    onClick={onClose}
+                                    disabled={submitting}
+                                    className="flex-1 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-secondary dark:text-gray-300 rounded-xl text-sm font-bold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleInitialSubmit}
+                                    disabled={submitting}
+                                    className="flex-1 py-3 bg-brand-blue hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-md shadow-brand-blue/20 transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                                >
+                                    Review Request
+                                </button>
+                            </>
+                        )}
                     </div>
 
                 </motion.div>
