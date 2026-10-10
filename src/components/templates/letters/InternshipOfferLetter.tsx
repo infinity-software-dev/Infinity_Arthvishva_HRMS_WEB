@@ -17,7 +17,6 @@ export interface InternshipOfferLetterData {
     reportingTo: string;          // e.g. "Finance Manager / Mentor Name & Designation"
     stipend: string;              // amount only, e.g. "5,000"
     workingHours: string;         // e.g. "Monday to Friday, 09:30 AM to 06:30 PM"
-    signatory?: string;           // name / designation of the person signing (optional)
 }
 
 
@@ -133,8 +132,7 @@ export const InternshipOfferLetterTemplate: React.FC<{ data: InternshipOfferLett
                 <div className="space-y-1 text-left">
                     <p>Regards,</p>
                     <p>Infinity Arthvishva</p>
-                    <p>{data.signatory ? <strong>{data.signatory}</strong> : '\u00A0'}</p>
-                    <p>Authorized Signatory</p>
+
                 </div>
 
                 <EmployeeAcceptance name={`${data.internTitle ? `${data.internTitle} ` : ''}${data.internName}`.trim()} />

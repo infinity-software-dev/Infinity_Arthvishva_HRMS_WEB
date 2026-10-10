@@ -22,7 +22,6 @@ export const InternshipOfferLetterForm: React.FC<InternshipOfferLetterFormProps>
         reportingTo: '',
         stipend: '',
         workingHours: '',
-        signatory: '',
         projectScopeStr: 'Scope item 1\nScope item 2',
         responsibilitiesStr: 'Responsibility 1\nResponsibility 2',
     });
@@ -85,7 +84,6 @@ export const InternshipOfferLetterForm: React.FC<InternshipOfferLetterFormProps>
             reportingTo: formData.reportingTo,
             stipend: formData.stipend,
             workingHours: formData.workingHours,
-            signatory: formData.signatory,
             projectScope,
             responsibilities,
         };
@@ -197,22 +195,16 @@ export const InternshipOfferLetterForm: React.FC<InternshipOfferLetterFormProps>
                     onChange={handleChange}
                     required
                 />
-                <FormInput
-                    label="Working Hours"
-                    name="workingHours"
-                    type="text"
-                    value={formData.workingHours || ''}
-                    onChange={handleChange}
-                    required
-                />
-                <FormInput
-                    label="Signatory"
-                    name="signatory"
-                    type="text"
-                    value={formData.signatory || ''}
-                    onChange={handleChange}
-                    required
-                />
+                <div className="md:col-span-2">
+                    <FormInput
+                        label="Working Hours"
+                        name="workingHours"
+                        type="text"
+                        value={formData.workingHours || ''}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">

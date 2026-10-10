@@ -6,7 +6,7 @@ import type { SalaryAnnexureData } from '@/components/templates/letters/SalaryAn
 import { ExtraPoint } from '@/types/letterTypes';
 
 export interface IncrementLetterData {
-    letterNumber: string;
+    // letterNumber?: string;
     financialYear?: string;
     date: string;
     candidateTitle?: string;
@@ -71,7 +71,7 @@ export const IncrementLetterTemplate: React.FC<IncrementLetterTemplateProps> = (
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', margin: '0 0 8pt 0' }}>
-                <span>Infinity/Increment Letter/ {fy}/{data.letterNumber}</span>
+                {/* <span>Infinity/Increment Letter/ {fy}/{data.letterNumber}</span> */}
                 <span>Date: {data.date}</span>
             </div>
 
@@ -92,7 +92,7 @@ export const IncrementLetterTemplate: React.FC<IncrementLetterTemplateProps> = (
                 <div style={{ display: 'flex', alignItems: 'flex-start', margin: '0 0 8pt 0', paddingRight: '21.5px', textAlign: 'justify' }}>
                     <span style={{ marginRight: '8px', fontWeight: 700, userSelect: 'none' }}>•</span>
                     <div>
-                        <B>Performance Appraisals:</B> Shall be based on the company, project and individual performance. Depending upon project target achievement and Department target achievement of more than 75%, increment shall be considered. Based on Performance achievement, the Increments shall be done. Yearly target and achievement shall be appraised for the projects and the departments and on the basis of it Increment policy shall be implemented.
+                        <B>Performance Appraisals:</B> Shall be based on the company, project and individual performance. Depending upon project target achievement and Department target achievement  increment shall be considered. Based on Performance achievement, the Increments shall be done. Yearly target and achievement shall be appraised for the projects and the departments and on the basis of it Increment policy shall be implemented.
                     </div>
                 </div>
             </div>
@@ -142,8 +142,6 @@ export const IncrementLetterTemplate: React.FC<IncrementLetterTemplateProps> = (
 
                 <div className="in-avoid" style={{ marginTop: '16px' }}>
                     <P>Regards,</P>
-                    <P />
-                    <P>Director</P>
                     <P>Infinity Arthvishva</P>
                 </div>
             </div>

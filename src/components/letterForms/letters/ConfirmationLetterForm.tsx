@@ -10,15 +10,12 @@ interface ConfirmationLetterFormProps {
 export const ConfirmationLetterForm: React.FC<ConfirmationLetterFormProps> = ({ onSubmit }) => {
     const [formData, setFormData] = useState<ConfirmationLetterData & { employeeEmail?: string }>({
         date: '',
-        letterNumber: '',
         financialYear: '2025-2026',
         employeeTitle: 'Mr.',
         employeeName: '',
         designation: '',
         department: '',
         confirmationDate: '',
-        signatoryName: '',
-        signatoryDesignation: 'Director/ HR Manager',
         employeeEmail: '',
     });
 
@@ -69,23 +66,6 @@ export const ConfirmationLetterForm: React.FC<ConfirmationLetterFormProps> = ({ 
                     onChange={handleChange}
                     textTransform="none"
                     required
-                />
-                <FormInput
-                    label="Letter Number"
-                    name="letterNumber"
-                    type="number"
-                    value={formData.letterNumber || ''}
-                    onChange={handleChange}
-                    placeholder="e.g. 101"
-                    required
-                />
-                <FormInput
-                    label="Financial Year"
-                    name="financialYear"
-                    type="text"
-                    value={formData.financialYear || ''}
-                    onChange={handleChange}
-                    placeholder="e.g. 2025-2026"
                 />
                 <div className="flex gap-4">
                     <div className="w-1/3">
@@ -139,18 +119,12 @@ export const ConfirmationLetterForm: React.FC<ConfirmationLetterFormProps> = ({ 
                     required
                 />
                 <FormInput
-                    label="Signatory Name (Optional)"
-                    name="signatoryName"
+                    label="Financial Year"
+                    name="financialYear"
                     type="text"
-                    value={formData.signatoryName || ''}
+                    value={formData.financialYear || ''}
                     onChange={handleChange}
-                />
-                <FormInput
-                    label="Signatory Designation"
-                    name="signatoryDesignation"
-                    type="text"
-                    value={formData.signatoryDesignation || ''}
-                    onChange={handleChange}
+                    placeholder="e.g. 2025-2026"
                 />
             </div>
 

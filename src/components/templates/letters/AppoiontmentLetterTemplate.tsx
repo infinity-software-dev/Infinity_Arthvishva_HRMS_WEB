@@ -12,8 +12,9 @@ export interface AppointmentLetterData {
     designation: string;
     joiningDate: string;
     location: string;             // working location (place name)
-    reportingDesignation: string; // who the employee reports to (designation)
     monthlyGross: string;         // amount only, e.g. "25,000"
+    monthlyGrossWords?: string;   // in words, e.g. "Twenty Five Thousand Only"
+    yearlyCtc?: string;           // amount only, e.g. "3,00,000"
     reportingTime: string;        // Annexure A
     reportingManager: string;     // Annexure A
     extraPoints?: ExtraPoint[];
@@ -98,10 +99,12 @@ export const AppointmentLetterTemplate: React.FC<AppointmentLetterTemplateProps>
             </P>
 
             <P>
-                Your working location shall be the {data.location} and you will report to the <B>{data.reportingDesignation}</B> or any other authority as may be the communicated to you from time to time.
+                Your working location shall be the {data.location} and you will report to <B>{data.reportingManager}</B> or any other authority as may be communicated to you from time to time.
             </P>
 
-            <P>You shall be paid gross emoluments of (Rs.{data.monthlyGross}/- ) per month, as mutually discussed and agreed by you.</P>
+            <P>
+                You shall be paid gross emoluments of Rs.{data.monthlyGross}/- {data.monthlyGrossWords ? `(${data.monthlyGrossWords}) ` : ''}per month, as mutually discussed and agreed by you.
+            </P>
 
             <P>
                 This appointment is based on the information and documents furnished by you. In the event of any discrepancy, misrepresentation found at any stage, the company reserves the right to withdraw or revise this appointment.
@@ -115,8 +118,7 @@ export const AppointmentLetterTemplate: React.FC<AppointmentLetterTemplateProps>
             <div className="ap-avoid">
                 <P>Regards,</P>
                 <P>Infinity Arthvishva</P>
-                <P />
-                <P>Signature</P>
+
             </div>
 
             {/* ---------------- Annexure A ---------------- */}
@@ -130,7 +132,10 @@ export const AppointmentLetterTemplate: React.FC<AppointmentLetterTemplateProps>
                     <L indent={24}><span style={{ marginRight: '8px', fontWeight: 700 }}>•</span><B>Date of Joining:</B> {data.joiningDate}</L>
                     <L indent={24}><span style={{ marginRight: '8px', fontWeight: 700 }}>•</span><B>Reporting Time:</B> {data.reportingTime}</L>
                     <L indent={24}><span style={{ marginRight: '8px', fontWeight: 700 }}>•</span><B>Reporting Manager:</B> {data.reportingManager}</L>
-                    <L indent={24}><span style={{ marginRight: '8px', fontWeight: 700 }}>•</span><B>Monthly Gross Salary:</B> Rs.{data.monthlyGross}/-</L>
+                    <L indent={24}><span style={{ marginRight: '8px', fontWeight: 700 }}>•</span><B>Monthly Gross Salary:</B> Rs.{data.monthlyGross}/- {data.monthlyGrossWords ? `(${data.monthlyGrossWords})` : ''}</L>
+                    {data.yearlyCtc && (
+                        <L indent={24}><span style={{ marginRight: '8px', fontWeight: 700 }}>•</span><B>Yearly CTC:</B> Rs.{data.yearlyCtc}/-</L>
+                    )}
                 </div>
 
                 <div className="ap-avoid mb-2 break-inside-avoid">

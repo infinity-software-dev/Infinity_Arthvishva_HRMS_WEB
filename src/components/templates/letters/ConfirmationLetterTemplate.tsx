@@ -4,15 +4,15 @@ import { EmployeeAcceptance } from '../EmployeeAcceptance';
 
 export interface ConfirmationLetterData {
     date: string;                   // e.g. 00/00/2026
-    letterNumber: string;           // -> "Ref. No, HR/Confirmation Letter/ <letterNumber>/2025-2026"
     financialYear?: string;         // default "2025-2026"
     employeeTitle?: string;
     employeeName: string;
     designation: string;
     department: string;
     confirmationDate: string;       // date from which the employment is confirmed
-    signatoryName?: string;         // name of the owner / HR / authorised person (optional)
-    signatoryDesignation?: string;  // default "Director/ HR Manager"
+    // letterNumber?: string;
+    // signatoryName?: string;
+    // signatoryDesignation?: string;
 }
 
 
@@ -47,8 +47,7 @@ export const ConfirmationLetterTemplate: React.FC<{ data: ConfirmationLetterData
             <P align="left"><B>Date:</B> {data.date}</P>
             <P align="center" />
 
-            <P>Ref. No, HR/Confirmation Letter/ {data.letterNumber}/{fy}</P>
-            <P />
+            {/* Ref. No, HR/Confirmation Letter/ {fy} */}
 
             <P>To,</P>
             <P>{data.employeeTitle ? `${data.employeeTitle} ` : ''}{data.employeeName}</P>
@@ -83,10 +82,8 @@ export const ConfirmationLetterTemplate: React.FC<{ data: ConfirmationLetterData
             <P align="justify" />
 
             <div className="cl-avoid">
+                <P align="justify">Regards,</P>
                 <P align="justify">Infinity Arthvishva</P>
-                <P align="justify">{data.signatoryName || '\u00A0'}</P>
-                <P align="justify" />
-                <P align="justify">{data.signatoryDesignation || 'Director/ HR Manager'}</P>
             </div>
 
             <div style={{ marginTop: '40px' }}>

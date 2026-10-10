@@ -13,7 +13,7 @@ interface IncrementLetterFormProps {
 
 export const IncrementLetterForm: React.FC<IncrementLetterFormProps> = ({ onSubmit }) => {
     const [formData, setFormData] = useState<IncrementLetterData & { employeeEmail?: string }>({
-        letterNumber: '',
+        // letterNumber: '',
         financialYear: '2025-2026',
         date: '',
         candidateTitle: 'Mr.',
@@ -76,12 +76,12 @@ export const IncrementLetterForm: React.FC<IncrementLetterFormProps> = ({ onSubm
         <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormInput
-                    label="Letter Number"
-                    name="letterNumber"
-                    type="number"
-                    value={formData.letterNumber || ''}
+                    label="Date"
+                    name="date"
+                    type="date"
+                    value={formData.date || ''}
                     onChange={handleChange}
-                    placeholder="e.g. 001"
+                    textTransform="none"
                     required
                 />
                 <FormInput
@@ -91,15 +91,6 @@ export const IncrementLetterForm: React.FC<IncrementLetterFormProps> = ({ onSubm
                     value={formData.financialYear || ''}
                     onChange={handleChange}
                     placeholder="e.g. 2025-2026"
-                />
-                <FormInput
-                    label="Date"
-                    name="date"
-                    type="date"
-                    value={formData.date || ''}
-                    onChange={handleChange}
-                    textTransform="none"
-                    required
                 />
                 <div className="flex gap-4">
                     <div className="w-1/3">

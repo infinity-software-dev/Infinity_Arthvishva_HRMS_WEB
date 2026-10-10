@@ -1,6 +1,5 @@
 import React from 'react';
 import { LetterHeadLayout } from '@/components/templates/LetterHeadLayout';
-import { EmployeeAcceptance } from '../EmployeeAcceptance';
 
 export interface AssetRow {
     assetType: string;    // e.g. "Laptop / Desktop / Mobile"
@@ -120,10 +119,6 @@ export const AssetsIssueFormTemplate: React.FC<{ data?: AssetsIssueFormData }> =
                     <p style={{ fontWeight: 700, margin: '0 0 20pt 0' }}>Signature</p>
                     <p style={{ margin: 0, borderTop: '1px solid #000', width: '160px' }}>&nbsp;</p>
                 </div>
-            </div>
-
-            <div style={{ marginTop: '40px' }}>
-                <EmployeeAcceptance name={`${data.employeeTitle ? `${data.employeeTitle} ` : ''}${data.employeeName || ''}`.trim()} />
             </div>
         </LetterHeadLayout>
     );

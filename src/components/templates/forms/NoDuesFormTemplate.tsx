@@ -1,9 +1,9 @@
 import React from 'react';
 import { LetterHeadLayout } from '@/components/templates/LetterHeadLayout';
-import { EmployeeAcceptance } from '../EmployeeAcceptance';
 
 export interface NoDuesRow {
     department: string;
+    name?: string;
     dues?: string;     // "Yes" / "No"
     amount?: string;
     remarks?: string;
@@ -86,12 +86,13 @@ export const NoDuesFormTemplate: React.FC<{ data?: NoDuesFormData }> = ({ data =
             <table className="nd-table">
                 <thead>
                     <tr>
-                        <th style={{ width: '7%' }}>Sr No</th>
+                        <th style={{ width: '6%' }}>Sr No</th>
                         <th>Department</th>
+                        <th>Name</th>
                         <th style={{ width: '10%' }}>Dues (Yes/No)</th>
-                        <th style={{ width: '12%' }}>Amount</th>
+                        <th style={{ width: '11%' }}>Amount</th>
                         <th>Remarks</th>
-                        <th style={{ width: '14%' }}>Signature</th>
+                        <th style={{ width: '13%' }}>Signature</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -99,6 +100,7 @@ export const NoDuesFormTemplate: React.FC<{ data?: NoDuesFormData }> = ({ data =
                         <tr key={i}>
                             <td>{i + 1}</td>
                             <td>{r.department || '\u00A0'}</td>
+                            <td>{r.name || '\u00A0'}</td>
                             <td>{r.dues || '\u00A0'}</td>
                             <td>{r.amount || '\u00A0'}</td>
                             <td>{r.remarks || '\u00A0'}</td>
@@ -108,12 +110,9 @@ export const NoDuesFormTemplate: React.FC<{ data?: NoDuesFormData }> = ({ data =
                 </tbody>
             </table>
 
-            <div className="nd-avoid" style={{ display: 'flex', flexDirection: 'column', gap: '40px', marginTop: '40pt' }}>
+            <div className="nd-avoid" style={{ display: 'flex', flexDirection: 'column', gap: '30pt', marginTop: '36pt' }}>
                 <p style={{ fontWeight: 700, margin: 0 }}>HR/ Reporting Manager Signature</p>
-            </div>
-
-            <div style={{ marginTop: '40px' }}>
-                <EmployeeAcceptance name={`${data.employeeTitle ? `${data.employeeTitle} ` : ''}${data.employeeName || ''}`.trim()} />
+                <p style={{ fontWeight: 700, margin: 0 }}>Employee Signature</p>
             </div>
         </LetterHeadLayout>
     );

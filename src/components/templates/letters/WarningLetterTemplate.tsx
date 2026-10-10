@@ -1,6 +1,5 @@
 import React from "react";
 import { LetterHeadLayout } from '@/components/templates/LetterHeadLayout';
-import { EmployeeAcceptance } from '../EmployeeAcceptance';
 
 export interface WarningLetterData {
     date: string;                 // e.g. 00/00/2026
@@ -10,8 +9,8 @@ export interface WarningLetterData {
     department: string;
     subject?: string;             // default: "Warning for unprofessional conduct"
     misconduct: string;           // what the employee did (shown in bold)
-    issuerName: string;           // name of the concerned person signing the letter
-    issuerDesignation: string;
+    issuerName?: string;
+    issuerDesignation?: string;
 }
 
 
@@ -89,17 +88,7 @@ export const WarningLetterTemplate: React.FC<{ data: WarningLetterData }> = ({ d
 
             <div className="wl-avoid">
                 <P align="justify">Regards,</P>
-                <P>{data.issuerName}</P>
-                <P>{data.issuerDesignation}</P>
                 <P>Infinity Arthvishva</P>
-                <P />
-                <P />
-                <P />
-                <P>Signature</P>
-            </div>
-
-            <div style={{ marginTop: '40px' }}>
-                <EmployeeAcceptance name={`${data.employeeTitle ? `${data.employeeTitle} ` : ''}${data.employeeName}`.trim()} />
             </div>
         </LetterHeadLayout>
     );

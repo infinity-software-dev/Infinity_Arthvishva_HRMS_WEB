@@ -124,8 +124,9 @@ export const NoDuesForm: React.FC<NoDuesFormProps> = ({ onSubmit }) => {
                         {index > 2 && (
                             <button type="button" onClick={() => removeRow(index)} className="absolute top-4 right-4 text-red-500 hover:text-red-700 text-sm font-medium">Remove</button>
                         )}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
                             <FormInput label="Department" name="department" value={row.department || ''} onChange={(e) => handleRowChange(index, 'department', e.target.value)} />
+                            <FormInput label="Name" name="name" value={row.name || ''} onChange={(e) => handleRowChange(index, 'name', e.target.value)} placeholder="e.g. Authorized Person" />
                             <FormInput label="Dues (Yes/No)" name="dues" value={row.dues || ''} onChange={(e) => handleRowChange(index, 'dues', e.target.value)} />
                             <FormInput label="Amount" name="amount" type="number" value={row.amount || ''} onChange={(e) => handleRowChange(index, 'amount', e.target.value)} />
                             <FormInput label="Remarks" name="remarks" value={row.remarks || ''} onChange={(e) => handleRowChange(index, 'remarks', e.target.value)} />

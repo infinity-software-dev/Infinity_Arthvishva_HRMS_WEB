@@ -152,22 +152,26 @@ export const EmployeeHandoverForm: React.FC<EmployeeHandoverFormProps> = ({ onSu
             {/* Tasks Section */}
             <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Work & Responsibility Handover</h3>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white">Work &amp; Responsibility Handover</h3>
                     <button type="button" onClick={() => addRow('tasks')} className="px-3 py-1.5 text-sm bg-brand-blue text-white rounded-lg hover:bg-brand-blue/90">+ Add Task</button>
                 </div>
-                {(formData.tasks || []).map((row, index) => (
-                    <div key={index} className="p-4 border border-gray-200 dark:border-gray-700 rounded-xl space-y-4 relative">
-                        {index > 0 && (
+                {(formData.tasks || []).length === 0 ? (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 italic p-4 border border-dashed border-gray-300 dark:border-gray-700 rounded-xl text-center">
+                        No tasks added. (Click "+ Add Task" to add, or leave empty to exclude this section from the letter)
+                    </p>
+                ) : (
+                    (formData.tasks || []).map((row, index) => (
+                        <div key={index} className="p-4 border border-gray-200 dark:border-gray-700 rounded-xl space-y-4 relative">
                             <button type="button" onClick={() => removeRow('tasks', index)} className="absolute top-4 right-4 text-red-500 hover:text-red-700 text-sm font-medium">Remove</button>
-                        )}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <FormInput label="Task / Responsibility" name="task" value={row.task || ''} onChange={(e) => handleTaskChange(index, 'task', e.target.value)} />
-                            <FormInput label="Status (Completed/Pending)" name="status" value={row.status || ''} onChange={(e) => handleTaskChange(index, 'status', e.target.value)} />
-                            <FormInput label="Handover To (Name & Dept)" name="handoverTo" value={row.handoverTo || ''} onChange={(e) => handleTaskChange(index, 'handoverTo', e.target.value)} />
-                            <FormInput label="Remarks" name="remarks" value={row.remarks || ''} onChange={(e) => handleTaskChange(index, 'remarks', e.target.value)} />
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <FormInput label="Task / Responsibility" name="task" value={row.task || ''} onChange={(e) => handleTaskChange(index, 'task', e.target.value)} />
+                                <FormInput label="Status (Completed/Pending)" name="status" value={row.status || ''} onChange={(e) => handleTaskChange(index, 'status', e.target.value)} />
+                                <FormInput label="Handover To (Name & Dept)" name="handoverTo" value={row.handoverTo || ''} onChange={(e) => handleTaskChange(index, 'handoverTo', e.target.value)} />
+                                <FormInput label="Remarks" name="remarks" value={row.remarks || ''} onChange={(e) => handleTaskChange(index, 'remarks', e.target.value)} />
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                )}
             </div>
 
             {/* Documents Section */}
@@ -176,19 +180,23 @@ export const EmployeeHandoverForm: React.FC<EmployeeHandoverFormProps> = ({ onSu
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white">Documents / System / Access Handover</h3>
                     <button type="button" onClick={() => addRow('documents')} className="px-3 py-1.5 text-sm bg-brand-blue text-white rounded-lg hover:bg-brand-blue/90">+ Add Item</button>
                 </div>
-                {(formData.documents || []).map((row, index) => (
-                    <div key={index} className="p-4 border border-gray-200 dark:border-gray-700 rounded-xl space-y-4 relative">
-                        {index > 3 && (
+                {(formData.documents || []).length === 0 ? (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 italic p-4 border border-dashed border-gray-300 dark:border-gray-700 rounded-xl text-center">
+                        No documents added. (Click "+ Add Item" to add, or leave empty to exclude this section from the letter)
+                    </p>
+                ) : (
+                    (formData.documents || []).map((row, index) => (
+                        <div key={index} className="p-4 border border-gray-200 dark:border-gray-700 rounded-xl space-y-4 relative">
                             <button type="button" onClick={() => removeRow('documents', index)} className="absolute top-4 right-4 text-red-500 hover:text-red-700 text-sm font-medium">Remove</button>
-                        )}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <FormInput label="Item" name="item" value={row.item || ''} onChange={(e) => handleDocumentChange(index, 'item', e.target.value)} />
-                            <FormInput label="Handed Over (Yes/No)" name="handedOver" value={row.handedOver || ''} onChange={(e) => handleDocumentChange(index, 'handedOver', e.target.value)} />
-                            <FormInput label="Receiver Name" name="receiverName" value={row.receiverName || ''} onChange={(e) => handleDocumentChange(index, 'receiverName', e.target.value)} />
-                            <FormInput label="Remarks" name="remarks" value={row.remarks || ''} onChange={(e) => handleDocumentChange(index, 'remarks', e.target.value)} />
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <FormInput label="Item" name="item" value={row.item || ''} onChange={(e) => handleDocumentChange(index, 'item', e.target.value)} />
+                                <FormInput label="Handed Over (Yes/No)" name="handedOver" value={row.handedOver || ''} onChange={(e) => handleDocumentChange(index, 'handedOver', e.target.value)} />
+                                <FormInput label="Receiver Name" name="receiverName" value={row.receiverName || ''} onChange={(e) => handleDocumentChange(index, 'receiverName', e.target.value)} />
+                                <FormInput label="Remarks" name="remarks" value={row.remarks || ''} onChange={(e) => handleDocumentChange(index, 'remarks', e.target.value)} />
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                )}
             </div>
 
             {/* File Handover Section */}
@@ -197,19 +205,23 @@ export const EmployeeHandoverForm: React.FC<EmployeeHandoverFormProps> = ({ onSu
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white">File / System Handover</h3>
                     <button type="button" onClick={() => addRow('fileHandover')} className="px-3 py-1.5 text-sm bg-brand-blue text-white rounded-lg hover:bg-brand-blue/90">+ Add File/System</button>
                 </div>
-                {(formData.fileHandover || []).map((row, index) => (
-                    <div key={index} className="p-4 border border-gray-200 dark:border-gray-700 rounded-xl space-y-4 relative">
-                        {index > 0 && (
+                {(formData.fileHandover || []).length === 0 ? (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 italic p-4 border border-dashed border-gray-300 dark:border-gray-700 rounded-xl text-center">
+                        No File / System handover added. (Click "+ Add File/System" to add, or leave empty to exclude this section from the letter)
+                    </p>
+                ) : (
+                    (formData.fileHandover || []).map((row, index) => (
+                        <div key={index} className="p-4 border border-gray-200 dark:border-gray-700 rounded-xl space-y-4 relative">
                             <button type="button" onClick={() => removeRow('fileHandover', index)} className="absolute top-4 right-4 text-red-500 hover:text-red-700 text-sm font-medium">Remove</button>
-                        )}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <FormInput label="System / Access" name="systemAccess" value={row.systemAccess || ''} onChange={(e) => handleFileChange(index, 'systemAccess', e.target.value)} />
-                            <FormInput label="Handed Over (Yes/No)" name="handedOver" value={row.handedOver || ''} onChange={(e) => handleFileChange(index, 'handedOver', e.target.value)} />
-                            <FormInput label="File Path / Location" name="filePath" value={row.filePath || ''} onChange={(e) => handleFileChange(index, 'filePath', e.target.value)} />
-                            <FormInput label="Remarks" name="remarks" value={row.remarks || ''} onChange={(e) => handleFileChange(index, 'remarks', e.target.value)} />
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <FormInput label="System / Access" name="systemAccess" value={row.systemAccess || ''} onChange={(e) => handleFileChange(index, 'systemAccess', e.target.value)} />
+                                <FormInput label="Handed Over (Yes/No)" name="handedOver" value={row.handedOver || ''} onChange={(e) => handleFileChange(index, 'handedOver', e.target.value)} />
+                                <FormInput label="File Path / Location" name="filePath" value={row.filePath || ''} onChange={(e) => handleFileChange(index, 'filePath', e.target.value)} />
+                                <FormInput label="Remarks" name="remarks" value={row.remarks || ''} onChange={(e) => handleFileChange(index, 'remarks', e.target.value)} />
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                )}
             </div>
 
             {/* Login Handover Section */}
@@ -218,19 +230,23 @@ export const EmployeeHandoverForm: React.FC<EmployeeHandoverFormProps> = ({ onSu
                     <h3 className="text-lg font-medium text-gray-900 dark:text-white">Email / Login / Password Handover</h3>
                     <button type="button" onClick={() => addRow('loginHandover')} className="px-3 py-1.5 text-sm bg-brand-blue text-white rounded-lg hover:bg-brand-blue/90">+ Add Login Details</button>
                 </div>
-                {(formData.loginHandover || []).map((row, index) => (
-                    <div key={index} className="p-4 border border-gray-200 dark:border-gray-700 rounded-xl space-y-4 relative">
-                        {index > 0 && (
+                {(formData.loginHandover || []).length === 0 ? (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 italic p-4 border border-dashed border-gray-300 dark:border-gray-700 rounded-xl text-center">
+                        No login details added. (Click "+ Add Login Details" to add, or leave empty to exclude this section from the letter)
+                    </p>
+                ) : (
+                    (formData.loginHandover || []).map((row, index) => (
+                        <div key={index} className="p-4 border border-gray-200 dark:border-gray-700 rounded-xl space-y-4 relative">
                             <button type="button" onClick={() => removeRow('loginHandover', index)} className="absolute top-4 right-4 text-red-500 hover:text-red-700 text-sm font-medium">Remove</button>
-                        )}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <FormInput label="Email ID / Login ID" name="loginId" value={row.loginId || ''} onChange={(e) => handleLoginChange(index, 'loginId', e.target.value)} />
-                            <FormInput label="Handed Over (Yes/No)" name="handedOver" value={row.handedOver || ''} onChange={(e) => handleLoginChange(index, 'handedOver', e.target.value)} />
-                            <FormInput label="Password" name="password" value={row.password || ''} onChange={(e) => handleLoginChange(index, 'password', e.target.value)} />
-                            <FormInput label="Remarks" name="remarks" value={row.remarks || ''} onChange={(e) => handleLoginChange(index, 'remarks', e.target.value)} />
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <FormInput label="Email ID / Login ID" name="loginId" value={row.loginId || ''} onChange={(e) => handleLoginChange(index, 'loginId', e.target.value)} />
+                                <FormInput label="Handed Over (Yes/No)" name="handedOver" value={row.handedOver || ''} onChange={(e) => handleLoginChange(index, 'handedOver', e.target.value)} />
+                                <FormInput label="Password" name="password" value={row.password || ''} onChange={(e) => handleLoginChange(index, 'password', e.target.value)} />
+                                <FormInput label="Remarks" name="remarks" value={row.remarks || ''} onChange={(e) => handleLoginChange(index, 'remarks', e.target.value)} />
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                )}
             </div>
 
             <div className="flex justify-end pt-4 border-t border-gray-200 dark:border-gray-700">

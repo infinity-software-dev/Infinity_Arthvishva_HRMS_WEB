@@ -1,6 +1,5 @@
 import React from "react";
 import { LetterHeadLayout } from '@/components/templates/LetterHeadLayout';
-import { EmployeeAcceptance } from '../EmployeeAcceptance';
 
 export interface ExperienceLetterData {
     date: string;               // e.g. 01/01/2026
@@ -89,13 +88,6 @@ export const ExperienceLetterTemplate: React.FC<{ data: ExperienceLetterData }> 
             <div className="el-avoid">
                 <P align="justify">Regards,</P>
                 <P align="justify">Infinity Arthvishva</P>
-                <P align="justify" />
-                <P align="justify" />
-                <P align="justify">Signature/ Stamp</P>
-            </div>
-
-            <div style={{ marginTop: '40px' }}>
-                <EmployeeAcceptance name={`${data.employeeTitle} ${data.employeeName}`.trim()} />
             </div>
         </LetterHeadLayout>
     );

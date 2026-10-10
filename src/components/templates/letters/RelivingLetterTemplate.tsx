@@ -1,6 +1,5 @@
 import React from "react";
 import { LetterHeadLayout } from '@/components/templates/LetterHeadLayout';
-import { EmployeeAcceptance } from '../EmployeeAcceptance';
 
 export interface RelievingLetterData {
     date: string;               // e.g. 01/01/2026
@@ -81,10 +80,6 @@ export const RelivingLetterTemplate: React.FC<{ data: RelievingLetterData }> = (
                 <P align="justify" body />
                 <P align="justify" body />
                 <P align="justify" body>Signature/ Stamp</P>
-            </div>
-
-            <div style={{ marginTop: '40px' }}>
-                <EmployeeAcceptance name={`${data.employeeTitle} ${data.employeeName}`.trim()} />
             </div>
         </LetterHeadLayout>
     );

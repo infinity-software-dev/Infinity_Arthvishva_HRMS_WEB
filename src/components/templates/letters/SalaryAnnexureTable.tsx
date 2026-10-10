@@ -50,18 +50,18 @@ const TABLE_CSS = `
     text-align: left;
 }
 .bg-blue, .bg-blue td {
-    background-color: #2076C7;
-    color: #ffffff;
+    background-color: #E6F0FA;
+    color: #000000;
     font-weight: bold;
 }
 .bg-yellow, .bg-yellow td {
-    background-color: #fff3cd;
-    color: #1A0F1E;
+    background-color: #FEF9E7;
+    color: #000000;
     font-weight: bold;
 }
 .bg-green, .bg-green td {
-    background-color: #1CADA3;
-    color: #ffffff;
+    background-color: #E2F5F2;
+    color: #000000;
     font-weight: bold;
 }
 `;

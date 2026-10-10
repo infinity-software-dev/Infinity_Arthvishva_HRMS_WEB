@@ -1,6 +1,5 @@
 import React from 'react';
 import { LetterHeadLayout } from '@/components/templates/LetterHeadLayout';
-import { EmployeeAcceptance } from '../EmployeeAcceptance';
 
 export interface HandoverTaskRow { task?: string; status?: string; handoverTo?: string; remarks?: string; }
 export interface HandoverItemRow { item?: string; handedOver?: string; receiverName?: string; remarks?: string; }
@@ -57,10 +56,17 @@ const DetailField: React.FC<{ label: string; value?: string }> = ({ label, value
 );
 
 export const EmployeeHandoverFormTemplate: React.FC<{ data?: EmployeeHandoverFormData }> = ({ data = {} }) => {
-    const tasks = data.tasks && data.tasks.length ? data.tasks : defaultTasks;
-    const documents = data.documents && data.documents.length ? data.documents : defaultDocuments;
-    const fileHandover = data.fileHandover && data.fileHandover.length ? data.fileHandover : defaultFileHandover;
-    const loginHandover = data.loginHandover && data.loginHandover.length ? data.loginHandover : defaultLoginHandover;
+    // If the section is explicitly passed as an empty array [] (user removed it), hide it.
+    // If data is empty object ({}) with undefined fields, show defaults.
+    const tasks = data.tasks !== undefined ? data.tasks : defaultTasks;
+    const documents = data.documents !== undefined ? data.documents : defaultDocuments;
+    const fileHandover = data.fileHandover !== undefined ? data.fileHandover : defaultFileHandover;
+    const loginHandover = data.loginHandover !== undefined ? data.loginHandover : defaultLoginHandover;
+
+    const showTasks = tasks && tasks.length > 0;
+    const showDocuments = documents && documents.length > 0;
+    const showFileHandover = fileHandover && fileHandover.length > 0;
+    const showLoginHandover = loginHandover && loginHandover.length > 0;
 
     return (
         <LetterHeadLayout>
@@ -93,101 +99,117 @@ export const EmployeeHandoverFormTemplate: React.FC<{ data?: EmployeeHandoverFor
                 </ul>
             </div>
 
-            <p className="hf-section">WORK &amp; RESPONSIBILITY HANDOVER:</p>
-            <table className="hf-table">
-                <thead>
-                    <tr>
-                        <th style={{ width: '7%' }}>Sr. No.</th>
-                        <th>Task / Responsibility</th>
-                        <th style={{ width: '18%' }}>Status (Completed / Pending)</th>
-                        <th style={{ width: '20%' }}>Handover To (Name &amp; Dept.)</th>
-                        <th style={{ width: '16%' }}>Remarks</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {tasks.map((r, i) => (
-                        <tr key={i}>
-                            <td>{i + 1}</td>
-                            <td>{r.task || '\u00A0'}</td>
-                            <td>{r.status || '\u00A0'}</td>
-                            <td>{r.handoverTo || '\u00A0'}</td>
-                            <td>{r.remarks || '\u00A0'}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            {showTasks && (
+                <>
+                    <p className="hf-section">WORK &amp; RESPONSIBILITY HANDOVER:</p>
+                    <table className="hf-table">
+                        <thead>
+                            <tr>
+                                <th style={{ width: '7%' }}>Sr. No.</th>
+                                <th>Task / Responsibility</th>
+                                <th style={{ width: '18%' }}>Status (Completed / Pending)</th>
+                                <th style={{ width: '20%' }}>Handover To (Name &amp; Dept.)</th>
+                                <th style={{ width: '16%' }}>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {tasks.map((r, i) => (
+                                <tr key={i}>
+                                    <td>{i + 1}</td>
+                                    <td>{r.task || '\u00A0'}</td>
+                                    <td>{r.status || '\u00A0'}</td>
+                                    <td>{r.handoverTo || '\u00A0'}</td>
+                                    <td>{r.remarks || '\u00A0'}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </>
+            )}
 
-            <p className="hf-section">DOCUMENTS / SYSTEM / ACCESS HANDOVER:</p>
-            <table className="hf-table">
-                <thead>
-                    <tr>
-                        <th style={{ width: '7%' }}>Sr. No.</th>
-                        <th>Item</th>
-                        <th style={{ width: '16%' }}>Handed Over (Yes / No)</th>
-                        <th style={{ width: '20%' }}>Receiver Name</th>
-                        <th style={{ width: '16%' }}>Remarks</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {documents.map((r, i) => (
-                        <tr key={i}>
-                            <td>{i + 1}</td>
-                            <td>{r.item || '\u00A0'}</td>
-                            <td>{r.handedOver || '\u00A0'}</td>
-                            <td>{r.receiverName || '\u00A0'}</td>
-                            <td>{r.remarks || '\u00A0'}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            {showDocuments && (
+                <>
+                    <p className="hf-section">DOCUMENTS / SYSTEM / ACCESS HANDOVER:</p>
+                    <table className="hf-table">
+                        <thead>
+                            <tr>
+                                <th style={{ width: '7%' }}>Sr. No.</th>
+                                <th>Item</th>
+                                <th style={{ width: '16%' }}>Handed Over (Yes / No)</th>
+                                <th style={{ width: '20%' }}>Receiver Name</th>
+                                <th style={{ width: '16%' }}>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {documents.map((r, i) => (
+                                <tr key={i}>
+                                    <td>{i + 1}</td>
+                                    <td>{r.item || '\u00A0'}</td>
+                                    <td>{r.handedOver || '\u00A0'}</td>
+                                    <td>{r.receiverName || '\u00A0'}</td>
+                                    <td>{r.remarks || '\u00A0'}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </>
+            )}
 
-            <p className="hf-section">FILE / SYSTEM HANDOVER (File Path / Location):</p>
-            <table className="hf-table">
-                <thead>
-                    <tr>
-                        <th style={{ width: '7%' }}>Sr. No.</th>
-                        <th>System / Access</th>
-                        <th style={{ width: '16%' }}>Handed Over (Yes / No)</th>
-                        <th style={{ width: '24%' }}>File Path / Location</th>
-                        <th style={{ width: '16%' }}>Remarks</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {fileHandover.map((r, i) => (
-                        <tr key={i}>
-                            <td>{i + 1}</td>
-                            <td>{r.systemAccess || '\u00A0'}</td>
-                            <td>{r.handedOver || '\u00A0'}</td>
-                            <td>{r.filePath || '\u00A0'}</td>
-                            <td>{r.remarks || '\u00A0'}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            {showFileHandover && (
+                <>
+                    <p className="hf-section">FILE / SYSTEM HANDOVER (File Path / Location):</p>
+                    <table className="hf-table">
+                        <thead>
+                            <tr>
+                                <th style={{ width: '7%' }}>Sr. No.</th>
+                                <th>System / Access</th>
+                                <th style={{ width: '16%' }}>Handed Over (Yes / No)</th>
+                                <th style={{ width: '24%' }}>File Path / Location</th>
+                                <th style={{ width: '16%' }}>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {fileHandover.map((r, i) => (
+                                <tr key={i}>
+                                    <td>{i + 1}</td>
+                                    <td>{r.systemAccess || '\u00A0'}</td>
+                                    <td>{r.handedOver || '\u00A0'}</td>
+                                    <td>{r.filePath || '\u00A0'}</td>
+                                    <td>{r.remarks || '\u00A0'}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </>
+            )}
 
-            <p className="hf-section">EMAIL / LOGIN / PASSWORD HANDOVER:</p>
-            <table className="hf-table">
-                <thead>
-                    <tr>
-                        <th style={{ width: '7%' }}>Sr. No.</th>
-                        <th>Email ID / Login ID</th>
-                        <th style={{ width: '16%' }}>Handed Over (Yes / No)</th>
-                        <th style={{ width: '20%' }}>Password</th>
-                        <th style={{ width: '16%' }}>Remarks</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {loginHandover.map((r, i) => (
-                        <tr key={i}>
-                            <td>{i + 1}</td>
-                            <td>{r.loginId || '\u00A0'}</td>
-                            <td>{r.handedOver || '\u00A0'}</td>
-                            <td>{r.password || '\u00A0'}</td>
-                            <td>{r.remarks || '\u00A0'}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            {showLoginHandover && (
+                <>
+                    <p className="hf-section">EMAIL / LOGIN / PASSWORD HANDOVER:</p>
+                    <table className="hf-table">
+                        <thead>
+                            <tr>
+                                <th style={{ width: '7%' }}>Sr. No.</th>
+                                <th>Email ID / Login ID</th>
+                                <th style={{ width: '16%' }}>Handed Over (Yes / No)</th>
+                                <th style={{ width: '20%' }}>Password</th>
+                                <th style={{ width: '16%' }}>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {loginHandover.map((r, i) => (
+                                <tr key={i}>
+                                    <td>{i + 1}</td>
+                                    <td>{r.loginId || '\u00A0'}</td>
+                                    <td>{r.handedOver || '\u00A0'}</td>
+                                    <td>{r.password || '\u00A0'}</td>
+                                    <td>{r.remarks || '\u00A0'}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </>
+            )}
 
             <p className="hf-section">HANDOVER CONFIRMATION</p>
             <div className="hf-avoid" style={{ display: 'flex', flexDirection: 'column', gap: '20pt', marginBottom: '20pt' }}>
@@ -209,10 +231,6 @@ export const EmployeeHandoverFormTemplate: React.FC<{ data?: EmployeeHandoverFor
             <div className="hf-avoid" style={{ display: 'flex', flexDirection: 'column', gap: '20pt', marginTop: '30pt' }}>
                 <p style={{ fontWeight: 700, margin: 0 }}>Reporting Manager Signature</p>
                 <p style={{ fontWeight: 700, margin: 0 }}>HR Signature</p>
-            </div>
-
-            <div style={{ marginTop: '40px' }}>
-                <EmployeeAcceptance name={`${data.employeeTitle ? `${data.employeeTitle} ` : ''}${data.employeeName || ''}`.trim()} />
             </div>
         </LetterHeadLayout>
     );

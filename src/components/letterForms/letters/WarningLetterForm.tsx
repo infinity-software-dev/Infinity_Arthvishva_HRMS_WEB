@@ -16,8 +16,6 @@ export const WarningLetterForm: React.FC<WarningLetterFormProps> = ({ onSubmit }
         department: '',
         subject: '',
         misconduct: '',
-        issuerName: '',
-        issuerDesignation: '',
         employeeEmail: '',
     });
 
@@ -111,30 +109,16 @@ export const WarningLetterForm: React.FC<WarningLetterFormProps> = ({ onSubmit }
                     onChange={handleChange}
                     required
                 />
-                <FormInput
-                    label="Subject (Optional)"
-                    name="subject"
-                    type="text"
-                    value={formData.subject || ''}
-                    onChange={handleChange}
-                    placeholder="e.g. Warning for unprofessional conduct"
-                />
-                <FormInput
-                    label="Issuer Name"
-                    name="issuerName"
-                    type="text"
-                    value={formData.issuerName || ''}
-                    onChange={handleChange}
-                    required
-                />
-                <FormInput
-                    label="Issuer Designation"
-                    name="issuerDesignation"
-                    type="text"
-                    value={formData.issuerDesignation || ''}
-                    onChange={handleChange}
-                    required
-                />
+                <div className="md:col-span-2">
+                    <FormInput
+                        label="Subject (Optional)"
+                        name="subject"
+                        type="text"
+                        value={formData.subject || ''}
+                        onChange={handleChange}
+                        placeholder="e.g. Warning for unprofessional conduct"
+                    />
+                </div>
             </div>
 
             <div className="mt-6">

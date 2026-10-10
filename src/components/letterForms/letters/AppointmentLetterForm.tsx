@@ -19,8 +19,9 @@ export const AppointmentLetterForm: React.FC<AppointmentLetterFormProps> = ({ on
         designation: '',
         joiningDate: '',
         location: '',
-        reportingDesignation: '',
         monthlyGross: '',
+        monthlyGrossWords: '',
+        yearlyCtc: '',
         reportingTime: '',
         reportingManager: '',
     });
@@ -117,15 +118,16 @@ export const AppointmentLetterForm: React.FC<AppointmentLetterFormProps> = ({ on
                     required
                 />
                 <FormInput
-                    label="Reporting Manager Designation"
-                    name="reportingDesignation"
-                    type="text"
-                    value={formData.reportingDesignation || ''}
+                    label="Yearly CTC"
+                    name="yearlyCtc"
+                    type="number"
+                    value={formData.yearlyCtc || ''}
                     onChange={handleChange}
+                    placeholder="e.g. 300000"
                     required
                 />
                 <FormInput
-                    label="Monthly Gross Amount"
+                    label="Gross Salary"
                     name="monthlyGross"
                     type="number"
                     value={formData.monthlyGross || ''}
@@ -133,7 +135,16 @@ export const AppointmentLetterForm: React.FC<AppointmentLetterFormProps> = ({ on
                     required
                 />
                 <FormInput
-                    label="Reporting Time (Annexure A)"
+                    label="Gross Salary in Words"
+                    name="monthlyGrossWords"
+                    type="text"
+                    value={formData.monthlyGrossWords || ''}
+                    onChange={handleChange}
+                    placeholder="e.g. Twenty Five Thousand Only"
+                    required
+                />
+                <FormInput
+                    label="Reporting Time"
                     name="reportingTime"
                     type="text"
                     value={formData.reportingTime || ''}
@@ -141,7 +152,7 @@ export const AppointmentLetterForm: React.FC<AppointmentLetterFormProps> = ({ on
                     required
                 />
                 <FormInput
-                    label="Reporting Manager Name (Annexure A)"
+                    label="Reporting Manager Name"
                     name="reportingManager"
                     type="text"
                     value={formData.reportingManager || ''}

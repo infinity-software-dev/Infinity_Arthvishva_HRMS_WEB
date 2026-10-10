@@ -156,7 +156,6 @@ export const OfferLetterTemplate: React.FC<OfferLetterTemplateProps> = ({ data, 
             <div className="ap-avoid mt-8">
                 <div className="space-y-1 text-left">
                     <p>Regards,</p>
-                    <p>HR</p>
                     <p>Infinity Arthvishva</p>
                 </div>
 
