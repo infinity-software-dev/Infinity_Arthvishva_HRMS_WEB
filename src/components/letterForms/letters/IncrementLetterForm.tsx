@@ -18,7 +18,7 @@ export const IncrementLetterForm: React.FC<IncrementLetterFormProps> = ({ onSubm
         date: '',
         candidateTitle: 'Mr.',
         candidateName: '',
-        effectiveMonth: '',
+        effectiveDate: '',
         joiningDate: '',
         employeeId: '',
         existingSalary: '',
@@ -69,7 +69,11 @@ export const IncrementLetterForm: React.FC<IncrementLetterFormProps> = ({ onSubm
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit({ ...formData, annexure: annexureData, extraPoints });
+        onSubmit({
+            ...formData,
+            annexure: annexureData,
+            extraPoints,
+        });
     };
 
     return (
@@ -119,12 +123,12 @@ export const IncrementLetterForm: React.FC<IncrementLetterFormProps> = ({ onSubm
                     </div>
                 </div>
                 <FormInput
-                    label="Effective Month"
-                    name="effectiveMonth"
-                    type="text"
-                    value={formData.effectiveMonth || ''}
+                    label="Effective Date"
+                    name="effectiveDate"
+                    type="date"
+                    value={formData.effectiveDate || ''}
                     onChange={handleChange}
-                    placeholder="e.g. April 2026"
+                    textTransform="none"
                     required
                 />
                 <FormInput

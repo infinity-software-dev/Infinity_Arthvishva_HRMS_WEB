@@ -5,6 +5,7 @@ export interface WarningLetterData {
     date: string;                 // e.g. 00/00/2026
     employeeTitle?: string;
     employeeName: string;
+    employeeId?: string;
     designation: string;
     department: string;
     subject?: string;             // default: "Warning for unprofessional conduct"
@@ -13,7 +14,16 @@ export interface WarningLetterData {
     issuerDesignation?: string;
 }
 
-
+const formatDisplayDate = (d?: string) => {
+    if (!d) return "";
+    if (d.includes("-")) {
+        const parts = d.split("-");
+        if (parts.length === 3 && parts[0].length === 4) {
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+    }
+    return d;
+};
 
 /** One Word paragraph: no spacing before/after, single line. Empty = blank line. */
 const P: React.FC<{ align?: 'left' | 'justify' | 'center' | 'right'; children?: React.ReactNode }> = ({
@@ -24,6 +34,8 @@ const P: React.FC<{ align?: 'left' | 'justify' | 'center' | 'right'; children?: 
 const B: React.FC<{ children: React.ReactNode }> = ({ children }) => <strong>{children}</strong>;
 
 export const WarningLetterTemplate: React.FC<{ data: WarningLetterData }> = ({ data }) => {
+    const displayDate = formatDisplayDate(data.date);
+
     return (
         <LetterHeadLayout>
 
@@ -40,11 +52,12 @@ export const WarningLetterTemplate: React.FC<{ data: WarningLetterData }> = ({ d
             >
                 WARNING LETTER
             </p>
-            <P align="left">Date: {data.date}</P>
+            <P align="left">Date: {displayDate}</P>
             <P />
 
             <P align="justify">To,</P>
             <P align="justify">{data.employeeTitle ? `${data.employeeTitle} ` : ''}{data.employeeName}</P>
+            {data.employeeId && <P align="justify">Employee ID: {data.employeeId}</P>}
             <P align="justify">{data.designation}</P>
             <P align="justify">{data.department}</P>
             <P />

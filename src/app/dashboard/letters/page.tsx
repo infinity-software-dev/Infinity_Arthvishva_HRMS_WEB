@@ -8,6 +8,7 @@ import { AppointmentLetterForm } from '@/components/letterForms/letters/Appointm
 import { ConfirmationLetterForm } from '@/components/letterForms/letters/ConfirmationLetterForm';
 import { IncrementLetterForm } from '@/components/letterForms/letters/IncrementLetterForm';
 import { ExperienceLetterForm } from '@/components/letterForms/letters/ExperienceLetterForm';
+import { InternshipExperienceLetterForm } from '@/components/letterForms/letters/InternshipExperienceLetterForm';
 import { RelievingLetterForm } from '@/components/letterForms/letters/RelievingLetterForm';
 import { WarningLetterForm } from '@/components/letterForms/letters/WarningLetterForm';
 import { DynamicLetterPreviewModal } from '@/components/modals/DynamicLetterPreviewModal';
@@ -133,6 +134,12 @@ export default function LettersPage() {
                             <div className="bg-white dark:bg-gray-900 rounded-xl p-1">
                                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">Experience Letter Details</h2>
                                 <ExperienceLetterForm onSubmit={handleOfferLetterSubmit} />
+                            </div>
+                        )}
+                        {selectedLetter === 'Internship Experience Letter' && (
+                            <div className="bg-white dark:bg-gray-900 rounded-xl p-1">
+                                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">Internship Experience Letter Details</h2>
+                                <InternshipExperienceLetterForm onSubmit={handleOfferLetterSubmit} />
                             </div>
                         )}
                         {selectedLetter === 'Relieving Letter' && (

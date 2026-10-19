@@ -11,7 +11,7 @@ export interface IncrementLetterData {
     date: string;
     candidateTitle?: string;
     candidateName: string;
-    effectiveMonth: string;
+    effectiveDate: string;
     joiningDate: string;
     employeeId: string;
     existingSalary?: string;
@@ -26,7 +26,16 @@ interface IncrementLetterTemplateProps {
     annexure?: SalaryAnnexureData | null;
 }
 
-
+const formatDisplayDate = (d?: string) => {
+    if (!d) return "";
+    if (d.includes("-")) {
+        const parts = d.split("-");
+        if (parts.length === 3 && parts[0].length === 4) {
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+    }
+    return d;
+};
 
 type Align = 'left' | 'justify' | 'center' | 'right';
 
@@ -52,6 +61,9 @@ const Row: React.FC<{ label: string; value?: string }> = ({ label, value }) => (
 
 export const IncrementLetterTemplate: React.FC<IncrementLetterTemplateProps> = ({ data, annexure }) => {
     const fy = data.financialYear || '2025-2026';
+    const effectiveDateStr = formatDisplayDate(data.effectiveDate);
+    const displayDate = formatDisplayDate(data.date);
+    const displayJoiningDate = formatDisplayDate(data.joiningDate);
 
     return (
         <LetterHeadLayout>
@@ -72,16 +84,16 @@ export const IncrementLetterTemplate: React.FC<IncrementLetterTemplateProps> = (
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', margin: '0 0 8pt 0' }}>
                 {/* <span>Infinity/Increment Letter/ {fy}/{data.letterNumber}</span> */}
-                <span>Date: {data.date}</span>
+                <span>Date: {displayDate}</span>
             </div>
 
             <P align="justify" indent={false}>Dear <B>{data.candidateTitle ? `${data.candidateTitle} ` : ''}{data.candidateName}</B></P>
 
             <P>
-                Your salary has been hiked from the month of {data.effectiveMonth}. We thank you for being associated with the company and as a token of gratitude, we have decided to do the increment. We expect your efforts for the financial year {fy} in achieving the targets and putting efforts in executing your responsibilities.
+                Your salary has been hiked effective from {effectiveDateStr}. We thank you for being associated with the company and as a token of gratitude, we have decided to do the increment. We expect your efforts for the financial year {fy} in achieving the targets and putting efforts in executing your responsibilities.
             </P>
 
-            <Row label="Joining Date" value={data.joiningDate} />
+            <Row label="Joining Date" value={displayJoiningDate} />
             <Row label="Employee ID" value={data.employeeId} />
             {data.existingSalary && <Row label="Your Existing Salary is" value={data.existingSalary} />}
             <Row label="Your Revised Annual CTC is" value={data.revisedAnnualCTC} />

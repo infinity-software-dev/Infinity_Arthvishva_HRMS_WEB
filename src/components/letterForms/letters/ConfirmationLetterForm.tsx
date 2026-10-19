@@ -13,6 +13,7 @@ export const ConfirmationLetterForm: React.FC<ConfirmationLetterFormProps> = ({ 
         financialYear: '2025-2026',
         employeeTitle: 'Mr.',
         employeeName: '',
+        employeeId: '',
         designation: '',
         department: '',
         confirmationDate: '',
@@ -31,12 +32,13 @@ export const ConfirmationLetterForm: React.FC<ConfirmationLetterFormProps> = ({ 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
-        // Auto-fill designation and department when employee is selected
+        // Auto-fill designation, department and employeeId when employee is selected
         if (name === 'employeeName') {
             const selected = value ? employees.find(emp => emp.name === value) : null;
             setFormData(prev => ({
                 ...prev,
                 employeeName: value,
+                employeeId: selected?.employeeCode || '',
                 designation: selected?.position || '',
                 department: selected?.department || '',
                 employeeEmail: selected?.email || '',
@@ -93,6 +95,14 @@ export const ConfirmationLetterForm: React.FC<ConfirmationLetterFormProps> = ({ 
                         />
                     </div>
                 </div>
+                <FormInput
+                    label="Employee ID"
+                    name="employeeId"
+                    type="text"
+                    value={formData.employeeId || ''}
+                    onChange={handleChange}
+                    placeholder="e.g. IA00014"
+                />
                 <FormInput
                     label="Designation"
                     name="designation"

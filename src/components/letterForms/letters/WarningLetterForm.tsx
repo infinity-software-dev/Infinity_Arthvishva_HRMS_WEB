@@ -12,6 +12,7 @@ export const WarningLetterForm: React.FC<WarningLetterFormProps> = ({ onSubmit }
         date: '',
         employeeTitle: 'Mr.',
         employeeName: '',
+        employeeId: '',
         designation: '',
         department: '',
         subject: '',
@@ -37,6 +38,7 @@ export const WarningLetterForm: React.FC<WarningLetterFormProps> = ({ onSubmit }
             setFormData(prev => ({
                 ...prev,
                 employeeName: value,
+                employeeId: selected?.employeeCode || '',
                 designation: selected?.position || '',
                 department: selected?.department || '',
                 employeeEmail: selected?.email || '',
@@ -94,6 +96,14 @@ export const WarningLetterForm: React.FC<WarningLetterFormProps> = ({ onSubmit }
                     </div>
                 </div>
                 <FormInput
+                    label="Employee ID"
+                    name="employeeId"
+                    type="text"
+                    value={formData.employeeId || ''}
+                    onChange={handleChange}
+                    placeholder="e.g. IA00014"
+                />
+                <FormInput
                     label="Designation"
                     name="designation"
                     type="text"
@@ -109,16 +119,14 @@ export const WarningLetterForm: React.FC<WarningLetterFormProps> = ({ onSubmit }
                     onChange={handleChange}
                     required
                 />
-                <div className="md:col-span-2">
-                    <FormInput
-                        label="Subject (Optional)"
-                        name="subject"
-                        type="text"
-                        value={formData.subject || ''}
-                        onChange={handleChange}
-                        placeholder="e.g. Warning for unprofessional conduct"
-                    />
-                </div>
+                <FormInput
+                    label="Subject (Optional)"
+                    name="subject"
+                    type="text"
+                    value={formData.subject || ''}
+                    onChange={handleChange}
+                    placeholder="e.g. Warning for unprofessional conduct"
+                />
             </div>
 
             <div className="mt-6">

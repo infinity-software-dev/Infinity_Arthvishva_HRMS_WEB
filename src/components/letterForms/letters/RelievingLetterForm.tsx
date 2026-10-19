@@ -12,6 +12,7 @@ export const RelievingLetterForm: React.FC<RelievingLetterFormProps> = ({ onSubm
         date: '',
         employeeTitle: 'Mr.',
         employeeName: '',
+        employeeId: '',
         designation: '',
         lastWorkingDate: '',
         gender: 'male',
@@ -36,6 +37,7 @@ export const RelievingLetterForm: React.FC<RelievingLetterFormProps> = ({ onSubm
             setFormData(prev => ({
                 ...prev,
                 employeeName: value,
+                employeeId: selected?.employeeCode || '',
                 designation: selected?.position || '',
                 employeeEmail: selected?.email || '',
             }));
@@ -92,6 +94,15 @@ export const RelievingLetterForm: React.FC<RelievingLetterFormProps> = ({ onSubm
                         />
                     </div>
                 </div>
+
+                <FormInput
+                    label="Employee ID"
+                    name="employeeId"
+                    type="text"
+                    value={formData.employeeId || ''}
+                    onChange={handleChange}
+                    placeholder="e.g. IA00014"
+                />
 
                 <FormSelect
                     label="Gender (For Pronouns)"

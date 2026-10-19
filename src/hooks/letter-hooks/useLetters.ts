@@ -22,6 +22,7 @@ export function useLetters() {
     "Confirmation Letter",
     "Increment Letter",
     "Experience Letter",
+    "Internship Experience Letter",
     "Relieving Letter",
     "Warning Letter",
   ];

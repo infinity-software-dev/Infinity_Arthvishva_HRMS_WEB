@@ -12,6 +12,7 @@ export const ExperienceLetterForm: React.FC<ExperienceLetterFormProps> = ({ onSu
         date: '',
         employeeTitle: 'Mr.',
         employeeName: '',
+        employeeId: '',
         joiningDate: '',
         lastWorkingDate: '',
         designation: '',
@@ -42,6 +43,7 @@ export const ExperienceLetterForm: React.FC<ExperienceLetterFormProps> = ({ onSu
             setFormData(prev => ({
                 ...prev,
                 employeeName: value,
+                employeeId: selected?.employeeCode || '',
                 designation: selected?.position || '',
                 department: selected?.department || '',
                 joiningDate: joiningDate || '',
@@ -100,6 +102,15 @@ export const ExperienceLetterForm: React.FC<ExperienceLetterFormProps> = ({ onSu
                         />
                     </div>
                 </div>
+
+                <FormInput
+                    label="Employee ID"
+                    name="employeeId"
+                    type="text"
+                    value={formData.employeeId || ''}
+                    onChange={handleChange}
+                    placeholder="e.g. IA00014"
+                />
 
                 <FormSelect
                     label="Gender (For Pronouns)"

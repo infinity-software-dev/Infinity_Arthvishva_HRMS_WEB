@@ -7,6 +7,7 @@ export interface ConfirmationLetterData {
     financialYear?: string;         // default "2025-2026"
     employeeTitle?: string;
     employeeName: string;
+    employeeId?: string;
     designation: string;
     department: string;
     confirmationDate: string;       // date from which the employment is confirmed
@@ -51,6 +52,7 @@ export const ConfirmationLetterTemplate: React.FC<{ data: ConfirmationLetterData
 
             <P>To,</P>
             <P>{data.employeeTitle ? `${data.employeeTitle} ` : ''}{data.employeeName}</P>
+            {data.employeeId && <P>Employee ID: {data.employeeId}</P>}
             <P>{data.designation}</P>
             <P>{data.department}</P>
             <P />

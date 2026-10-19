@@ -5,13 +5,23 @@ export interface RelievingLetterData {
     date: string;               // e.g. 01/01/2026
     employeeTitle: string;      // Mr / Ms / Mrs
     employeeName: string;
+    employeeId?: string;
     designation: string;
     lastWorkingDate: string;
     /** Optional: 'male' | 'female'. If omitted it is taken from the title (Mr = male, else female) */
     gender?: 'male' | 'female';
 }
 
-
+const formatDisplayDate = (d?: string) => {
+    if (!d) return "";
+    if (d.includes("-")) {
+        const parts = d.split("-");
+        if (parts.length === 3 && parts[0].length === 4) {
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+    }
+    return d;
+};
 
 const BODY_LINE = 1.72; // 1.5 line spacing in Word (on Arial)
 
@@ -37,6 +47,8 @@ const pronouns = (title: string, gender?: 'male' | 'female') => {
 export const RelivingLetterTemplate: React.FC<{ data: RelievingLetterData }> = ({ data }) => {
     const p = pronouns(data.employeeTitle, data.gender);
     const fullName = `${data.employeeTitle} ${data.employeeName}`;
+    const displayDate = formatDisplayDate(data.date);
+    const displayLastWorkingDate = formatDisplayDate(data.lastWorkingDate);
 
     return (
         <LetterHeadLayout>
@@ -55,14 +67,14 @@ export const RelivingLetterTemplate: React.FC<{ data: RelievingLetterData }> = (
                 RELIEVING LETTER
             </p>
             <P />
-            <P align="left">Date: {data.date}</P>
+            <P align="left">Date: {displayDate}</P>
             <P align="justify" body />
 
             <P align="justify" body>To whomsoever it may concern,</P>
 
             <P align="justify" body>
-                This is to inform you that <B>{fullName}, {data.designation},</B> has been relieved from the services of{' '}
-                <B>Infinity Arthvishva</B> with effect from <B>{data.lastWorkingDate},</B> pursuant to <B>{p.his}</B> resignation.
+                This is to inform you that <B>{fullName}</B>{data.employeeId ? <> (Employee ID: <B>{data.employeeId}</B>)</> : ''}, <B>{data.designation},</B> has been relieved from the services of{' '}
+                <B>Infinity Arthvishva</B> with effect from <B>{displayLastWorkingDate},</B> pursuant to <B>{p.his}</B> resignation.
             </P>
 
             <P align="justify" body>

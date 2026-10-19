@@ -8,6 +8,7 @@ import { AppointmentLetterTemplate } from "@/components/templates/letters/Appoio
 import { ConfirmationLetterTemplate } from "@/components/templates/letters/ConfirmationLetterTemplate";
 import { IncrementLetterTemplate } from "@/components/templates/letters/IncrementLetterTemplate";
 import { ExperienceLetterTemplate } from "@/components/templates/letters/ExperienceLetterTemplate";
+import { InternshipExperienceLetterTemplate } from "@/components/templates/letters/InternshipExperinceLetterTemplate";
 import { RelivingLetterTemplate } from "@/components/templates/letters/RelivingLetterTemplate";
 import { WarningLetterTemplate } from "@/components/templates/letters/WarningLetterTemplate";
 import { AssetsIssueFormTemplate } from "@/components/templates/forms/AssetsIssueFormTemplate";
@@ -104,6 +105,7 @@ export const DynamicLetterPreviewModal: React.FC<
             case "Confirmation Letter": return <ConfirmationLetterTemplate data={data} />;
             case "Increment Letter": return <IncrementLetterTemplate data={data} annexure={data?.annexure ?? null} />;
             case "Experience Letter": return <ExperienceLetterTemplate data={data} />;
+            case "Internship Experience Letter": return <InternshipExperienceLetterTemplate data={data} />;
             case "Relieving Letter": return <RelivingLetterTemplate data={data} />;
             case "Warning Letter": return <WarningLetterTemplate data={data} />;
             case "Asset Issue Form": return <AssetsIssueFormTemplate data={data} />;
