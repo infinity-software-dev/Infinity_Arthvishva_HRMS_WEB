@@ -34,6 +34,7 @@ export const DynamicLetterPreviewModal: React.FC<
     const [message, setMessage] = useState("");
     const [pageImages, setPageImages] = useState<string[]>([]);
     const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
+    const [pdfBlob, setPdfBlob] = useState<Blob | null>(null);
     const [isGeneratingPreview, setIsGeneratingPreview] = useState(true);
     
     useEffect(() => {
@@ -50,12 +51,14 @@ export const DynamicLetterPreviewModal: React.FC<
             setIsGeneratingPreview(true);
             setPageImages([]);
             setPdfBlobUrl(null);
+            setPdfBlob(null);
             
             // Give DOM time to mount the hidden template before capturing
             setTimeout(async () => {
                 try {
                     const result = await generateLetterPages("pdf-preview-content-hidden");
                     setPageImages(result.pageImages);
+                    setPdfBlob(result.pdfBlob);
                     setPdfBlobUrl(URL.createObjectURL(result.pdfBlob));
                 } catch (err) {
                     console.error("Preview generation failed:", err);
@@ -76,8 +79,13 @@ export const DynamicLetterPreviewModal: React.FC<
             return;
         }
 
+        if (!pdfBlob) {
+            alert("Preview is still generating, please wait a moment.");
+            return;
+        }
+
         const success = await sendEmail(
-            "pdf-preview-content-hidden",
+            pdfBlob,
             email,
             `${selectedLetter}.pdf`,
             subject,
@@ -152,7 +160,6 @@ export const DynamicLetterPreviewModal: React.FC<
                         width: '794px',
                         zIndex: -1,
                         pointerEvents: 'none',
-                        display: pageImages.length > 0 ? 'none' : 'block',
                     }}>
                         <div id="pdf-preview-content-hidden">
                             {renderTemplate()}
@@ -231,7 +238,7 @@ export const DynamicLetterPreviewModal: React.FC<
                             <button
                                 type="button"
                                 onClick={handleSend}
-                                disabled={isSending || isSent || !email || isGeneratingPreview}
+                                disabled={isSending || isSent || !email || isGeneratingPreview || !pdfBlob}
                                 className={`flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-semibold text-white rounded-xl transition-all shadow-sm w-full md:w-auto ${isSent ? "bg-green-500 hover:bg-green-600" : "bg-brand-blue hover:bg-brand-blue/90"} disabled:opacity-60 cursor-pointer`}
                             >
                                 {isSending ? (
