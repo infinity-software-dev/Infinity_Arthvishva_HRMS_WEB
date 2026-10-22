@@ -6,6 +6,9 @@ import { letterService } from '@/services/letter.service';
 export const A4_W = 794;  // px  (210 mm)
 export const A4_H = 1123; // px  (297 mm)
 
+// High-DPI render scale (2x gives crisp 192-300 DPI print quality without blur)
+export const RENDER_SCALE = 2;
+
 // LetterHeadLayout fixed heights (LetterHeadLayout.tsx inline styles)
 export const HEADER_H = Math.round(47 * A4_W / 210); // 178 px
 export const FOOTER_H = Math.round(26 * A4_W / 210); // 98  px
@@ -109,13 +112,15 @@ function isPointHeading(el: HTMLElement): boolean {
 function findBlankRowAbove(
   ctx: CanvasRenderingContext2D,
   targetY: number,
+  scale: number = RENDER_SCALE,
   lookback: number = 60,
 ): number {
-  const startX = 60;
-  const sampleW = A4_W - 120;
-  const clampedTargetY = Math.round(targetY);
+  const startX = 60 * scale;
+  const sampleW = (A4_W - 120) * scale;
+  const clampedTargetY = Math.round(targetY * scale);
+  const scaledLookback = Math.round(lookback * scale);
 
-  for (let y = clampedTargetY - 5; y >= Math.max(0, clampedTargetY - lookback); y--) {
+  for (let y = clampedTargetY - 5; y >= Math.max(0, clampedTargetY - scaledLookback); y--) {
     const imgData = ctx.getImageData(startX, y, sampleW, 1).data;
     let isBlank = true;
     for (let i = 0; i < imgData.length; i += 16) {
@@ -124,10 +129,10 @@ function findBlankRowAbove(
         break;
       }
     }
-    if (isBlank) return y;
+    if (isBlank) return Math.round(y / scale);
   }
 
-  return Math.max(0, clampedTargetY - 15);
+  return Math.max(0, Math.round((clampedTargetY - 15) / scale));
 }
 
 /**
@@ -140,6 +145,7 @@ function findPointAwareSlices(
   letterEl: HTMLElement,
   contentCanvas: HTMLCanvasElement,
   contentH: number,
+  scale: number = RENDER_SCALE,
 ): PageSlice[] {
   const slices: PageSlice[] = [];
   const ctx = contentCanvas.getContext('2d', { willReadFrequently: true })!;
@@ -226,7 +232,7 @@ function findPointAwareSlices(
 
       // 1. Explicit break (.ap-newpage) - always break cleanly before it!
       if (unit.isExplicit && unit.top <= maxPageBottomY + 80) {
-        chosenCutY = findBlankRowAbove(ctx, unit.top, 80);
+        chosenCutY = findBlankRowAbove(ctx, unit.top, scale, 80);
         nextStartSrcY = chosenCutY;
         found = true;
         break;
@@ -234,7 +240,7 @@ function findPointAwareSlices(
 
       // 2. Heading or point unit whose bottom overflows the page - take the ENTIRE point down!
       if (unit.bottom > maxPageBottomY && unit.top > currentSrcY + 120) {
-        chosenCutY = findBlankRowAbove(ctx, unit.top, 80);
+        chosenCutY = findBlankRowAbove(ctx, unit.top, scale, 80);
         nextStartSrcY = chosenCutY;
         found = true;
         break;
@@ -242,7 +248,7 @@ function findPointAwareSlices(
     }
 
     if (!found) {
-      chosenCutY = findBlankRowAbove(ctx, maxPageBottomY, 80);
+      chosenCutY = findBlankRowAbove(ctx, maxPageBottomY, scale, 80);
       nextStartSrcY = chosenCutY;
     }
 
@@ -282,32 +288,37 @@ function buildFullPageCanvas(
   srcH: number,
   destPadTop: number,
   logo: HTMLImageElement | null,
+  scale: number = RENDER_SCALE,
 ): HTMLCanvasElement {
   const c = document.createElement('canvas');
-  c.width = A4_W;
-  c.height = A4_H;
+  c.width = A4_W * scale;
+  c.height = A4_H * scale;
   const ctx = c.getContext('2d')!;
 
   // 1. Base white
   ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, A4_W, A4_H);
+  ctx.fillRect(0, 0, c.width, c.height);
 
   // 2. Header
-  ctx.drawImage(contentCanvas, 0, 0, A4_W, HEADER_H, 0, 0, A4_W, HEADER_H);
+  ctx.drawImage(
+    contentCanvas,
+    0, 0, A4_W * scale, HEADER_H * scale,
+    0, 0, A4_W * scale, HEADER_H * scale,
+  );
 
   // 3. Footer
   ctx.drawImage(
     contentCanvas,
-    0, contentH - FOOTER_H, A4_W, FOOTER_H,
-    0, A4_H - FOOTER_H, A4_W, FOOTER_H,
+    0, (contentH - FOOTER_H) * scale, A4_W * scale, FOOTER_H * scale,
+    0, (A4_H - FOOTER_H) * scale, A4_W * scale, FOOTER_H * scale,
   );
 
   // 4. Centred watermark in body area (HEADER_H to A4_H - FOOTER_H)
   if (logo) {
-    const wmW = A4_W * 0.65;
+    const wmW = (A4_W * 0.65) * scale;
     const wmH = wmW * (logo.naturalHeight / logo.naturalWidth);
-    const wmX = (A4_W - wmW) / 2;
-    const wmY = HEADER_H + (BODY_H - wmH) / 2;
+    const wmX = (c.width - wmW) / 2;
+    const wmY = (HEADER_H * scale) + ((BODY_H * scale) - wmH) / 2;
     ctx.save();
     ctx.globalAlpha = 0.20;
     ctx.drawImage(logo, wmX, wmY, wmW, wmH);
@@ -316,20 +327,23 @@ function buildFullPageCanvas(
 
   // 5. Body content with multiply blend
   if (srcH > 0) {
-    const slice = cropCanvas(contentCanvas, 0, srcY, A4_W, srcH);
+    const slice = cropCanvas(
+      contentCanvas,
+      0, srcY * scale, A4_W * scale, srcH * scale
+    );
     const paddedSlice = document.createElement('canvas');
-    paddedSlice.width = A4_W;
-    paddedSlice.height = BODY_H;
+    paddedSlice.width = A4_W * scale;
+    paddedSlice.height = BODY_H * scale;
     const pCtx = paddedSlice.getContext('2d')!;
     pCtx.fillStyle = '#ffffff';
-    pCtx.fillRect(0, 0, A4_W, BODY_H);
+    pCtx.fillRect(0, 0, paddedSlice.width, paddedSlice.height);
 
     // destPadTop gives comfortable breathing room below header line on page 2+
-    pCtx.drawImage(slice, 0, destPadTop);
+    pCtx.drawImage(slice, 0, destPadTop * scale);
 
     ctx.save();
     ctx.globalCompositeOperation = 'multiply';
-    ctx.drawImage(paddedSlice, 0, HEADER_H);
+    ctx.drawImage(paddedSlice, 0, HEADER_H * scale);
     ctx.restore();
   }
 
@@ -368,7 +382,7 @@ export const generateLetterPages = async (
       const pageEl = pageEls[i];
       await waitForImages(pageEl);
       const canvas = await toCanvas(pageEl, {
-        pixelRatio: 1,
+        pixelRatio: RENDER_SCALE,
         backgroundColor: '#ffffff',
         width: A4_W,
         height: A4_H,
@@ -377,7 +391,7 @@ export const generateLetterPages = async (
       const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
       pageImages.push(dataUrl);
       if (i > 0) pdf.addPage();
-      pdf.addImage(dataUrl, 'JPEG', 0, 0, PW, PH);
+      pdf.addImage(dataUrl, 'JPEG', 0, 0, PW, PH, undefined, 'FAST');
     }
 
     const pdfBlob = pdf.output('blob');
@@ -401,7 +415,7 @@ export const generateLetterPages = async (
 
   // Capture full content without watermark (watermark is cleanly added per page)
   const contentCanvas = await toCanvas(letterEl, {
-    pixelRatio: 1,
+    pixelRatio: RENDER_SCALE,
     backgroundColor: '#ffffff',
     width: A4_W,
     height: contentH,
@@ -416,7 +430,7 @@ export const generateLetterPages = async (
   });
 
   // Intelligent point-aware page slicer: cuts in blank gap before the point and takes the entire point down
-  const slices = findPointAwareSlices(letterEl, contentCanvas, contentH);
+  const slices = findPointAwareSlices(letterEl, contentCanvas, contentH, RENDER_SCALE);
   const pageImages: string[] = [];
 
   slices.forEach((slice, pageIdx) => {
@@ -429,11 +443,12 @@ export const generateLetterPages = async (
       slice.srcH,
       slice.destPadTop,
       logo,
+      RENDER_SCALE,
     );
     const pageDataUrl = pageCanvas.toDataURL('image/jpeg', 0.95);
 
     pageImages.push(pageDataUrl);
-    pdf.addImage(pageDataUrl, 'JPEG', 0, 0, PW, PH);
+    pdf.addImage(pageDataUrl, 'JPEG', 0, 0, PW, PH, undefined, 'FAST');
   });
 
   const pdfBlob = pdf.output('blob');
