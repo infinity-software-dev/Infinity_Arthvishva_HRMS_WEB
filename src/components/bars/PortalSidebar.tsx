@@ -9,15 +9,57 @@ import GradientText from "../elements/GradientText";
 import { PORTAL_NAV } from "@/constants/Sidebar/navigation";
 import ThemeToggleSwitch from "../buttons/ThemeToggle";
 
+import { portalService } from "@/services/employeeProtalServices/employee.overview.service";
+import { managerService } from "@/services/managerService";
+
 export default function PortalSidebar() {
     const pathname = usePathname();
     const router = useRouter();
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
+    const [isLeadership, setIsLeadership] = useState(false);
+    const [pendingCount, setPendingCount] = useState(0);
 
     useEffect(() => {
         setIsMounted(true);
+        if (typeof window !== "undefined") {
+            const rawUser = localStorage.getItem("user");
+            if (rawUser) {
+                try {
+                    const parsed = JSON.parse(rawUser);
+                    if (parsed?.isLeadershipRole) {
+                        setIsLeadership(true);
+                        if (parsed?._id) {
+                            managerService.getApprovalMetrics(parsed._id)
+                                .then((metrics) => {
+                                    setPendingCount(metrics?.pendingApprovalsCount || 0);
+                                })
+                                .catch(() => {});
+                        }
+                    }
+                } catch (e) {
+                    console.error("Error parsing user from localStorage", e);
+                }
+            }
+
+            // Also check latest profile from API in case localStorage is empty or outdated
+            portalService.getProfileData()
+                .then((profile) => {
+                    if (profile?.isLeadershipRole) {
+                        setIsLeadership(true);
+                        localStorage.setItem("user", JSON.stringify(profile));
+                        if (profile?._id) {
+                            managerService.getApprovalMetrics(profile._id)
+                                .then((metrics) => {
+                                    setPendingCount(metrics?.pendingApprovalsCount || 0);
+                                })
+                                .catch(() => {});
+                        }
+                    }
+                })
+                .catch(() => {});
+        }
     }, []);
 
     const closeMobileMenu = () => setIsMobileMenuOpen(false);
@@ -78,29 +120,39 @@ export default function PortalSidebar() {
                                 {section.label}
                             </p>
                             <div className="space-y-1">
-                                {section.items.map((item) => {
-                                    const isBaseRoute = item.url === "/portal" || item.url === "/";
-                                    const isActive = isBaseRoute
-                                        ? pathname === item.url
-                                        : pathname === item.url || pathname.startsWith(`${item.url}/`);
+                                {section.items
+                                    .filter((item: any) => !item.leadershipOnly || isLeadership)
+                                    .map((item: any) => {
+                                        const isBaseRoute = item.url === "/portal" || item.url === "/";
+                                        const isActive = isBaseRoute
+                                            ? pathname === item.url
+                                            : pathname === item.url || pathname.startsWith(`${item.url}/`);
 
-                                    const Icon = item.icon;
+                                        const Icon = item.icon;
+                                        const showBadge = item.url === "/portal/team-leaves" && pendingCount > 0;
 
-                                    return (
-                                        <Link
-                                            key={item.url}
-                                            href={item.url}
-                                            onClick={closeMobileMenu}
-                                            className={`flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${isActive
-                                                ? "bg-gradient-to-r from-brand-blue to-brand-green text-white dark:bg-white dark:text-primary shadow-md"
-                                                : "text-secondary dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-primary dark:hover:text-white"
-                                                }`}
-                                        >
-                                            <Icon className={`w-5 h-5 ${isActive ? "" : "opacity-70"}`} />
-                                            {item.title}
-                                        </Link>
-                                    );
-                                })}
+                                        return (
+                                            <Link
+                                                key={item.url}
+                                                href={item.url}
+                                                onClick={closeMobileMenu}
+                                                className={`flex items-center justify-between w-full px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${isActive
+                                                    ? "bg-gradient-to-r from-brand-blue to-brand-green text-white dark:bg-white dark:text-primary shadow-md"
+                                                    : "text-secondary dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-primary dark:hover:text-white"
+                                                    }`}
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    <Icon className={`w-5 h-5 ${isActive ? "" : "opacity-70"}`} />
+                                                    <span>{item.title}</span>
+                                                </div>
+                                                {showBadge && (
+                                                    <span className={`px-2 py-0.5 text-xs font-bold rounded-full ${isActive ? "bg-white text-brand-blue" : "bg-brand-blue text-white"}`}>
+                                                        {pendingCount}
+                                                    </span>
+                                                )}
+                                            </Link>
+                                        );
+                                    })}
                             </div>
                         </div>
                     ))}

@@ -1,0 +1,82 @@
+'use client';
+
+import React from 'react';
+import { Calendar as CalendarIcon, Loader2, AlertCircle } from 'lucide-react';
+import { useHolidays } from '@/hooks/holiday-hooks/useHolidays';
+import { HolidayCard } from '@/components/cards/Holiday/HolidayCard';
+
+export default function PortalHolidaysPage() {
+  const currentYear = new Date().getFullYear();
+
+  const {
+    holidays,
+    selectedYear,
+    setSelectedYear,
+    isLoading,
+    error,
+  } = useHolidays({ initialYear: currentYear });
+
+  return (
+    <div className="max-w-5xl mx-auto p-6 font-sans">
+      {/* Header & Controls */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-primary dark:text-white">Holiday Calendar</h1>
+          <p className="text-secondary dark:text-gray-400 mt-1">
+            Official holidays and non-working days for payroll & attendance.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <select
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(Number(e.target.value))}
+            className="bg-white dark:bg-[#16101B] border border-secondary/25 dark:border-secondary/40 text-primary dark:text-white text-sm rounded-xl focus:ring-2 focus:ring-brand-blue focus:border-brand-blue block p-2.5 outline-none cursor-pointer"
+          >
+            {[selectedYear - 1, selectedYear, selectedYear + 1].map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Global Error Banner */}
+      {error && (
+        <div className="mb-6 p-4 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 flex items-center gap-3">
+          <AlertCircle size={20} className="flex-shrink-0" />
+          <p className="text-sm">{error}</p>
+        </div>
+      )}
+
+      {/* Main Content Area */}
+      <div className="bg-white dark:bg-[#16101B] rounded-2xl shadow-sm border border-secondary/20 dark:border-secondary/30 overflow-hidden">
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-20 text-secondary dark:text-gray-400">
+            <Loader2 className="animate-spin mb-4 text-brand-green" size={32} />
+            <p>Loading {selectedYear} holidays...</p>
+          </div>
+        ) : holidays.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 text-secondary dark:text-gray-400 text-center px-4">
+            <CalendarIcon size={48} className="mb-4 text-secondary/40 opacity-50" />
+            <h3 className="text-lg font-semibold text-primary dark:text-white mb-1">
+              No holidays found
+            </h3>
+            <p className="text-sm">There are no holidays configured for {selectedYear} yet.</p>
+          </div>
+        ) : (
+          <ul className="divide-y divide-secondary/15 dark:divide-secondary/20">
+            {holidays.map((holiday) => (
+              <HolidayCard
+                key={holiday._id}
+                holiday={holiday}
+                onDelete={() => {}}
+              />
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  );
+}

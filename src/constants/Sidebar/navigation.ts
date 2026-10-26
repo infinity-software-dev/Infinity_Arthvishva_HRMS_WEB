@@ -13,6 +13,7 @@ import {
     PlaneTakeoff,
     HandCoins,
     Building2,
+    ClipboardList,
 } from "lucide-react";
 
 // --- MANAGEMENT STACK (HR & DIRECTOR) ---
@@ -134,6 +135,18 @@ export const PORTAL_NAV = [
                 icon: PlaneTakeoff,
             },
             {
+                title: "Team Leave",
+                url: "/portal/team-leaves",
+                icon: Users,
+                leadershipOnly: true,
+            },
+            {
+                title: "Team Reports",
+                url: "/portal/team-reports",
+                icon: ClipboardList,
+                leadershipOnly: true,
+            },
+            {
                 title: "Payroll Center",
                 url: "/portal/payroll",
                 icon: CreditCard,
@@ -142,6 +155,11 @@ export const PORTAL_NAV = [
                 title: "Reimbursement Center",
                 url: "/portal/reimbursement",
                 icon: HandCoins,
+            },
+            {
+                title: "Holidays",
+                url: "/portal/holidays",
+                icon: CalendarCheck,
             },
             // {
             //     title: "Complaints Center",

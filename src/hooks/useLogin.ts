@@ -62,6 +62,9 @@ export const useLogin = () => {
             localStorage.setItem("accessToken", data.data.accessToken);
             localStorage.setItem("refreshToken", data.data.refreshToken);
             localStorage.setItem("role", roleToStore);
+            if (data.data.employee) {
+                localStorage.setItem("user", JSON.stringify(data.data.employee));
+            }
 
             if (roleToStore === "EMPLOYEE") {
                 router.replace("/portal");

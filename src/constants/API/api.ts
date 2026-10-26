@@ -126,7 +126,16 @@ export const EMPLOYEE_API = {
   GET_REIMBURSEMENT_HISTORY: '/api/web/reimbursement/history',
   APPLY_REIMBURSEMENT: '/api/web/reimbursement/apply',
   CANCEL_REIMBURSEMENT: (id: string) => `/api/web/reimbursement/${id}`,
+};
 
+export const MANAGER_API = {
+  GET_APPROVAL_METRICS: (id: string) => `/api/web/employee/${id}/approval-metrics`,
+  GET_DETAILED_REQUESTS: (id: string) => `/api/web/employee/${id}/detailed-requests`,
+  GET_REQUESTS_HISTORY: (id: string) => `/api/web/employee/${id}/requests-history`,
+  APPROVE_LEAVE: (managerId: string, leaveId: string) => `/api/web/employee/${managerId}/leaves/${leaveId}/approve`,
+  REJECT_LEAVE: (managerId: string, leaveId: string) => `/api/web/employee/${managerId}/leaves/${leaveId}/reject`,
+  GET_TEAM_REPORTS: (date: string) => `/api/web/attendance/team-reports?date=${date}`,
+  UPDATE_REPORT_READ_STATUS: (reportId: string) => `/api/web/attendance/work-reports/${reportId}/read-status`,
 };
 
 export const KYC_API = {
