@@ -16,12 +16,22 @@ export default function HolidaysPage() {
     isLoading,
     error,
     addHoliday,
-    isModalOpen,
-        setIsModalOpen, 
-        handleDelete
+    removeHoliday,
   } = useHolidays({ initialYear: currentYear });
 
-  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleDelete = async (id: string, name: string) => {
+    if (!window.confirm(`Are you sure you want to remove "${name}" from the holiday calendar?`)) {
+      return;
+    }
+
+    try {
+      await removeHoliday(id);
+    } catch (err: any) {
+      alert(err.message || 'Failed to delete holiday');
+    }
+  };
 
   return (
     <div className="max-w-5xl mx-auto p-6 font-sans">
