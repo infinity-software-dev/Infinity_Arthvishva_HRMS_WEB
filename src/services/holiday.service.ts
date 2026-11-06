@@ -48,7 +48,7 @@ export const holidayService = {
 
 
     async deleteHoliday(id: string): Promise<DeleteHolidayResponse> {
-        const response = await apiClient.delete<DeleteHolidayResponse>(
+        const response = await apiClient.post<DeleteHolidayResponse>(
             HR_API.DELETE_HOLIDAY(id)
         );
         return response.data;

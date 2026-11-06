@@ -18,6 +18,23 @@ export function useHolidays({
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    
+      const handleDelete = async (id: string, name: string) => {
+        if (!window.confirm(`Are you sure you want to remove "${name}" from the holiday calendar?`)) {
+          return;
+        }
+    
+        try {
+          await removeHoliday(id);
+        } catch (err: any) {
+          alert(err.message || 'Failed to delete holiday');
+        }
+        finally {
+            refresh(); // Refresh the holidays after deletion
+        }
+      };
+
     const fetchHolidays = useCallback(async (year: number) => {
         setIsLoading(true);
         setError(null);
