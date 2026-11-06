@@ -1,13 +1,17 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Calendar as CalendarIcon, Plus, Loader2, AlertCircle } from 'lucide-react';
-import { useHolidays } from '@/hooks/holiday-hooks/useHolidays';
-import { HolidayCard } from '@/components/cards/Holiday/HolidayCard';
-import { AddHolidayModal } from '@/components/modals/AddHolidayModal';
+import {
+  Calendar as CalendarIcon,
+  Plus,
+  Loader2,
+  AlertCircle,
+} from "lucide-react";
+import { useHolidays } from "@/hooks/holiday-hooks/useHolidays";
+import { HolidayCard } from "@/components/cards/Holiday/HolidayCard";
+import { AddHolidayModal } from "@/components/modals/AddHolidayModal";
 
 export default function HolidaysPage() {
-  const isHR = localStorage.getItem('role') === 'HR'; // Check if the user is HR
+  const isHR = localStorage.getItem("role") === "HR"; // Check if the user is HR
   const currentYear = new Date().getFullYear();
   const {
     holidays,
@@ -16,31 +20,22 @@ export default function HolidaysPage() {
     isLoading,
     error,
     addHoliday,
-    removeHoliday,
+    isModalOpen,
+    setIsModalOpen,
+    handleToggle,
   } = useHolidays({ initialYear: currentYear });
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleDelete = async (id: string, name: string) => {
-    if (!window.confirm(`Are you sure you want to remove "${name}" from the holiday calendar?`)) {
-      return;
-    }
-
-    try {
-      await removeHoliday(id);
-    } catch (err: any) {
-      alert(err.message || 'Failed to delete holiday');
-    }
-  };
 
   return (
     <div className="max-w-5xl mx-auto p-6 font-sans">
       {/* Header & Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-primary dark:text-white">Holiday Calendar</h1>
+          <h1 className="text-3xl font-bold text-primary dark:text-white">
+            Holiday Calendar
+          </h1>
           <p className="text-secondary dark:text-gray-400 mt-1">
-            Manage official holidays and non-working days for payroll & attendance.
+            Manage official holidays and non-working days for payroll &
+            attendance.
           </p>
         </div>
 
@@ -86,11 +81,16 @@ export default function HolidaysPage() {
           </div>
         ) : holidays.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-secondary dark:text-gray-400 text-center px-4">
-            <CalendarIcon size={48} className="mb-4 text-secondary/40 opacity-50" />
+            <CalendarIcon
+              size={48}
+              className="mb-4 text-secondary/40 opacity-50"
+            />
             <h3 className="text-lg font-semibold text-primary dark:text-white mb-1">
               No holidays found
             </h3>
-            <p className="text-sm">There are no holidays configured for {selectedYear} yet.</p>
+            <p className="text-sm">
+              There are no holidays configured for {selectedYear} yet.
+            </p>
           </div>
         ) : (
           <ul className="divide-y divide-secondary/15 dark:divide-secondary/20">
@@ -98,7 +98,7 @@ export default function HolidaysPage() {
               <HolidayCard
                 key={holiday._id}
                 holiday={holiday}
-                onDelete={handleDelete}
+                onToggle={handleToggle}
               />
             ))}
           </ul>
