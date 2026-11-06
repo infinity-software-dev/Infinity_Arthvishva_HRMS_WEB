@@ -71,7 +71,7 @@ export default function PortalHolidaysPage() {
               <HolidayCard
                 key={holiday._id}
                 holiday={holiday}
-                onDelete={() => {}}
+                onToggle={() => {}}
               />
             ))}
           </ul>
