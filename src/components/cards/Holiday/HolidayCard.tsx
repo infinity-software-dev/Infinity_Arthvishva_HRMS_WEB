@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Trash2, MapPin, Building2, Ban } from 'lucide-react';
+import { Trash2, MapPin, Building2, Ban, Undo2 } from 'lucide-react';
 import { Holiday } from '@/services/holiday.service';
 
 interface HolidayCardProps {
@@ -106,15 +106,25 @@ export const HolidayCard: React.FC<HolidayCardProps> = ({ holiday, onDelete }) =
             </div>
 
             {/* Actions */}
-            {isHR && isActive && (
-                <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
-                        onClick={() => onDelete(holiday._id, holiday.name)}
-                        className="p-2 text-secondary/60 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors cursor-pointer"
-                        title="Remove Holiday"
-                    >
-                        <Trash2 size={18} />
-                    </button>
+           {isHR && (
+        <div className="flex-shrink-0 opacity-100 transition-opacity">
+          {isActive ? (
+            <button
+              onClick={() => onDelete(holiday._id, holiday.name)}
+              className="p-2 text-secondary/60 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors cursor-pointer"
+              title="Remove Holiday"
+            >
+              <Trash2 size={18} />
+            </button>
+          ) : (
+            <button
+              onClick={() => onDelete(holiday._id, holiday.name)}
+              className="p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-950/30 rounded-lg transition-colors cursor-pointer"
+              title="Activate Holiday"
+            >
+              <Undo2 size={18} />
+            </button>
+          )}
                 </div>
             )}
         </li>
