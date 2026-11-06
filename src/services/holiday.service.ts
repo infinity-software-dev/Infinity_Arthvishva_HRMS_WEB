@@ -47,9 +47,9 @@ export const holidayService = {
     },
 
 
-    async deleteHoliday(id: string): Promise<DeleteHolidayResponse> {
-        const response = await apiClient.delete<DeleteHolidayResponse>(
-            HR_API.DELETE_HOLIDAY(id)
+    async toggleHoliday(id: string): Promise<DeleteHolidayResponse> {
+        const response = await apiClient.post<DeleteHolidayResponse>(
+            HR_API.TOGGLE_HOLIDAY(id)
         );
         return response.data;
     },

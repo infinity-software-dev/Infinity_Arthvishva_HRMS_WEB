@@ -63,7 +63,7 @@ export const HR_API = {
 
   // ─── HOLIDAY ENDPOINTS (ADDED) ───
   CREATE_HOLIDAY: `/api/web/hr/holidays`,
-  DELETE_HOLIDAY: (id: string) => `/api/web/hr/holidays/${id}`,
+  TOGGLE_HOLIDAY: (id: string) => `/api/web/hr/holidays/${id}`,
 
   // ─── ANNOUNCEMENT ENDPOINTS (ADDED) ───
   UPSERT_ALERT: `/api/web/hr/announcements/upsert`,
